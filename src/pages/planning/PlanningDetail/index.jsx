@@ -1,19 +1,14 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import back from "../../../assets/icons/back.svg";
 import Row from "./Row";
 import check from "../../../assets/icons/check.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { clearProducts, fetchProductsByVendorID } from "../../../store/vendor";
-import Loader from "../../../components/Loader";
 import { NotificationManager } from "react-notifications";
+import Loader from "../../../components/Loader";
+
+import style from "../style.module.scss";
 
 const headers = [
   "ID",
@@ -22,6 +17,7 @@ const headers = [
   "Fulfilled",
   "Reserved",
   "In Stock",
+  "Available",
 ];
 
 export default function PlanningDetail() {
@@ -100,29 +96,20 @@ export default function PlanningDetail() {
               </div>
             </div>
           </header>
-
-          <TableContainer sx={{ marginTop: "1rem" }} component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  {headers.map((header, index) => (
-                    <TableCell
-                      sx={{ padding: "1rem 2rem" }}
-                      key={index}
-                      align="left"
-                    >
-                      {header}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredProducts.map((product, index) => (
-                  <Row filter={dillerFilter} key={index} row={product} />
+          <table className={`${style.table} ${style.t2}`}>
+            <thead>
+              <tr>
+                {headers.map((header, index) => (
+                  <th key={index}>{header}</th>
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              </tr>
+            </thead>
+            <tbody className="scroll">
+              {filteredProducts.map((product, index) => (
+                <Row filter={dillerFilter} key={index} data={product} />
+              ))}
+            </tbody>
+          </table>
           <div className="actions">
             <button type="button" className="btn success">
               <img src={check} alt="check" />

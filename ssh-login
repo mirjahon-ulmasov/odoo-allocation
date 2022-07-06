@@ -1,1 +1,0 @@
-ssh -i odoo_extension_front.pem ubuntu@3.110.153.70

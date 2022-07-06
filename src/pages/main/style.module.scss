@@ -1,0 +1,31 @@
+.container {
+  .tabs {
+    margin-top: 2rem;
+    position: relative;
+    border-bottom: 1px solid #e6e6e6;
+    .actions {
+      position: relative;
+      margin-left: 2rem;
+      bottom: -1px;
+      left: 0;
+
+      button {
+        font-size: 16px;
+        color: #9b9b9b;
+        border-radius: 0;
+        font-weight: 400;
+        text-transform: unset;
+        background-color: #fff;
+        border: 1px solid #e6e6e6;
+
+        &:first-child {
+          border-right: transparent;
+        }
+        &.active {
+          color: #515151;
+          border-bottom: 1px solid #fff;
+        }
+      }
+    }
+  }
+}

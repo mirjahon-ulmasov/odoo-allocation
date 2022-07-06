@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import LoginPage from "./pages/auth/LoginPage";
 import NotFound from "./pages/auth/NotFound";
-import MainPage from "./pages/main/MainPage";
+import MainPage from "./pages/main";
 import Planning from "./pages/planning";
 import RequireAuth from "./routes/RequireAuth";
 

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "1",
+    "name": "Gulser Computer",
+    "isFull": false,
+    "products": [
+      {
+        "id": "GY897968762",
+        "ordered": 36,
+        "fulfilled": 12,
+        "reserved": 12,
+        "allocation": 12
+      },
+      {
+        "id": "AY897968762",
+        "ordered": 2,
+        "fulfilled": 2,
+        "reserved": 0,
+        "allocation": 0
+      },
+      {
+        "id": "RY897968762",
+        "ordered": 40,
+        "fulfilled": 10,
+        "reserved": 20,
+        "allocation": 10
+      },
+      {
+        "id": "TY897968762",
+        "ordered": 5,
+        "fulfilled": 1,
+        "reserved": 2,
+        "allocation": 3
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Artel Astana",
+    "isFull": false,
+    "products": [
+      {
+        "id": "GY897968762",
+        "ordered": 36,
+        "fulfilled": 12,
+        "reserved": 12,
+        "allocation": 12
+      },
+      {
+        "id": "AY897968762",
+        "ordered": 2,
+        "fulfilled": 2,
+        "reserved": 0,
+        "allocation": 0
+      },
+      {
+        "id": "RY897968762",
+        "ordered": 40,
+        "fulfilled": 10,
+        "reserved": 20,
+        "allocation": 10
+      },
+      {
+        "id": "TY897968762",
+        "ordered": 5,
+        "fulfilled": 1,
+        "reserved": 2,
+        "allocation": 3
+      }
+    ]
+  }
+]

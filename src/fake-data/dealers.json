@@ -1,0 +1,138 @@
+[
+  {
+    "id": "1",
+    "dealer_name": "texnograd",
+    "factories": [
+      {
+        "name": "total",
+        "ordered": 12,
+        "fulfilled": 15,
+        "reserved": 12,
+        "in_stock": 24
+      },
+      {
+        "name": "fridge",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 72,
+        "in_stock": 25
+      },
+      {
+        "name": "air conditioner",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 21,
+        "in_stock": 37
+      },
+      {
+        "name": "air vacuum",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 21,
+        "in_stock": 37
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "dealer_name": "evrika",
+    "factories": [
+      {
+        "name": "total",
+        "ordered": 12,
+        "fulfilled": 15,
+        "reserved": 12,
+        "in_stock": 24
+      },
+      {
+        "name": "fridge",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 72,
+        "in_stock": 25
+      },
+      {
+        "name": "air conditioner",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 21,
+        "in_stock": 37
+      },
+      {
+        "name": "air vacuum",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 21,
+        "in_stock": 37
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "dealer_name": "arena",
+    "factories": [
+      {
+        "name": "total",
+        "ordered": 12,
+        "fulfilled": 15,
+        "reserved": 12,
+        "in_stock": 24
+      },
+      {
+        "name": "fridge",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 72,
+        "in_stock": 25
+      },
+      {
+        "name": "air conditioner",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 21,
+        "in_stock": 37
+      },
+      {
+        "name": "air vacuum",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 21,
+        "in_stock": 37
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "dealer_name": "mechta",
+    "factories": [
+      {
+        "name": "total",
+        "ordered": 12,
+        "fulfilled": 15,
+        "reserved": 12,
+        "in_stock": 24
+      },
+      {
+        "name": "fridge",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 72,
+        "in_stock": 25
+      },
+      {
+        "name": "air conditioner",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 21,
+        "in_stock": 37
+      },
+      {
+        "name": "air vacuum",
+        "ordered": 12,
+        "fulfilled": 12,
+        "reserved": 21,
+        "in_stock": 37
+      }
+    ]
+  }
+]

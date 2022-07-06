@@ -1,17 +1,20 @@
 import { Button, Typography } from "@mui/material";
 import React, { useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SummaryByFact from "./SummaryByFact/index.jsx";
+import SummaryByProd from "./SumarryByProd/index.jsx";
+import styles from "./style.module.scss";
 
 export default function MainPage() {
   const id = useId();
   const id2 = useId();
   const navigate = useNavigate();
-  const [active, setActive] = useState(id);
-  const activeClass = (id) => (active === id ? "active" : "");
+  const [active, setActive] = useState(id2);
+  const activeClass = (id) => (active === id ? styles.active : "");
   return (
     <>
       <header className="header">
-        <Typography variant="h1">Total sales</Typography>
+        <Typography variant="h1">Summary reports</Typography>
         <button
           type="button"
           className="btn dark"
@@ -22,26 +25,29 @@ export default function MainPage() {
           Start Planning
         </button>
       </header>
-      <section className="container">
-        <div className="tabs">
-          <div className="actions">
+      <section className={styles.container}>
+        <div className={styles.tabs}>
+          <div className={styles.actions}>
             <Button
               type="button"
               onClick={() => setActive(id)}
               className={activeClass(id)}
             >
-              Total sales
+              Summary by products
             </Button>
             <Button
               type="button"
               onClick={() => setActive(id2)}
               className={activeClass(id2)}
             >
-              Total sales 2
+              Summary by factories
             </Button>
           </div>
         </div>
-        <div className="content"></div>
+        <>
+          {active === id && <SummaryByProd />}
+          {active === id2 && <SummaryByFact />}
+        </>
       </section>
     </>
   );

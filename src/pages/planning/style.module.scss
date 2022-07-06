@@ -1,0 +1,96 @@
+table.table {
+  width: 100%;
+  color: #333;
+  text-align: left;
+  margin-top: 1.5rem;
+  border-collapse: collapse;
+  animation: 0.5s linear fadeIn;
+
+  thead tr {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    th {
+      font-weight: 500;
+    }
+  }
+
+  td,
+  th {
+    border: 0;
+    font-size: 15px;
+    padding: 1rem 0 1rem 2rem;
+  }
+}
+
+table.t1 {
+  thead,
+  tbody tr {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+  }
+
+  tbody {
+    height: 28rem;
+    display: block;
+    overflow: auto;
+    tr {
+      &:nth-child(odd) {
+        background-color: #f3f3f3;
+      }
+      td .actions {
+        gap: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  th,
+  td {
+    &:first-child {
+      width: 10%;
+    }
+    &:nth-child(2),
+    &:nth-child(3) {
+      width: 25%;
+    }
+  }
+}
+
+table.t2 {
+  tbody tr.row:nth-child(4n-3) {
+    background-color: #f3f3f3;
+  }
+  td:last-child {
+    width: 8rem;
+    font-weight: 500;
+  }
+}
+
+// Nested Tables
+table.nested_table {
+  margin-top: 0;
+  animation: 0.5s linear fadeIn;
+  thead {
+    tr {
+      background-color: #667787;
+      th {
+        padding: 10px 2rem;
+        color: #fff;
+      }
+    }
+  }
+  tbody {
+    tr {
+      border-bottom: 1px dashed #c4dbdf;
+      td {
+        padding: 10px 2rem;
+        color: #333;
+        &:last-child {
+          padding-right: 5rem;
+        }
+      }
+    }
+  }
+}

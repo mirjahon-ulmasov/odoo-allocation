@@ -2,9 +2,12 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deepOrange } from "@mui/material/colors";
 import { Avatar, Typography } from "@mui/material";
-import icon from "../assets/icons/dashboard.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/auth";
+
+import icon from "../assets/icons/dashboard.svg";
+import document from "../assets/icons/document.svg";
+import notification from "../assets/icons/notification.svg";
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -33,19 +36,31 @@ export default function NavBar() {
         </div>
         {user && (
           <div className="right">
-            <Avatar
-              sx={{
-                bgcolor: deepOrange[500],
-                cursor: "pointer",
-                height: 35,
-                width: 35,
-              }}
-              ref={menuRef}
-              onClick={() => setIsOpen((prev) => !prev)}
-            >
-              {user.first_name.charAt()}
-            </Avatar>
-            <Typography>{user.email}</Typography>
+            <ul className="nav-links">
+              <li>
+                <img src={document} alt="document icon" />
+                <span>History</span>
+              </li>
+              <li>
+                <img src={notification} alt="notification icon" />
+                <span>Notifications</span>
+              </li>
+              <li>
+                <Avatar
+                  sx={{
+                    bgcolor: deepOrange[500],
+                    cursor: "pointer",
+                    height: 35,
+                    width: 35,
+                  }}
+                  ref={menuRef}
+                  onClick={() => setIsOpen((prev) => !prev)}
+                >
+                  {user.first_name.charAt()}
+                </Avatar>
+                <span>{user.email}</span>
+              </li>
+            </ul>
             {isOpen && (
               <div className="menu">
                 <button
