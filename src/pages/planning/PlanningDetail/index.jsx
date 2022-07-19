@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useMemo } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import back from "../../../assets/icons/back.svg";
-import Row from "./Row";
-import check from "../../../assets/icons/check.svg";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearProducts, fetchProductsByVendorID } from "../../../store/vendor";
 import { NotificationManager } from "react-notifications";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { clearProducts, fetchProductsByVendorID } from "../../../store/vendor";
 import Loader from "../../../components/Loader";
+import Row from "./Row";
 
+import back from "../../../assets/icons/back.svg";
+import check from "../../../assets/icons/check.svg";
 import style from "../style.module.scss";
 
 const headers = [
@@ -24,27 +24,15 @@ export default function PlanningDetail() {
   const [productFilter, setProductFilter] = useState(false);
   const [dillerFilter, setDillerFilter] = useState(false);
   const { loading, products, error } = useSelector((state) => state.vendors);
-  const { planId } = useParams();
+  const { vendorID } = useParams();
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchProductsByVendorID(planId));
+    dispatch(fetchProductsByVendorID({ vendorID, exclude: productFilter }));
     return () => dispatch(clearProducts());
-  }, [dispatch, planId, location]);
-
-  const filteredProducts = useMemo(() => {
-    return (
-      products &&
-      products.filter((product) => {
-        if (productFilter) {
-          return product.ordered > 0;
-        }
-        return true;
-      })
-    );
-  }, [productFilter, products]);
+  }, [dispatch, vendorID, productFilter]);
 
   return (
     <>
@@ -70,7 +58,7 @@ export default function PlanningDetail() {
                   id="small"
                   name="size"
                   type="checkbox"
-                  value={productFilter}
+                  checked={productFilter}
                   onChange={(e) => setProductFilter(e.target.checked)}
                   className="form__radio-input"
                 />
@@ -83,7 +71,7 @@ export default function PlanningDetail() {
               <div className="form__radio-group">
                 <input
                   type="checkbox"
-                  value={dillerFilter}
+                  checked={dillerFilter}
                   onChange={(e) => setDillerFilter(e.target.checked)}
                   className="form__radio-input"
                   id="large"
@@ -105,7 +93,7 @@ export default function PlanningDetail() {
               </tr>
             </thead>
             <tbody className="scroll">
-              {filteredProducts.map((product, index) => (
+              {products.map((product, index) => (
                 <Row filter={dillerFilter} key={index} data={product} />
               ))}
             </tbody>

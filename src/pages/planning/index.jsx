@@ -7,7 +7,7 @@ export default function Planning() {
   return (
     <Routes>
       <Route path="/" element={<PlanningList />} />
-      <Route path="/:planId" element={<PlanningDetail />} />
+      <Route path="/:vendorID" element={<PlanningDetail />} />
     </Routes>
   );
 }

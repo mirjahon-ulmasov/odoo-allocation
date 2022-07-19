@@ -9,7 +9,7 @@ export default function MainPage() {
   const id = useId();
   const id2 = useId();
   const navigate = useNavigate();
-  const [active, setActive] = useState(id2);
+  const [active, setActive] = useState(id);
   const activeClass = (id) => (active === id ? styles.active : "");
   return (
     <>

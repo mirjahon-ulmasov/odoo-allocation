@@ -85,8 +85,9 @@ table.nested_table {
     tr {
       border-bottom: 1px dashed #c4dbdf;
       td {
-        padding: 10px 2rem;
         color: #333;
+        padding: 10px 2rem;
+        vertical-align: middle;
         &:last-child {
           padding-right: 5rem;
         }

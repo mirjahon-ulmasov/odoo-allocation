@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
+import { useFetchAllProductsQuery } from "../../../services/productService";
+import Loader from "../../../components/Loader";
 import { IconButton } from "@mui/material";
 import style from "./style.module.scss";
 
 import companyList from "../../../fake-data/companies.json";
+import { NotificationManager } from "react-notifications";
 
 export default function SummaryByProd() {
   const [isFull, setIsFull] = useState(true);
   const [companies, setCompanies] = useState(null);
+  const { data, isLoading: loading, error } = useFetchAllProductsQuery();
 
   useEffect(() => {
     setTimeout(() => {
@@ -17,50 +21,54 @@ export default function SummaryByProd() {
 
   return (
     <div className={style.summary_prod + " scroll"}>
-      <table className={style.table_1}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Product</th>
-            {isFull && (
-              <>
-                <th>Ordered</th>
-                <th>Fulfilled</th>
-                <th>Reserved</th>
-                <th>In stock</th>
-                <th>Available</th>
-              </>
-            )}
-            <th>
-              <IconButton
-                sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#FFF" }}
-                type="button"
-                onClick={() => setIsFull((prev) => !prev)}
-              >
-                {isFull ? <ChevronLeft /> : <ChevronRight />}
-              </IconButton>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {[1, 2, 3, 4].map((el, index) => (
-            <tr key={index}>
-              <td>GY897968762</td>
-              <td>TV-ART-43JSDKJFHS78</td>
+      {error && NotificationManager.error(error)}
+      {loading && <Loader />}
+      {data && (
+        <table className={style.table_1}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Product</th>
               {isFull && (
-                <>
-                  <td>123</td>
-                  <td>66</td>
-                  <td>34</td>
-                  <td>12</td>
-                  <td>12</td>
-                </>
+                <Fragment>
+                  <th>Ordered</th>
+                  <th>Fulfilled</th>
+                  <th>Reserved</th>
+                  <th>In stock</th>
+                  <th>Available</th>
+                </Fragment>
               )}
-              <td></td>
+              <th>
+                <IconButton
+                  sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#FFF" }}
+                  type="button"
+                  onClick={() => setIsFull((prev) => !prev)}
+                >
+                  {isFull ? <ChevronLeft /> : <ChevronRight />}
+                </IconButton>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="scroll">
+            {data.results.map((prod, index) => (
+              <tr key={index}>
+                <td>{prod.material}</td>
+                <td>{prod.material_name}</td>
+                {isFull && (
+                  <Fragment>
+                    <td>{prod.ordered}</td>
+                    <td>{prod.fulfilled}</td>
+                    <td>{prod.reserved}</td>
+                    <td>{prod.in_stock}</td>
+                    <td>{prod.is_available}</td>
+                  </Fragment>
+                )}
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       {companies &&
         companies.map((company, index) => (
           <table
