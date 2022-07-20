@@ -1,11 +1,13 @@
-import React from "react";
+import React, { Fragment } from "react";
+import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
-import back from "../../../assets/icons/back.svg";
-import Loader from "../../../components/Loader";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { NotificationManager } from "react-notifications";
 import { useFetchVendorsQuery } from "../../../services/productService";
+import Loader from "../../../components/Loader";
+
 import style from "../style.module.scss";
+import back from "../../../assets/icons/back.svg";
 
 const headers = ["ID", "Organization", "Status", "Action"];
 
@@ -13,16 +15,17 @@ export default function PlanningList() {
   const navigate = useNavigate();
   const { data, isLoading: loading, error } = useFetchVendorsQuery();
 
-  const updateAllDB = () => {};
-  const updateDB = (id) => {};
+  const updateDB = () => {};
 
   const planningHandler = (vendorId, title) => {
     navigate(vendorId, { state: { title } });
   };
+
+  if (loading) return ReactDOM.createPortal(<Loader />, document.getElementById("loading"));
+  if (error) return NotificationManager.error(error);
+
   return (
-    <>
-      {loading && <Loader />}
-      {error && NotificationManager.error(error)}
+    <Fragment>
       <nav className="nav-links">
         <img onClick={() => navigate(-1)} src={back} alt="back icon" />
         <p onClick={() => navigate("/")} className="click">
@@ -32,9 +35,9 @@ export default function PlanningList() {
       </nav>
       <header className="header">
         <h1>Planning</h1>
-        <button type="button" onClick={updateAllDB} className="btn info">
+        <button type="button" onClick={updateDB} className="btn info">
           <Cached />
-          Update all databases
+          Update
         </button>
       </header>
       {data && (
@@ -54,29 +57,19 @@ export default function PlanningList() {
                   <td>{vendor.vendor_name}</td>
                   <td>Last update 17:00, 24th may</td>
                   <td>
-                    <div className={style.actions}>
-                      <button
-                        type="button"
-                        onClick={() => updateDB(1)}
-                        className="btn info"
-                      >
-                        <Cached />
-                        Update database
-                      </button>
-                      <button
-                        type="button"
-                        className="btn success"
-                        onClick={() =>
-                          planningHandler(
-                            vendor.id.toString(),
-                            vendor.vendor_name
-                          )
-                        }
-                      >
-                        Start planning
-                        <ArrowForward />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      className="btn success"
+                      onClick={() =>
+                        planningHandler(
+                          vendor.id.toString(),
+                          vendor.vendor_name
+                        )
+                      }
+                    >
+                      Start planning
+                      <ArrowForward />
+                    </button>
                   </td>
                 </tr>
               );
@@ -84,6 +77,6 @@ export default function PlanningList() {
           </tbody>
         </table>
       )}
-    </>
+    </Fragment>
   );
 }

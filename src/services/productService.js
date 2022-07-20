@@ -17,7 +17,32 @@ export const productApi = createApi({
         method: "GET",
       }),
     }),
+    fetchProdsByVendor: builder.query({
+      query: ({ vendor, exclude }) => ({
+        url: "/material/list/",
+        method: "GET",
+        params: {
+          vendor,
+          exclude,
+        },
+      }),
+    }),
+    fetchDealersByProd: builder.query({
+      query: ({ material, exclude }) => ({
+        url: "/customer/list/",
+        method: "GET",
+        params: {
+          material,
+          exclude,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useFetchAllProductsQuery, useFetchVendorsQuery } = productApi;
+export const {
+  useFetchVendorsQuery,
+  useFetchAllProductsQuery,
+  useFetchDealersByProdQuery,
+  useFetchProdsByVendorQuery
+} = productApi;

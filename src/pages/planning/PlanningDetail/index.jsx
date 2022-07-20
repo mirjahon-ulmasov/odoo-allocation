@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { NotificationManager } from "react-notifications";
+import ReactDOM from "react-dom";
+import React, { Fragment, useEffect, useState } from "react";
+import { useFetchProdsByVendorQuery } from "../../../services/productService";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { clearProducts, fetchProductsByVendorID } from "../../../store/vendor";
+import { NotificationManager } from "react-notifications";
 import Loader from "../../../components/Loader";
 import Row from "./Row";
 
+import style from "../style.module.scss";
 import back from "../../../assets/icons/back.svg";
 import check from "../../../assets/icons/check.svg";
-import style from "../style.module.scss";
 
 const headers = [
   "ID",
@@ -21,24 +21,27 @@ const headers = [
 ];
 
 export default function PlanningDetail() {
-  const [productFilter, setProductFilter] = useState(false);
-  const [dillerFilter, setDillerFilter] = useState(false);
-  const { loading, products, error } = useSelector((state) => state.vendors);
   const { vendorID } = useParams();
   const location = useLocation();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [productFilter, setProductFilter] = useState(false);
+  const [dillerFilter, setDillerFilter] = useState(false);
+  const { data, isLoading: loading, error, refetch,
+  } = useFetchProdsByVendorQuery({
+    vendor: vendorID,
+    exclude: productFilter,
+  });
 
   useEffect(() => {
-    dispatch(fetchProductsByVendorID({ vendorID, exclude: productFilter }));
-    return () => dispatch(clearProducts());
-  }, [dispatch, vendorID, productFilter]);
+    refetch();
+  }, [refetch, vendorID, productFilter]);
+
+  if (loading) return ReactDOM.createPortal(<Loader />, document.getElementById("loading"));
+  if (error) return NotificationManager.error(error);
 
   return (
-    <>
-      {loading && <Loader />}
-      {error && NotificationManager.error(error)}
-      {products && (
+    <Fragment>
+      {data && (
         <>
           <nav className="nav-links">
             <img onClick={() => navigate(-1)} src={back} alt="back icon" />
@@ -90,11 +93,12 @@ export default function PlanningDetail() {
                 {headers.map((header, index) => (
                   <th key={index}>{header}</th>
                 ))}
+                <th></th>
               </tr>
             </thead>
             <tbody className="scroll">
-              {products.map((product, index) => (
-                <Row filter={dillerFilter} key={index} data={product} />
+              {data.results.map((product, index) => (
+                <Row key={index} filter={dillerFilter} product={product} />
               ))}
             </tbody>
           </table>
@@ -106,6 +110,6 @@ export default function PlanningDetail() {
           </div>
         </>
       )}
-    </>
+    </Fragment>
   );
 }

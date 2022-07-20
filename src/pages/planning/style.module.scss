@@ -1,7 +1,7 @@
 table.table {
   width: 100%;
   color: #333;
-  text-align: left;
+  text-align: center;
   margin-top: 1.5rem;
   border-collapse: collapse;
   animation: 0.5s linear fadeIn;
@@ -13,58 +13,65 @@ table.table {
     }
   }
 
+  tbody {
+    display: block;
+    overflow: auto;
+    width: 100%;
+  }
+
+  tr {
+    display: table;
+    width: 100%;
+  }
+
   td,
   th {
     border: 0;
-    font-size: 15px;
+    font-size: 16px;
     padding: 1rem 0 1rem 2rem;
   }
 }
 
 table.t1 {
-  thead,
-  tbody tr {
-    width: 100%;
-    display: table;
-    table-layout: fixed;
-  }
-
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   tbody {
-    height: 28rem;
-    display: block;
-    overflow: auto;
+    max-height: 65vh;
     tr {
       &:nth-child(odd) {
         background-color: #f3f3f3;
-      }
-      td .actions {
-        gap: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
       }
     }
   }
 
   th,
   td {
-    &:first-child {
-      width: 10%;
-    }
-    &:nth-child(2),
-    &:nth-child(3) {
-      width: 25%;
-    }
+    width: 25%;
   }
 }
 
 table.t2 {
-  tbody tr.row:nth-child(4n-3) {
-    background-color: #f3f3f3;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  tbody {
+    max-height: 65vh;
+    tr.row:nth-child(4n-3) {
+      background-color: #f3f3f3;
+    }
   }
   td:last-child {
-    width: 8rem;
     font-weight: 500;
+  }
+  th,
+  td {
+    width: 9%;
+    &:first-child,
+    &:last-child {
+      width: 15%;
+    }
+    &:nth-child(2) {
+      width: 25%;
+    }
   }
 }
 
@@ -82,16 +89,28 @@ table.nested_table {
     }
   }
   tbody {
+    max-height: 30vh;
     tr {
       border-bottom: 1px dashed #c4dbdf;
       td {
         color: #333;
-        padding: 10px 2rem;
+        padding: 1rem 2rem;
         vertical-align: middle;
-        &:last-child {
-          padding-right: 5rem;
+
+        input {
+          padding: 10px;
+          font-size: 1rem;
+          max-width: 10rem;
+          background: #fcffff;
+          border: 1px solid #c4dbdf;
         }
       }
+    }
+  }
+  tr.nested {
+    th,
+    td {
+      width: 20%;
     }
   }
 }
