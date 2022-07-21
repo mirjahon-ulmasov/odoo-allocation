@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { NotificationManager } from "react-notifications";
-import { useFetchVendorsQuery } from "../../../services/productService";
-import Loader from "../../../components/Loader";
+import { useFetchVendorsQuery } from "services/productService";
+import Loader from "components/Loader";
 
 import style from "../style.module.scss";
-import back from "../../../assets/icons/back.svg";
+import back from "assets/icons/back.svg";
 
 const headers = ["ID", "Organization", "Status", "Action"];
 
@@ -28,7 +28,7 @@ export default function PlanningList() {
     <Fragment>
       <nav className="nav-links">
         <img onClick={() => navigate(-1)} src={back} alt="back icon" />
-        <p onClick={() => navigate("/")} className="click">
+        <p onClick={() => navigate("/planner")} className="click">
           Main Page -
         </p>
         <p className="unclick">Planning</p>

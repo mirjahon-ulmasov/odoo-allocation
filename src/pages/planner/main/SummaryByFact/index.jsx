@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
-import dealerList from "../../../fake-data/dealers.json";
+
+import dealerList from "fake-data/dealers.json";
 import style from "./style.module.scss";
 
 export default function SummaryByFact() {

@@ -1,14 +1,14 @@
 import ReactDOM from "react-dom";
 import React, { Fragment, useEffect, useState } from "react";
-import { useFetchProdsByVendorQuery } from "../../../services/productService";
+import { useFetchProdsByVendorQuery } from "services/productService";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { NotificationManager } from "react-notifications";
-import Loader from "../../../components/Loader";
+import Loader from "components/Loader";
 import Row from "./Row";
 
 import style from "../style.module.scss";
-import back from "../../../assets/icons/back.svg";
-import check from "../../../assets/icons/check.svg";
+import back from "assets/icons/back.svg";
+import check from "assets/icons/check.svg";
 
 const headers = [
   "ID",
@@ -45,10 +45,10 @@ export default function PlanningDetail() {
         <>
           <nav className="nav-links">
             <img onClick={() => navigate(-1)} src={back} alt="back icon" />
-            <p onClick={() => navigate("/")} className="click">
+            <p onClick={() => navigate("/planner")} className="click">
               Main Page -
             </p>
-            <p onClick={() => navigate("/planning")} className="click">
+            <p onClick={() => navigate("/planner/planning")} className="click">
               Planning -
             </p>
             <p className="unclick">{location.state.title}</p>

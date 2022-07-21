@@ -22,7 +22,7 @@ export const login = createAsyncThunk(
       localStorage.setItem("token", user.token);
       localStorage.setItem("email", user.email);
       NotificationManager.success("Login Success", "", 2000);
-      navigate("/");
+      navigate(`/${user.role}`);
       return user;
     } catch (err) {
       NotificationManager.error("User not found", "", 2000);

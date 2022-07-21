@@ -1,10 +1,10 @@
 import ReactDOM from "react-dom";
 import { Fragment, useEffect, useState } from "react";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { useFetchDealersByProdQuery } from "../../../services/productService";
+import { useFetchDealersByProdQuery } from "services/productService";
 import { Collapse, IconButton } from "@mui/material";
 import { NotificationManager } from "react-notifications";
-import Loader from "../../../components/Loader";
+import Loader from "components/Loader";
 import style from "../style.module.scss";
 
 const headers = [

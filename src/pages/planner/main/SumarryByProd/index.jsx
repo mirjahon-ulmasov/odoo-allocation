@@ -1,12 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
-import { useFetchAllProductsQuery } from "../../../services/productService";
-import Loader from "../../../components/Loader";
-import { IconButton } from "@mui/material";
-import style from "./style.module.scss";
-
-import companyList from "../../../fake-data/companies.json";
+import { useFetchAllProductsQuery } from "services/productService";
 import { NotificationManager } from "react-notifications";
+import { IconButton } from "@mui/material";
+import Loader from "components/Loader";
+
+import style from "./style.module.scss";
+import companyList from "fake-data/companies.json";
 
 export default function SummaryByProd() {
   const [isFull, setIsFull] = useState(true);

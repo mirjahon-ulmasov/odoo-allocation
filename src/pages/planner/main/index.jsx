@@ -1,8 +1,9 @@
-import { Button, Typography } from "@mui/material";
 import React, { useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button, Typography } from "@mui/material";
 import SummaryByFact from "./SummaryByFact/index.jsx";
 import SummaryByProd from "./SumarryByProd/index.jsx";
+
 import styles from "./style.module.scss";
 
 export default function MainPage() {
@@ -19,7 +20,7 @@ export default function MainPage() {
           type="button"
           className="btn dark"
           onClick={() => {
-            navigate("/planning");
+            navigate("planning");
           }}
         >
           Start Planning

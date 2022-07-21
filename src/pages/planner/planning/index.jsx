@@ -6,7 +6,7 @@ import PlanningList from "./PlanningList/index.jsx";
 export default function Planning() {
   return (
     <Routes>
-      <Route path="/" element={<PlanningList />} />
+      <Route index element={<PlanningList />} />
       <Route path="/:vendorID" element={<PlanningDetail />} />
     </Routes>
   );
