@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import PlanningDetail from "./PlanningDetail/index.jsx";
-import PlanningList from "./PlanningList/index.jsx";
+import PlanningDetail from "./components/PlanningDetail.jsx";
+import PlanningList from "./components/PlanningList.jsx";
 
 export default function Planning() {
   return (

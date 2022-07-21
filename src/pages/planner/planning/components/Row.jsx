@@ -58,7 +58,7 @@ const Row = ({ filter, product }) => {
                     </tr>
                   </thead>
                   <tbody className="scroll">
-                    {data.results.map((dealer, index) => (
+                    {data.map((dealer, index) => (
                       <tr className={style.nested} key={index}>
                         <td>{dealer.name}</td>
                         <td>{dealer.ordered}</td>

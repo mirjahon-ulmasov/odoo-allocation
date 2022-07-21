@@ -10,12 +10,18 @@ export const productApi = createApi({
         url: "/material/list/",
         method: "GET",
       }),
+      transformResponse: (response) => {
+        return response.results;
+      },
     }),
     fetchVendors: builder.query({
       query: () => ({
         url: "/vendor/list/",
         method: "GET",
       }),
+      transformResponse: (response) => {
+        return response.results;
+      },
     }),
     fetchProdsByVendor: builder.query({
       query: ({ vendor, exclude }) => ({
@@ -26,6 +32,9 @@ export const productApi = createApi({
           exclude,
         },
       }),
+      transformResponse: (response) => {
+        return response.results;
+      },
     }),
     fetchDealersByProd: builder.query({
       query: ({ material, exclude }) => ({
@@ -36,6 +45,9 @@ export const productApi = createApi({
           exclude,
         },
       }),
+      transformResponse: (response) => {
+        return response.results;
+      },
     }),
   }),
 });
@@ -44,5 +56,5 @@ export const {
   useFetchVendorsQuery,
   useFetchAllProductsQuery,
   useFetchDealersByProdQuery,
-  useFetchProdsByVendorQuery
+  useFetchProdsByVendorQuery,
 } = productApi;

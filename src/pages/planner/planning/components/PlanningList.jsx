@@ -50,7 +50,7 @@ export default function PlanningList() {
             </tr>
           </thead>
           <tbody className="scroll">
-            {data.results.map((vendor, index) => {
+            {data.map((vendor, index) => {
               return (
                 <tr key={index}>
                   <td>{vendor.vendor}</td>

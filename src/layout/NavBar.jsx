@@ -1,13 +1,14 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { deepOrange } from "@mui/material/colors";
-import { Avatar, Typography } from "@mui/material";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../store/auth";
+import { Avatar, Typography } from "@mui/material";
+import { deepOrange } from "@mui/material/colors";
+import { logout } from "store/auth";
+import { getPath } from "services/setting";
 
-import icon from "../assets/icons/dashboard.svg";
-import document from "../assets/icons/document.svg";
-import notification from "../assets/icons/notification.svg";
+import icon from "assets/icons/dashboard.svg";
+import document from "assets/icons/document.svg";
+import notification from "assets/icons/notification.svg";
 
 export default function NavBar() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ export default function NavBar() {
                 <img src={document} alt="document icon" />
                 <span>History</span>
               </li>
-              <li>
+              <li onClick={() => navigate(`${getPath(user)}/notification`)}>
                 <img src={notification} alt="notification icon" />
                 <span>Notifications</span>
               </li>
@@ -53,12 +54,12 @@ export default function NavBar() {
                     height: 35,
                     width: 35,
                   }}
-                  ref={menuRef}
-                  onClick={() => setIsOpen((prev) => !prev)}
                 >
                   {user.first_name.charAt()}
                 </Avatar>
-                <span>{user.email}</span>
+                <span ref={menuRef} onClick={() => setIsOpen((prev) => !prev)}>
+                  {user.email}
+                </span>
               </li>
             </ul>
             {isOpen && (

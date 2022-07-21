@@ -97,7 +97,7 @@ export default function PlanningDetail() {
               </tr>
             </thead>
             <tbody className="scroll">
-              {data.results.map((product, index) => (
+              {data.map((product, index) => (
                 <Row key={index} filter={dillerFilter} product={product} />
               ))}
             </tbody>

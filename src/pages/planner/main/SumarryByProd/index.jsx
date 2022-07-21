@@ -50,7 +50,7 @@ export default function SummaryByProd() {
             </tr>
           </thead>
           <tbody className="scroll">
-            {data.results.map((prod, index) => (
+            {data.map((prod, index) => (
               <tr key={index}>
                 <td>{prod.material}</td>
                 <td>{prod.material_name}</td>
