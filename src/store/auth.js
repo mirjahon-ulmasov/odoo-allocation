@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { NotificationManager } from "react-notifications";
 import { API } from "../services/api";
 import axios from "axios";
+import { getPath } from "services/setting";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -22,7 +23,7 @@ export const login = createAsyncThunk(
       localStorage.setItem("token", user.token);
       localStorage.setItem("email", user.email);
       NotificationManager.success("Login Success", "", 2000);
-      navigate(`/${user.role}`);
+      navigate(getPath(user));
       return user;
     } catch (err) {
       NotificationManager.error("User not found", "", 2000);

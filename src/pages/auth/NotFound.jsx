@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getPath } from "services/setting";
 
 export default function NotFound() {
   const navigate = useNavigate();
@@ -13,9 +14,9 @@ export default function NotFound() {
         type="button"
         style={{ textTransform: "uppercase", padding: "0.7rem 2rem" }}
         className="btn dark"
-        onClick={() => navigate(`/${user.role}`)}
+        onClick={() => navigate(getPath(user))}
       >
-        back
+        Back
       </button>
     </div>
   );

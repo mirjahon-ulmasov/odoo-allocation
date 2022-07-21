@@ -3,7 +3,7 @@ import { NotificationContainer } from "react-notifications";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 
-export default function MainLayout({ children }) {
+export default function MainLayout() {
   return (
     <>
       <NotificationContainer />

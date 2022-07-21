@@ -1,16 +1,16 @@
 import NotFound from "pages/auth/NotFound";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
+import { checkPath } from "services/setting";
 
 const RequireAuth = ({ children }) => {
   const location = useLocation();
-  let role = location.pathname.split("/")[1];
+  const path = location.pathname.split("/")[1];
   const { isLoggedIn, user } = useSelector((state) => state.auth);
 
-  if (!isLoggedIn || !user || user.token === "")
+  if (!isLoggedIn || !user || user.token === "") {
     return <Navigate to="/login" state={{ from: location }} replace={true} />;
-  else if (role && user.role === role) return children;
-
+  } else if (checkPath(user, path)) return children;
   return <NotFound />;
 };
 
