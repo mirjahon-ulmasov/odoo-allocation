@@ -34,9 +34,8 @@ export default function Notification() {
       <li onClick={() => setOpen((prev) => !prev)}>
         <p className="message">
           <img src={down} alt="down" />
-          You (Texnograd) have asked to reserve extra pieces
+          Texnograd have asked to reserve extra pieces
         </p>
-        <span className="status">Status: Waiting</span>
       </li>
 
       <li>

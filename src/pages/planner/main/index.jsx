@@ -1,8 +1,8 @@
 import React, { useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Typography } from "@mui/material";
-import SummaryByFact from "./SummaryByFact/index.jsx";
-import SummaryByProd from "./SumarryByProd/index.jsx";
+import SummaryByFact from "./components/SummaryFact.jsx";
+import SummaryByProd from "./components/SummaryProd.jsx";
 
 import styles from "./style.module.scss";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import NotificationList from "./components/NotificationList";
+import Notification from "./notifications";
 import MainPage from "./main";
 import Planning from "./planning";
 
@@ -9,7 +9,7 @@ export default function Planner() {
     <Routes>
       <Route index element={<MainPage />} />
       <Route path="/planning/*" element={<Planning />} />
-      <Route path="/notifications" element={<NotificationList />} />
+      <Route path="/notifications/*" element={<Notification />} />
     </Routes>
   );
 }

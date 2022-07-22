@@ -5,7 +5,7 @@ import { NotificationManager } from "react-notifications";
 import { IconButton } from "@mui/material";
 import Loader from "components/Loader";
 
-import style from "./style.module.scss";
+import styled from "styled-components";
 import companyList from "fake-data/companies.json";
 
 export default function SummaryByProd() {
@@ -20,11 +20,11 @@ export default function SummaryByProd() {
   }, []);
 
   return (
-    <div className={style.summary_prod + " scroll"}>
+    <Summary className="scroll">
       {error && NotificationManager.error(error)}
       {loading && <Loader />}
       {data && (
-        <table className={style.table_1}>
+        <table className="table_1">
           <thead>
             <tr>
               <th>ID</th>
@@ -73,8 +73,7 @@ export default function SummaryByProd() {
         companies.map((company, index) => (
           <table
             key={index}
-            className={`${style.table_2} ${company.isFull ? style.active : ""}`}
-          >
+            className={`table_2 ${company.isFull ? "active" : ""}`}>
             <thead>
               <tr>
                 <th colSpan={4}>
@@ -123,6 +122,141 @@ export default function SummaryByProd() {
             </tbody>
           </table>
         ))}
-    </div>
+    </Summary>
   );
 }
+
+const Summary = styled.div`
+  display: flex;
+  overflow-x: scroll;
+
+  table {
+    color: #333333;
+    text-align: center;
+    min-width: max-content;
+    border-collapse: collapse;
+
+    & * {
+      box-sizing: unset;
+    }
+
+    tbody {
+      display: block;
+      overflow: auto;
+      height: 60vh;
+      width: 100%;
+      tr {
+        td {
+          font-weight: 500;
+          padding: 1rem 2rem;
+          vertical-align: middle;
+
+          &:first-child,
+          &:nth-child(2) {
+            font-weight: 400;
+          }
+        }
+        &:nth-child(odd) {
+          background-color: #f3f3f3;
+        }
+      }
+    }
+
+    tr {
+      display: table;
+      width: 100%;
+    }
+  }
+  table.table_1 {
+    border-right: 4px solid #b7478a;
+    thead {
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08);
+      tr {
+        border-bottom: 1px solid #dfdfdf;
+        th {
+          font-weight: 500;
+          padding: 1.5rem 2rem;
+
+          button:hover {
+            background-color: #130f2680;
+          }
+        }
+      }
+    }
+    tbody tr {
+      height: 5rem;
+    }
+
+    th,
+    td {
+      width: 4rem;
+      &:first-child {
+        width: 12rem;
+      }
+      &:nth-child(2) {
+        width: 20rem;
+      }
+    }
+  }
+  table.table_2 {
+    thead {
+      tr {
+        border-right: 1px solid #fff;
+        th {
+          padding: 0.4rem 2rem;
+        }
+        &:first-child {
+          th {
+            width: 5rem;
+            display: flex;
+            text-align: left;
+            align-items: center;
+
+            span {
+              font-weight: 500;
+              line-height: 1.2;
+            }
+          }
+        }
+        &:nth-child(2) {
+          background-color: #f2f2f2;
+          border-bottom: 1px solid #dfdfdf;
+          border-right: 1px solid #f2f2f2;
+          th {
+            font-size: 14px;
+            color: #898989;
+            font-weight: 400;
+            padding: 0.2rem 2rem;
+          }
+        }
+      }
+    }
+    tbody {
+      border-right: 1px solid #eaeaea;
+    }
+  }
+  table.table_2.active {
+    thead {
+      tr {
+        &:first-child {
+          th {
+            width: 100%;
+            display: table-cell;
+          }
+        }
+        &:nth-child(2) {
+          background-color: #016584;
+          th {
+            color: #fff;
+          }
+        }
+      }
+    }
+    tbody {
+      tr {
+        background-color: #f0f8f9;
+        border-bottom: 1px solid #dfdfdf;
+      }
+    }
+  }
+`;
