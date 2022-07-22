@@ -42,7 +42,7 @@ export default function NavBar() {
                 <img src={document} alt="document icon" />
                 <span>History</span>
               </li>
-              <li onClick={() => navigate(`${getPath(user)}/notification`)}>
+              <li onClick={() => navigate(`${getPath(user)}/notifications`)}>
                 <img src={notification} alt="notification icon" />
                 <span>Notifications</span>
               </li>

@@ -1,22 +1,9 @@
-header.header {
-  margin-top: -2rem;
-  padding: 1.5rem;
-  border-bottom: 1px solid #dfdfdf;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08);
+const { default: styled } = require("styled-components");
 
-  h1 {
-    font-weight: 600;
-    font-size: 20px;
-    color: #333333;
-    letter-spacing: 0.01em;
-  }
-}
-
-table.table {
+export const Table = styled.table`
   width: 100%;
   color: #333;
   text-align: center;
-  margin-top: 1.5rem;
   border-collapse: collapse;
   animation: 0.5s linear fadeIn;
 
@@ -38,16 +25,15 @@ table.table {
     width: 100%;
   }
 
-  td,
-  th {
+  td, th {
     border: 0;
     font-size: 16px;
     vertical-align: middle;
     padding: 1rem 0 1rem 2rem;
   }
-}
+`;
 
-table.t1 {
+export const T1 = styled(Table)`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   tbody {
     max-height: 65vh;
@@ -72,8 +58,7 @@ table.t1 {
     }
   }
 
-  th,
-  td {
+  th, td {
     width: 11%;
     &:first-child {
       width: 14%;
@@ -82,4 +67,6 @@ table.t1 {
       width: 20%;
     }
   }
-}
+`;
+
+export const T2 = styled(Table)``;

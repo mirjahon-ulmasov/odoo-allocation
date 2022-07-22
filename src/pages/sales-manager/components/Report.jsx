@@ -1,11 +1,11 @@
 import ReactDOM from "react-dom";
 import React, { Fragment, useState } from "react";
-import { NotificationManager } from "react-notifications";
 import { useFetchSmProdsQuery } from "services/smService";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Loader from "components/Loader";
 
-import style from "../style.module.scss";
+import { NotificationManager } from "react-notifications";
+import { T1 } from "components/Tables";
 
 const headers = [
   "ID",
@@ -27,10 +27,9 @@ export default function Report() {
       <Loader />,
       document.getElementById("loading")
     );
-  if (error) return NotificationManager.error(error);
-
   return (
     <Fragment>
+      {error && NotificationManager.error(error)}
       <header className="header">
         <h1>Report</h1>
         <Box sx={{ minWidth: 200 }}>
@@ -52,7 +51,7 @@ export default function Report() {
         </Box>
       </header>
       {data && (
-        <table className={`${style.table} ${style.t1}`}>
+        <T1 style={{ marginTop: "1.5em" }}>
           <thead>
             <tr>
               {headers.map((header, index) => (
@@ -82,7 +81,7 @@ export default function Report() {
               );
             })}
           </tbody>
-        </table>
+        </T1>
       )}
     </Fragment>
   );

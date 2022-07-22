@@ -37,10 +37,10 @@ export default function PlanningDetail() {
   }, [refetch, vendorID, productFilter]);
 
   if (loading) return ReactDOM.createPortal(<Loader />, document.getElementById("loading"));
-  if (error) return NotificationManager.error(error);
 
   return (
     <Fragment>
+      {error && NotificationManager.error(error)}
       {data && (
         <>
           <nav className="nav-links">

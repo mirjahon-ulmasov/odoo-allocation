@@ -22,10 +22,10 @@ export default function PlanningList() {
   };
 
   if (loading) return ReactDOM.createPortal(<Loader />, document.getElementById("loading"));
-  if (error) return NotificationManager.error(error);
-
+  
   return (
     <Fragment>
+      {error && NotificationManager.error(error)}
       <nav className="nav-links">
         <img onClick={() => navigate(-1)} src={back} alt="back icon" />
         <p onClick={() => navigate("/planner")} className="click">
