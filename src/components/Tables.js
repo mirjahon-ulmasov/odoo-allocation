@@ -93,6 +93,26 @@ export const T2 = styled(T1)`
   th,
   td {
     width: 9%;
+    .dropdown {
+      position: relative;
+
+      & > label {
+        width: 10rem;
+        display: flex;
+        align-items: center;
+        border-radius: 2px;
+        background: #fbfbfb;
+        padding: 0.5rem 0.7rem;
+      }
+
+      .drop-content {
+        position: absolute;
+        width: 10rem;
+        top: 0;
+        left: 0;
+        z-index: 2;
+      }
+    }
     &:first-child,
     &:last-child {
       width: 11%;

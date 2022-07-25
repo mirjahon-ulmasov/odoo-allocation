@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Done, Close } from "@mui/icons-material";
+import { Done, Close, KeyboardArrowDown } from "@mui/icons-material";
 
 export default function Row({ item }) {
   const [isReject, setIsReject] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <tr>
       <td>{item.material}</td>
@@ -32,7 +33,26 @@ export default function Row({ item }) {
           </button>
         </div>
       </td>
-      <td>Select Dealer</td>
+      <td>
+        <div className="dropdown">
+          <label onClick={() => setIsOpen((prev) => !prev)}>
+            Select Dealer
+            <KeyboardArrowDown />
+          </label>
+          {isOpen && (
+            <div className="drop-content">
+              <label>
+                Saturn (2)
+                <input type="text" />
+              </label>
+              <label>
+                Texnology diller (29)
+                <input type="text" />
+              </label>
+            </div>
+          )}
+        </div>
+      </td>
     </tr>
   );
 }

@@ -49,8 +49,10 @@ export const notificationSlice = createSlice({
   name: "notification",
   initialState,
   reducers: {
-    clearData(state) {
+    clearNotifications(state) {
       state.notifications = [];
+    },
+    clearNotificationDetail(state) {
       state.notification_details = [];
     },
   },
@@ -83,6 +85,6 @@ export const notificationSlice = createSlice({
   },
 });
 
-export const { clearData } = notificationSlice.actions;
+export const { clearNotifications, clearNotificationDetail } = notificationSlice.actions;
 const { reducer } = notificationSlice;
 export default reducer;

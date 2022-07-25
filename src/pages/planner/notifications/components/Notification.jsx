@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { NotificationManager } from "react-notifications";
+import { clearNotificationDetail } from "store/notification";
 import { fetchNotifDetails } from "store/notification";
 import { useDispatch, useSelector } from "react-redux";
 import { Collapse } from "@mui/material";
@@ -35,9 +36,10 @@ export default function Notification({ data }) {
     if (!open) {
       dispatch(fetchNotifDetails(data.id));
     }
+    return () => dispatch(clearNotificationDetail());
   };
 
-  const confirmHandler = () => {}
+  const confirmHandler = () => {};
 
   getLoading(loading);
 
@@ -50,7 +52,11 @@ export default function Notification({ data }) {
           {data.title} have asked to reserve extra pieces
         </p>
         {open && (
-          <button type="button" className="btn success" onClick={confirmHandler}>
+          <button
+            type="button"
+            className="btn success"
+            onClick={confirmHandler}
+          >
             <img src={check} alt="check" />
             Confirm reservation
           </button>
