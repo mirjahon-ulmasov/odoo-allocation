@@ -89,4 +89,16 @@ export const T1 = styled(Table)`
   }
 `;
 
-export const T2 = styled(Table)``;
+export const T2 = styled(T1)`
+  th,
+  td {
+    width: 9%;
+    &:first-child,
+    &:last-child {
+      width: 11%;
+    }
+    &:nth-child(2) {
+      width: 15%;
+    }
+  }
+`;

@@ -1,12 +1,14 @@
 import React, { Fragment, useState } from "react";
-import { useFetchSmProdsQuery } from "services/smService";
 import { NotificationManager } from "react-notifications";
+import { fetchNotifDetails } from "store/notification";
+import { useDispatch, useSelector } from "react-redux";
 import { Collapse } from "@mui/material";
-import { T1 } from "components/Tables";
+import { T2 } from "components/Tables";
 import { getLoading } from "utils";
 import Row from "./Row";
 
 import down from "assets/icons/down.svg";
+import check from "assets/icons/check.svg";
 
 const headers = [
   "ID",
@@ -21,27 +23,45 @@ const headers = [
   "Subtract from",
 ];
 
-export default function Notification() {
+export default function Notification({ data }) {
   const [open, setOpen] = useState(false);
-  const { data, isLoading: loading, error } = useFetchSmProdsQuery();
+  const dispatch = useDispatch();
+  const { notification_details, loading, error } = useSelector(
+    (state) => state.notification
+  );
+
+  const clickHandler = () => {
+    setOpen((prev) => !prev);
+    if (!open) {
+      dispatch(fetchNotifDetails(data.id));
+    }
+  };
+
+  const confirmHandler = () => {}
 
   getLoading(loading);
 
   return (
     <Fragment>
       {error && NotificationManager.error(error)}
-      <li onClick={() => setOpen((prev) => !prev)}>
+      <li onClick={clickHandler}>
         <p className="message">
           <img src={down} alt="down" />
-          Texnograd have asked to reserve extra pieces
+          {data.title} have asked to reserve extra pieces
         </p>
+        {open && (
+          <button type="button" className="btn success" onClick={confirmHandler}>
+            <img src={check} alt="check" />
+            Confirm reservation
+          </button>
+        )}
       </li>
 
       <li>
         <Collapse in={open} timeout="auto" unmountOnExit>
           <div style={{ width: "100%" }}>
-            {data && (
-              <T1>
+            {notification_details && (
+              <T2>
                 <thead>
                   <tr>
                     {headers.map((header, index) => (
@@ -50,11 +70,11 @@ export default function Notification() {
                   </tr>
                 </thead>
                 <tbody className="scroll" style={{ maxHeight: "20em" }}>
-                  {data.map((item, index) => (
+                  {notification_details.map((item, index) => (
                     <Row item={item} key={index} />
                   ))}
                 </tbody>
-              </T1>
+              </T2>
             )}
           </div>
         </Collapse>

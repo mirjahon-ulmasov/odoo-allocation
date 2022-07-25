@@ -12,17 +12,22 @@ export default function Row({ item }) {
       <td>{item.fulfilled_percentage}%</td>
       <td>{item.reserved}</td>
       <td>{item.allocated}</td>
-      <td>{item.reserve}</td>
+      <td>
+        {item.reversed_material}
+        <span>(+{item.extra_reserved})</span>
+      </td>
       <td>
         <div className="actions">
           <button
             className={!isReject ? "success" : ""}
-            onClick={setIsReject(false)}>
+            onClick={() => setIsReject(false)}
+          >
             <Done />
           </button>
           <button
             className={isReject ? "danger" : ""}
-            onClick={setIsReject(true)}>
+            onClick={() => setIsReject(true)}
+          >
             <Close />
           </button>
         </div>
