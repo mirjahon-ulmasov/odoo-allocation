@@ -1,7 +1,7 @@
 import NotFound from "pages/auth/NotFound";
 import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
-import { checkPath } from "services/setting";
+import { checkPath } from "utils/index";
 
 const RequireAuth = ({ children }) => {
   const location = useLocation();

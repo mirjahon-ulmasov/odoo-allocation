@@ -1,11 +1,11 @@
-import ReactDOM from "react-dom";
 import React, { Fragment, useState } from "react";
 import { useFetchSmProdsQuery } from "services/smService";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import Loader from "components/Loader";
-
 import { NotificationManager } from "react-notifications";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { T1 } from "components/Tables";
+import { getLoading } from "utils";
+
+import check from "assets/icons/check.svg";
 
 const headers = [
   "ID",
@@ -22,11 +22,8 @@ export default function Report() {
   const [dealer, setDealer] = useState("");
   const { data, isLoading: loading, error } = useFetchSmProdsQuery();
 
-  if (loading)
-    return ReactDOM.createPortal(
-      <Loader />,
-      document.getElementById("loading")
-    );
+  getLoading(loading);
+
   return (
     <Fragment>
       {error && NotificationManager.error(error)}
@@ -35,6 +32,7 @@ export default function Report() {
         <Box sx={{ minWidth: 200 }}>
           <FormControl
             sx={{ backgroundColor: "#f1f1f1", borderRadius: "2px" }}
+            size="small"
             fullWidth
           >
             <InputLabel>Select dealer</InputLabel>
@@ -83,6 +81,12 @@ export default function Report() {
           </tbody>
         </T1>
       )}
+      <div style={{ marginTop: "2rem" }} className="actions">
+        <button type="button" className="btn success">
+          <img src={check} alt="check" />
+          Submit planning
+        </button>
+      </div>
     </Fragment>
   );
 }

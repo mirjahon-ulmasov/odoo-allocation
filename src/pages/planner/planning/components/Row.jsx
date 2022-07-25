@@ -1,10 +1,9 @@
-import ReactDOM from "react-dom";
 import { Fragment, useEffect, useState } from "react";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { useFetchDealersByProdQuery } from "services/productService";
 import { Collapse, IconButton } from "@mui/material";
 import { NotificationManager } from "react-notifications";
-import Loader from "components/Loader";
+import { getLoading } from "utils";
 import style from "../style.module.scss";
 
 const headers = [
@@ -24,7 +23,7 @@ const Row = ({ filter, product }) => {
     refetch();
   }, [filter, refetch]);
 
-  if (loading) return ReactDOM.createPortal(<Loader />, document.getElementById("loading"));
+  getLoading(loading);
 
   return (
     <Fragment>

@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { NotificationManager } from "react-notifications";
-import { API } from "../services/api";
+import { API } from "../services/setting";
 import axios from "axios";
-import { getPath } from "services/setting";
+import { getPath } from "utils";
 
 const user = JSON.parse(localStorage.getItem("user"));
 

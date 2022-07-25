@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Avatar, Typography } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { logout } from "store/auth";
-import { getPath } from "services/setting";
+import { getPath } from "utils";
 
 import icon from "assets/icons/dashboard.svg";
 import document from "assets/icons/document.svg";

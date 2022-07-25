@@ -1,6 +1,11 @@
-import { fetchBaseQuery } from "@reduxjs/toolkit/query";
-import { API } from "./api";
+import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query";
+import axios from "axios";
 
+// API
+export const API =
+  process.env.REACT_APP_API || "http://odoo-api.artelelectronics.com/api/v1";
+
+// RTK Query
 const baseQuery = fetchBaseQuery({
   baseUrl: API,
   prepareHeaders: (headers, { getState }) => {
@@ -11,17 +16,26 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-export const getPath = (user = null) => {
-  if (!user) return "/login";
-  else if (user.role === "sales_manager") return "/sm";
-  return `/${user.role}`;
-};
-
-export const checkPath = (user = null, path) => {
-  let role = path === "sm" ? "sales_manager" : path;
-  if (!user) return false;
-  else if (user.role === role) return true;
-  return false;
-};
-
 export default baseQuery;
+
+// Axios
+export const defaultOptions = () => {
+  const token = localStorage.getItem("token");
+  const config = {
+    baseURL: API,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (token) {
+    config.headers["Authorization"] = `Token ${token}`;
+  }
+  return config;
+};
+
+const generate_api = () => axios.create(defaultOptions());
+
+export const regenerate_api = () => {
+  instance = generate_api();
+};
+export let instance = generate_api();

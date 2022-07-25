@@ -5,8 +5,8 @@ import SalesManager from "pages/sales-manager";
 import LoginPage from "pages/auth/LoginPage";
 import NotFound from "pages/auth/NotFound";
 import Planner from "pages/planner";
-import { getPath } from "services/setting";
 import { useSelector } from "react-redux";
+import { getPath } from "utils";
 
 function App() {
   const { user } = useSelector(state => state.auth);

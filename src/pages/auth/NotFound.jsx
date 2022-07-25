@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getPath } from "services/setting";
+import { getPath } from "utils";
 
 export default function NotFound() {
   const navigate = useNavigate();

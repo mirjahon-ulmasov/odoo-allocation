@@ -25,7 +25,8 @@ export const Table = styled.table`
     width: 100%;
   }
 
-  td, th {
+  td,
+  th {
     border: 0;
     font-size: 16px;
     vertical-align: middle;
@@ -54,11 +55,30 @@ export const T1 = styled(Table)`
           background: #fcffff;
           border: 1px solid #c4dbdf;
         }
+        .actions {
+          display: flex;
+          gap: 0.5rem;
+          button {
+            border: none;
+            color: #fff;
+            padding: 0.3rem 0.4rem;
+            border-radius: 10px;
+            background: #d0d0d0;
+          }
+
+          button.success {
+            background: #42bba5;
+          }
+          button.danger {
+            background: #f52c2c;
+          }
+        }
       }
     }
   }
 
-  th, td {
+  th,
+  td {
     width: 11%;
     &:first-child {
       width: 14%;

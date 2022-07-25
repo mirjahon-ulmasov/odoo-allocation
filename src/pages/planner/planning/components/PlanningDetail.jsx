@@ -1,9 +1,8 @@
-import ReactDOM from "react-dom";
 import React, { Fragment, useEffect, useState } from "react";
 import { useFetchProdsByVendorQuery } from "services/productService";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { NotificationManager } from "react-notifications";
-import Loader from "components/Loader";
+import { getLoading } from "utils";
 import Row from "./Row";
 
 import style from "../style.module.scss";
@@ -36,7 +35,7 @@ export default function PlanningDetail() {
     refetch();
   }, [refetch, vendorID, productFilter]);
 
-  if (loading) return ReactDOM.createPortal(<Loader />, document.getElementById("loading"));
+  getLoading(loading);
 
   return (
     <Fragment>

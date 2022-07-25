@@ -1,10 +1,10 @@
-import ReactDOM from "react-dom";
 import React, { Fragment, useState } from "react";
 import { useFetchSmProdsQuery } from "services/smService";
 import { NotificationManager } from "react-notifications";
 import { Collapse } from "@mui/material";
 import { T1 } from "components/Tables";
-import Loader from "components/Loader";
+import { getLoading } from "utils";
+import Row from "./Row";
 
 import down from "assets/icons/down.svg";
 
@@ -17,17 +17,16 @@ const headers = [
   "Reserved",
   "Allocated",
   "Reserve",
+  "Action",
+  "Subtract from",
 ];
 
 export default function Notification() {
   const [open, setOpen] = useState(false);
   const { data, isLoading: loading, error } = useFetchSmProdsQuery();
 
-  if (loading)
-    return ReactDOM.createPortal(
-      <Loader />,
-      document.getElementById("loading")
-    );
+  getLoading(loading);
+
   return (
     <Fragment>
       {error && NotificationManager.error(error)}
@@ -52,16 +51,7 @@ export default function Notification() {
                 </thead>
                 <tbody className="scroll" style={{ maxHeight: "20em" }}>
                   {data.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.material}</td>
-                      <td>{item.material_name}</td>
-                      <td>{item.ordered}</td>
-                      <td>{item.fulfilled}</td>
-                      <td>{item.fulfilled_percentage}%</td>
-                      <td>{item.reserved}</td>
-                      <td>{item.allocated}</td>
-                      <td>{item.reserve}</td>
-                    </tr>
+                    <Row item={item} key={index} />
                   ))}
                 </tbody>
               </T1>

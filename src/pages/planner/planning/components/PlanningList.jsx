@@ -1,10 +1,9 @@
 import React, { Fragment } from "react";
-import ReactDOM from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { NotificationManager } from "react-notifications";
 import { useFetchVendorsQuery } from "services/productService";
-import Loader from "components/Loader";
+import { getLoading } from "utils";
 
 import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
@@ -21,8 +20,8 @@ export default function PlanningList() {
     navigate(vendorId, { state: { title } });
   };
 
-  if (loading) return ReactDOM.createPortal(<Loader />, document.getElementById("loading"));
-  
+  getLoading(loading);
+
   return (
     <Fragment>
       {error && NotificationManager.error(error)}
