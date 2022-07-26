@@ -1,86 +1,94 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 
-import dealerList from "fake-data/dealers.json";
+import { useFetchDealersByFactQuery } from "services/productService";
+import { NotificationManager } from "react-notifications";
+import Loader from "components/Loader";
 
 export default function SummaryByFact() {
-  const [dealers, setDealers] = useState(null);
+  const { data, isLoading: loading, error } = useFetchDealersByFactQuery();
 
-  useEffect(() => {
-    setTimeout(() => {
-      setDealers(dealerList);
-    }, 0);
-  }, []);
+  const th = (index = "johon") => (
+    <Fragment key={index}>
+      <th>Ordered</th>
+      <th>Fulfilled</th>
+      <th>Reserved</th>
+      <th>Allocation</th>
+    </Fragment>
+  );
+
+  if (error) NotificationManager.error(error);
 
   return (
-    dealers && (
-      <Summary>
-        <table className="sticky">
-          <thead>
-            <tr>
-              <th>Dealers</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dealers.map((dealer, index) => {
-              return (
-                <tr key={index}>
-                  <td>{dealer.dealer_name}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <div
-          style={{ display: "flex", overflowX: "scroll" }}
-          className="scroll"
-        >
-          <table className="scroll">
+    <>
+      {loading && <Loader />}
+      {data && (
+        <Summary className="scroll">
+          <table className="sticky">
             <thead>
               <tr>
-                {dealers[0].factories.map((fact, index) => {
-                  return (
-                    <th key={index} colSpan={4}>
-                      {fact.name}
-                    </th>
-                  );
-                })}
-              </tr>
-              <tr>
-                {dealers[0].factories.map((_, index) => {
-                  return (
-                    <Fragment key={index}>
-                      <th>Ordered</th>
-                      <th>Fulfilled</th>
-                      <th>Reserved</th>
-                      <th>In Stock</th>
-                    </Fragment>
-                  );
-                })}
+                <th>Dealers</th>
               </tr>
             </thead>
             <tbody>
-              {dealers.map((dealer, index) => {
+              {data.map((dealer, index) => {
                 return (
                   <tr key={index}>
-                    {dealer.factories.map((fact, index) => {
-                      return (
-                        <Fragment key={index}>
-                          <td>{fact.ordered}</td>
-                          <td>{fact.fulfilled}</td>
-                          <td>{fact.reserved}</td>
-                          <td>{fact.in_stock}</td>
-                        </Fragment>
-                      );
-                    })}
+                    <td>{dealer.name}</td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
-        </div>
-      </Summary>
-    )
+          <div
+            style={{ display: "flex", overflowX: "scroll" }}
+            className="scroll">
+            <table className="scroll">
+              <thead>
+                <tr>
+                  <th colSpan={4}>Total</th>
+                  {data[0].products.map((prod, index) => {
+                    return (
+                      <th key={index} colSpan={4}>
+                        {prod.vendor}
+                      </th>
+                    );
+                  })}
+                </tr>
+                <tr>
+                  {th()}
+                  {data[0].products.map((_, index) => {
+                    return th(index);
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{row.total.total_ordered}</td>
+                      <td>{row.total.total_reserved}</td>
+                      <td>{row.total.total_fulfilled}</td>
+                      <td>{row.total.total_allocation}</td>
+                      {row.products.map((product, index) => {
+                        return (
+                          <Fragment key={index}>
+                            <td>{product.ordered}</td>
+                            <td>{product.reserved}</td>
+                            <td>{product.fulfilled}</td>
+                            <td>{product.allocation}</td>
+                          </Fragment>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Summary>
+      )}
+    </>
   );
 }
 
@@ -112,10 +120,8 @@ const Summary = styled.div`
     box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.08);
 
     tr th {
-      padding: 1.5rem 5rem;
-      display: inline-block;
+      padding: 1.6rem;
       border-bottom: 1px solid #dfdfdf;
-      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08);
     }
     td,
     th {

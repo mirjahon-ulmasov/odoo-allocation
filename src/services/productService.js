@@ -14,6 +14,12 @@ export const productApi = createApi({
         return response.results;
       },
     }),
+    fetchDealersByFact: builder.query({
+      query: () => ({
+        url: "/customer/stat_by_factory/",
+        method: "GET",
+      }),
+    }),
     fetchVendors: builder.query({
       query: () => ({
         url: "/vendor/list/",
@@ -26,4 +32,8 @@ export const productApi = createApi({
   }),
 });
 
-export const { useFetchVendorsQuery, useFetchAllProductsQuery } = productApi;
+export const {
+  useFetchVendorsQuery,
+  useFetchAllProductsQuery,
+  useFetchDealersByFactQuery,
+} = productApi;
