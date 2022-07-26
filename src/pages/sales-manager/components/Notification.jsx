@@ -3,9 +3,9 @@ import { useFetchSmProdsQuery } from "services/smService";
 import { NotificationManager } from "react-notifications";
 import { Collapse } from "@mui/material";
 import { T1 } from "components/Tables";
-import { getLoading } from "utils";
 
 import down from "assets/icons/down.svg";
+import Loader from "components/Loader";
 
 const headers = [
   "ID",
@@ -22,10 +22,9 @@ export default function Notification() {
   const [open, setOpen] = useState(false);
   const { data, isLoading: loading, error } = useFetchSmProdsQuery();
 
-  getLoading(loading);
-
   return (
     <Fragment>
+      {loading && <Loader />}
       {error && NotificationManager.error(error)}
       <li onClick={() => setOpen((prev) => !prev)}>
         <p className="message">

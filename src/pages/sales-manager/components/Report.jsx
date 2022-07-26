@@ -3,9 +3,9 @@ import { useFetchSmProdsQuery } from "services/smService";
 import { NotificationManager } from "react-notifications";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { T1 } from "components/Tables";
-import { getLoading } from "utils";
 
 import check from "assets/icons/check.svg";
+import Loader from "components/Loader";
 
 const headers = [
   "ID",
@@ -22,10 +22,9 @@ export default function Report() {
   const [dealer, setDealer] = useState("");
   const { data, isLoading: loading, error } = useFetchSmProdsQuery();
 
-  getLoading(loading);
-
   return (
     <Fragment>
+      {loading && <Loader />}
       {error && NotificationManager.error(error)}
       <header className="header">
         <h1>Report</h1>

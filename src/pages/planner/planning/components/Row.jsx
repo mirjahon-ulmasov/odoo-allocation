@@ -1,9 +1,8 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { useFetchDealersByProdQuery } from "services/productService";
 import { Collapse, IconButton } from "@mui/material";
-import { NotificationManager } from "react-notifications";
-import { getLoading } from "utils";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDealersByProd } from "store/product";
 import style from "../style.module.scss";
 
 const headers = [
@@ -14,28 +13,32 @@ const headers = [
   "Allocation",
 ];
 
-const Row = ({ filter, product }) => {
+const Row = ({ filter, product, rowIndex }) => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const { data, isLoading: loading, error, refetch,
-  } = useFetchDealersByProdQuery({ material: product.id, exclude: filter });
+  const { prods_dealer } = useSelector((state) => state.product);
 
-  useEffect(() => {
-    refetch();
-  }, [filter, refetch]);
+  const clickHandler = () => {
+    setOpen(!open);
+    if (!existingProd(prods_dealer)) {
+      dispatch(fetchDealersByProd({ material: product.id, exclude: filter }));
+    }
+  };
 
-  getLoading(loading);
+  const existingProd = (product) => {
+    return product.some((prod) => prod.id === product.id);
+  };
 
   return (
     <Fragment>
-      {error && NotificationManager.error(error)}
-      <tr className={style.row} onClick={() => setOpen(!open)}>
+      <tr className={style.row} onClick={clickHandler}>
         <td>{product.material}</td>
         <td>{product.material_name}</td>
         <td>{product.ordered}</td>
         <td>{product.fulfilled}</td>
         <td>{product.reserved}</td>
         <td>{product.in_stock}</td>
-        <td>0</td>
+        <td>{product.is_available}</td>
         <td>
           {open ? "Hide dillers" : "Show dillers"}
           <IconButton>
@@ -47,7 +50,7 @@ const Row = ({ filter, product }) => {
         <td style={{ padding: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <div style={{ backgroundColor: "#effafc", width: "100%" }}>
-              {data && (
+              {prods_dealer.length > 0 && (
                 <table className={`${style.table} ${style.nested_table}`}>
                   <thead>
                     <tr className={style.nested}>
@@ -57,21 +60,22 @@ const Row = ({ filter, product }) => {
                     </tr>
                   </thead>
                   <tbody className="scroll">
-                    {data.map((dealer, index) => (
-                      <tr className={style.nested} key={index}>
-                        <td>{dealer.name}</td>
-                        <td>{dealer.ordered}</td>
-                        <td>{dealer.fulfilled}</td>
-                        <td>{dealer.reserved}</td>
-                        <td>
-                          <input
-                            type="text"
-                            value={dealer.allocated}
-                            onChange={() => {}}
-                          />
-                        </td>
-                      </tr>
-                    ))}
+                    {prods_dealer[rowIndex] &&
+                      prods_dealer[rowIndex].map((dealer, index) => (
+                        <tr className={style.nested} key={index}>
+                          <td>{dealer.name}</td>
+                          <td>{dealer.ordered}</td>
+                          <td>{dealer.fulfilled}</td>
+                          <td>{dealer.reserved}</td>
+                          <td>
+                            <input
+                              type="text"
+                              value={dealer.allocated}
+                              onChange={() => {}}
+                            />
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               )}

@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useFetchProdsByVendorQuery } from "services/productService";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { NotificationManager } from "react-notifications";
-import { getLoading } from "utils";
 import Row from "./Row";
 
 import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
 import check from "assets/icons/check.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProdsByVendor } from "store/product";
+import Loader from "components/Loader";
 
 const headers = [
   "ID",
@@ -23,24 +23,25 @@ export default function PlanningDetail() {
   const { vendorID } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [productFilter, setProductFilter] = useState(false);
   const [dillerFilter, setDillerFilter] = useState(false);
-  const { data, isLoading: loading, error, refetch,
-  } = useFetchProdsByVendorQuery({
-    vendor: vendorID,
-    exclude: productFilter,
-  });
+
+  const { loading, vendor_prods } = useSelector((state) => state.product);
 
   useEffect(() => {
-    refetch();
-  }, [refetch, vendorID, productFilter]);
-
-  getLoading(loading);
+    dispatch(
+      fetchProdsByVendor({
+        vendor: vendorID,
+        exclude: productFilter,
+      })
+    );
+  }, [dispatch, vendorID, productFilter]);
 
   return (
     <Fragment>
-      {error && NotificationManager.error(error)}
-      {data && (
+      {loading && <Loader />}
+      {vendor_prods && (
         <>
           <nav className="nav-links">
             <img onClick={() => navigate(-1)} src={back} alt="back icon" />
@@ -96,15 +97,15 @@ export default function PlanningDetail() {
               </tr>
             </thead>
             <tbody className="scroll">
-              {data.map((product, index) => (
-                <Row key={index} filter={dillerFilter} product={product} />
+              {vendor_prods.map((product, index) => (
+                <Row key={index} filter={dillerFilter} product={product} rowIndex={index}/>
               ))}
             </tbody>
           </table>
-          <div className="actions">
+          <div style={{ marginTop: "2rem" }} className="actions">
             <button type="button" className="btn success">
               <img src={check} alt="check" />
-              Submit planning
+              Confirm planning
             </button>
           </div>
         </>

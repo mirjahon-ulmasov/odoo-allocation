@@ -1,25 +1,22 @@
 import React, { Fragment, useEffect } from "react";
-import { NotificationManager } from "react-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNotificationList } from "store/notification";
 import Notification from "./Notification";
 import styled from "styled-components";
-import { getLoading } from "utils";
+import Loader from "components/Loader";
 
 export default function NotificationList() {
   const dispatch = useDispatch();
-  const { notifications, loading, error } = useSelector(
+  const { notifications, loading } = useSelector(
     (state) => state.notification
   );
   useEffect(() => {
     dispatch(fetchNotificationList());
   }, [dispatch]);
 
-  getLoading(loading);
-
   return (
     <Fragment>
-      {error && NotificationManager.error(error)}
+      {loading && <Loader />}
       <Header>
         <h1>Notifications</h1>
       </Header>

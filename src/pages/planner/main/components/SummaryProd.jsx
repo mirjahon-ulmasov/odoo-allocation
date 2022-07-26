@@ -2,28 +2,32 @@ import React, { Fragment, useEffect, useState } from "react";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
 import { useFetchAllProductsQuery } from "services/productService";
 import { NotificationManager } from "react-notifications";
+import { useDispatch, useSelector } from "react-redux";
 import { IconButton } from "@mui/material";
 import Loader from "components/Loader";
-
 import styled from "styled-components";
-import companyList from "fake-data/companies.json";
+import {
+  fetchProdsByDealer,
+  editDealerProdisFull,
+  clearDealerProds,
+} from "store/product";
 
 export default function SummaryByProd() {
+  const dispatch = useDispatch();
   const [isFull, setIsFull] = useState(true);
-  const [companies, setCompanies] = useState(null);
-  const { data, isLoading: loading, error } = useFetchAllProductsQuery();
+  const { data: allProds, isLoading: load1, error } = useFetchAllProductsQuery();
+  const { loading: load2, dealer_prods } = useSelector((state) => state.product);
 
   useEffect(() => {
-    setTimeout(() => {
-      setCompanies(companyList);
-    }, 0);
-  }, []);
+    dispatch(fetchProdsByDealer());
+    return () => dispatch(clearDealerProds());
+  }, [dispatch]);
 
   return (
     <Summary className="scroll">
+      {(load1 || load2) && <Loader />}
       {error && NotificationManager.error(error)}
-      {loading && <Loader />}
-      {data && (
+      {allProds && (
         <table className="table_1">
           <thead>
             <tr>
@@ -42,15 +46,14 @@ export default function SummaryByProd() {
                 <IconButton
                   sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#FFF" }}
                   type="button"
-                  onClick={() => setIsFull((prev) => !prev)}
-                >
+                  onClick={() => setIsFull((prev) => !prev)}>
                   {isFull ? <ChevronLeft /> : <ChevronRight />}
                 </IconButton>
               </th>
             </tr>
           </thead>
-          <tbody className="scroll">
-            {data.map((prod, index) => (
+          <tbody>
+            {allProds.map((prod, index) => (
               <tr key={index}>
                 <td>{prod.material}</td>
                 <td>{prod.material_name}</td>
@@ -69,35 +72,25 @@ export default function SummaryByProd() {
           </tbody>
         </table>
       )}
-      {companies &&
-        companies.map((company, index) => (
+      {dealer_prods &&
+        dealer_prods.map((dealer, index) => (
           <table
             key={index}
-            className={`table_2 ${company.isFull ? "active" : ""}`}>
+            className={`table_2 ${dealer.isFull ? "active" : ""}`}>
             <thead>
               <tr>
                 <th colSpan={4}>
-                  <span>{company.name}</span>
+                  <span>{dealer.name}</span>
                   <IconButton
                     type="button"
-                    onClick={() => {
-                      setCompanies((prev) => {
-                        return prev.map((comp) => {
-                          if (comp.id === company.id) {
-                            return { ...comp, isFull: !comp.isFull };
-                          }
-                          return comp;
-                        });
-                      });
-                    }}
-                  >
-                    {company.isFull ? <ChevronRight /> : <ChevronLeft />}
+                    onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
+                    {dealer.isFull ? <ChevronRight /> : <ChevronLeft />}
                   </IconButton>
                 </th>
               </tr>
               <tr>
                 <th>Ordered</th>
-                {company.isFull && (
+                {dealer.isFull && (
                   <>
                     <th>Fulfilled</th>
                     <th>Reserved</th>
@@ -107,10 +100,10 @@ export default function SummaryByProd() {
               </tr>
             </thead>
             <tbody>
-              {company.products.map((el, index) => (
+              {dealer.products.map((el, index) => (
                 <tr key={index}>
                   <td>{el.ordered}</td>
-                  {company.isFull && (
+                  {dealer.isFull && (
                     <>
                       <td>{el.fulfilled}</td>
                       <td>{el.reserved}</td>
@@ -127,6 +120,7 @@ export default function SummaryByProd() {
 }
 
 const Summary = styled.div`
+  height: 75vh;
   display: flex;
   overflow-x: scroll;
 
@@ -139,29 +133,22 @@ const Summary = styled.div`
     & * {
       box-sizing: unset;
     }
-
     tbody {
       display: block;
       overflow: auto;
-      height: 60vh;
       width: 100%;
       tr {
+        height: 5rem;
         td {
           font-weight: 500;
           padding: 1rem 2rem;
           vertical-align: middle;
-
-          &:first-child,
-          &:nth-child(2) {
-            font-weight: 400;
-          }
         }
         &:nth-child(odd) {
           background-color: #f3f3f3;
         }
       }
     }
-
     tr {
       display: table;
       width: 100%;
@@ -183,12 +170,14 @@ const Summary = styled.div`
         }
       }
     }
-    tbody tr {
-      height: 5rem;
-    }
 
-    th,
-    td {
+    tbody tr td {
+      &:first-child,
+      &:nth-child(2) {
+        font-weight: 400;
+      }
+    }
+    th, td {
       width: 4rem;
       &:first-child {
         width: 12rem;
@@ -203,11 +192,11 @@ const Summary = styled.div`
       tr {
         border-right: 1px solid #fff;
         th {
-          padding: 0.4rem 2rem;
+          padding: 0.4rem 1rem;
         }
         &:first-child {
           th {
-            width: 5rem;
+            width: fit-content;
             display: flex;
             text-align: left;
             align-items: center;

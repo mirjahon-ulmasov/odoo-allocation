@@ -23,38 +23,7 @@ export const productApi = createApi({
         return response.results;
       },
     }),
-    fetchProdsByVendor: builder.query({
-      query: ({ vendor, exclude }) => ({
-        url: "/material/list/",
-        method: "GET",
-        params: {
-          vendor,
-          exclude,
-        },
-      }),
-      transformResponse: (response) => {
-        return response.results;
-      },
-    }),
-    fetchDealersByProd: builder.query({
-      query: ({ material, exclude }) => ({
-        url: "/customer/list/",
-        method: "GET",
-        params: {
-          material,
-          exclude,
-        },
-      }),
-      transformResponse: (response) => {
-        return response.results;
-      },
-    }),
   }),
 });
 
-export const {
-  useFetchVendorsQuery,
-  useFetchAllProductsQuery,
-  useFetchDealersByProdQuery,
-  useFetchProdsByVendorQuery,
-} = productApi;
+export const { useFetchVendorsQuery, useFetchAllProductsQuery } = productApi;

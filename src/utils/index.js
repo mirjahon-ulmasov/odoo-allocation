@@ -1,14 +1,3 @@
-import ReactDOM from "react-dom";
-import Loader from "components/Loader";
-
-export const getLoading = (loading) => {
-  if (loading) {
-    return ReactDOM.createPortal(
-      <Loader />,
-      document.getElementById("loading")
-    );
-  }
-};
 
 export const getPath = (user = null) => {
   if (!user) return "/login";

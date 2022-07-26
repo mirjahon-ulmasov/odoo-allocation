@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { NotificationManager } from "react-notifications";
 import { useFetchVendorsQuery } from "services/productService";
-import { getLoading } from "utils";
 
 import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
+import Loader from "components/Loader";
 
 const headers = ["ID", "Organization", "Status", "Action"];
 
@@ -20,10 +20,9 @@ export default function PlanningList() {
     navigate(vendorId, { state: { title } });
   };
 
-  getLoading(loading);
-
   return (
     <Fragment>
+      {loading && <Loader />}
       {error && NotificationManager.error(error)}
       <nav className="nav-links">
         <img onClick={() => navigate(-1)} src={back} alt="back icon" />
