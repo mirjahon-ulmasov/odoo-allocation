@@ -23,10 +23,11 @@ export default function SummaryByProd() {
     return () => dispatch(clearDealerProds());
   }, [dispatch]);
 
+  if (error) NotificationManager.error(error);
+
   return (
     <Summary className="scroll">
       {(load1 || load2) && <Loader />}
-      {error && NotificationManager.error(error)}
       {allProds && (
         <table className="table_1">
           <thead>
@@ -44,8 +45,8 @@ export default function SummaryByProd() {
               )}
               <th>
                 <IconButton
-                  sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#FFF" }}
                   type="button"
+                  sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#FFF" }}
                   onClick={() => setIsFull((prev) => !prev)}>
                   {isFull ? <ChevronLeft /> : <ChevronRight />}
                 </IconButton>
@@ -72,49 +73,52 @@ export default function SummaryByProd() {
           </tbody>
         </table>
       )}
-      {dealer_prods &&
-        dealer_prods.map((dealer, index) => (
-          <table
-            key={index}
-            className={`table_2 ${dealer.isFull ? "active" : ""}`}>
-            <thead>
-              <tr>
-                <th colSpan={4}>
-                  <span>{dealer.name}</span>
-                  <IconButton
-                    type="button"
-                    onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
-                    {dealer.isFull ? <ChevronRight /> : <ChevronLeft />}
-                  </IconButton>
-                </th>
-              </tr>
-              <tr>
-                <th>Ordered</th>
-                {dealer.isFull && (
-                  <>
-                    <th>Fulfilled</th>
-                    <th>Reserved</th>
-                    <th>Allocation</th>
-                  </>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {dealer.products.map((el, index) => (
-                <tr key={index}>
-                  <td>{el.ordered}</td>
+      <div className="scroll"
+        style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
+        {dealer_prods &&
+          dealer_prods.map((dealer, index) => (
+            <table
+              key={index}
+              className={`table_2 ${dealer.isFull ? "active" : ""}`}>
+              <thead>
+                <tr>
+                  <th colSpan={4}>
+                    <span>{dealer.name}</span>
+                    <IconButton
+                      type="button"
+                      onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
+                      {dealer.isFull ? <ChevronRight /> : <ChevronLeft />}
+                    </IconButton>
+                  </th>
+                </tr>
+                <tr>
+                  <th>Ordered</th>
                   {dealer.isFull && (
-                    <>
-                      <td>{el.fulfilled}</td>
-                      <td>{el.reserved}</td>
-                      <td>{el.allocation}</td>
-                    </>
+                    <Fragment>
+                      <th>Fulfilled</th>
+                      <th>Reserved</th>
+                      <th>Allocation</th>
+                    </Fragment>
                   )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ))}
+              </thead>
+              <tbody>
+                {dealer.products.map((el, index) => (
+                  <tr key={index}>
+                    <td>{el.ordered}</td>
+                    {dealer.isFull && (
+                      <Fragment>
+                        <td>{el.fulfilled}</td>
+                        <td>{el.reserved}</td>
+                        <td>{el.allocation}</td>
+                      </Fragment>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ))}
+      </div>
     </Summary>
   );
 }
@@ -122,7 +126,7 @@ export default function SummaryByProd() {
 const Summary = styled.div`
   height: 75vh;
   display: flex;
-  overflow-x: scroll;
+  overflow: scroll;
 
   table {
     color: #333333;
@@ -155,9 +159,11 @@ const Summary = styled.div`
     }
   }
   table.table_1 {
+    z-index: 10;
+    height: fit-content;
     border-right: 4px solid #b7478a;
+    box-shadow: 5px 0px 15px #ccccccc1;
     thead {
-      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.08);
       tr {
         border-bottom: 1px solid #dfdfdf;
         th {
@@ -170,7 +176,6 @@ const Summary = styled.div`
         }
       }
     }
-
     tbody tr td {
       &:first-child,
       &:nth-child(2) {
@@ -184,6 +189,10 @@ const Summary = styled.div`
       }
       &:nth-child(2) {
         width: 20rem;
+      }
+      &:last-child {
+        width: 2rem;
+        padding: 1.5rem 1rem;
       }
     }
   }
@@ -225,27 +234,21 @@ const Summary = styled.div`
     }
   }
   table.table_2.active {
-    thead {
-      tr {
-        &:first-child {
-          th {
-            width: 100%;
-            display: table-cell;
-          }
-        }
-        &:nth-child(2) {
-          background-color: #016584;
-          th {
-            color: #fff;
-          }
+    thead tr {
+      &:first-child th {
+        width: 100%;
+        display: table-cell;
+      }
+      &:nth-child(2) {
+        background-color: #016584;
+        th {
+          color: #fff;
         }
       }
     }
-    tbody {
-      tr {
-        background-color: #f0f8f9;
-        border-bottom: 1px solid #dfdfdf;
-      }
+    tbody tr {
+      background-color: #f0f8f9;
+      border-bottom: 1px solid #dfdfdf;
     }
   }
 `;

@@ -1,8 +1,7 @@
 import React, { Fragment } from "react";
-import styled from "styled-components";
-
 import { useFetchDealersByFactQuery } from "services/productService";
 import { NotificationManager } from "react-notifications";
+import styled from "styled-components";
 import Loader from "components/Loader";
 
 export default function SummaryByFact() {
@@ -20,7 +19,7 @@ export default function SummaryByFact() {
   if (error) NotificationManager.error(error);
 
   return (
-    <>
+    <Fragment>
       {loading && <Loader />}
       {data && (
         <Summary className="scroll">
@@ -31,35 +30,28 @@ export default function SummaryByFact() {
               </tr>
             </thead>
             <tbody>
-              {data.map((dealer, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{dealer.name}</td>
-                  </tr>
-                );
-              })}
+              {data.map((dealer, index) => (
+                <tr key={index}>
+                  <td>{dealer.name}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
-          <div
-            style={{ display: "flex", overflowX: "scroll" }}
-            className="scroll">
-            <table className="scroll">
+          <div className="scroll"
+            style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
+            <table className="scrolling">
               <thead>
                 <tr>
                   <th colSpan={4}>Total</th>
-                  {data[0].products.map((prod, index) => {
-                    return (
-                      <th key={index} colSpan={4}>
-                        {prod.vendor}
-                      </th>
-                    );
-                  })}
+                  {data[0].products.map((prod, index) => (
+                    <th key={index} colSpan={4}>
+                      {prod.vendor}
+                    </th>
+                  ))}
                 </tr>
                 <tr>
                   {th()}
-                  {data[0].products.map((_, index) => {
-                    return th(index);
-                  })}
+                  {data[0].products.map((_, index) => th(index))}
                 </tr>
               </thead>
               <tbody>
@@ -70,30 +62,29 @@ export default function SummaryByFact() {
                       <td>{row.total.total_reserved}</td>
                       <td>{row.total.total_fulfilled}</td>
                       <td>{row.total.total_allocation}</td>
-                      {row.products.map((product, index) => {
-                        return (
-                          <Fragment key={index}>
-                            <td>{product.ordered}</td>
-                            <td>{product.reserved}</td>
-                            <td>{product.fulfilled}</td>
-                            <td>{product.allocation}</td>
-                          </Fragment>
-                        );
-                      })}
+                      {row.products.map((product, index) => (
+                        <Fragment key={index}>
+                          <td>{product.ordered}</td>
+                          <td>{product.reserved}</td>
+                          <td>{product.fulfilled}</td>
+                          <td>{product.allocation}</td>
+                        </Fragment>
+                      ))}
                     </tr>
-                  );
-                })}
+                  )})}
               </tbody>
             </table>
           </div>
         </Summary>
       )}
-    </>
-  );
+    </Fragment>
+  )
 }
 
 const Summary = styled.div`
+  height: 75vh;
   display: flex;
+  overflow: scroll;
 
   table {
     margin-top: 1rem;
@@ -120,16 +111,17 @@ const Summary = styled.div`
     box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.08);
 
     tr th {
-      padding: 1.6rem;
+      padding: 1.56rem;
       border-bottom: 1px solid #dfdfdf;
     }
-    td,
-    th {
+    tr:last-child td {
+      padding: 1.45rem;
+    }
+    td, th {
       font-weight: 400;
-      padding: 1.2rem 4.3rem;
     }
   }
-  table.scroll {
+  table.scrolling {
     z-index: 1;
     thead {
       tr {
@@ -164,12 +156,8 @@ const Summary = styled.div`
         }
       }
     }
-    tbody {
-      tr {
-        td:nth-child(4n) {
-          border-right: 2px solid #ededed;
-        }
-      }
+    tbody tr td:nth-child(4n) {
+      border-right: 2px solid #ededed;
     }
   }
 `;
