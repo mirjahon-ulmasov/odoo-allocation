@@ -16,13 +16,13 @@ export default function SummaryByFact() {
     </Fragment>
   );
 
-  if (error) NotificationManager.error(error);
+  if (error) NotificationManager.error(error.error);
 
   return (
-    <Fragment>
+    <Summary className="scroll">
       {loading && <Loader />}
-      {data && (
-        <Summary className="scroll">
+      {data && 
+        <Fragment>
           <table className="sticky">
             <thead>
               <tr>
@@ -75,9 +75,9 @@ export default function SummaryByFact() {
               </tbody>
             </table>
           </div>
-        </Summary>
-      )}
-    </Fragment>
+        </Fragment>
+      }
+    </Summary>
   )
 }
 

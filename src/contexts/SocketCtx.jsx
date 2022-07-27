@@ -1,25 +1,28 @@
-import React, { createContext, useState } from "react";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { createContext, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addNotification } from "store/notification";
 
 export const SocketCtx = createContext();
 
 export default function Socket({ children }) {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const [messages, setMessages] = useState([]);
+  const { notifications } = useSelector((state) => state.notification);
 
   useEffect(() => {
     let websocket = null;
     if (user) {
-      websocket = new WebSocket(`ws://odoo-api.artelelectronics.com/ws/notification/${user.id}/`);
+      websocket = new WebSocket(
+        `ws://odoo-api.artelelectronics.com/ws/notification/${user.id}?token=${user.token}`
+      );
 
       websocket.onopen = function () {
         console.log("[open] Connection established");
       };
 
       websocket.onmessage = function (event) {
-        const message = JSON.parse(event);
-        setMessages((prev) => [message, ...prev]);
+        const message = JSON.parse(event.data);
+        dispatch(addNotification(message.data));
       };
       websocket.onerror = function (error) {
         console.log(`[error] ${error.message}`);
@@ -28,7 +31,9 @@ export default function Socket({ children }) {
     return () => {
       websocket = null;
     };
-  }, [user]);
+  }, [dispatch, user]);
 
-  return <SocketCtx.Provider value={messages}>{children}</SocketCtx.Provider>;
+  return (
+    <SocketCtx.Provider value={notifications}>{children}</SocketCtx.Provider>
+  );
 }

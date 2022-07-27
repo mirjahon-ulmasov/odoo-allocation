@@ -23,7 +23,7 @@ export default function SummaryByProd() {
     return () => dispatch(clearDealerProds());
   }, [dispatch]);
 
-  if (error) NotificationManager.error(error);
+  if (error) NotificationManager.error(error.error);
 
   return (
     <Summary className="scroll">

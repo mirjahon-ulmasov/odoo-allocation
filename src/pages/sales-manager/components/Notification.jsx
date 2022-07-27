@@ -21,7 +21,7 @@ export default function Notification() {
   const [open, setOpen] = useState(false);
   const { data, error } = useFetchSmProdsQuery();
 
-  if (error) NotificationManager.error(error);
+  if (error) NotificationManager.error(error.error);
 
   return (
     <Fragment>

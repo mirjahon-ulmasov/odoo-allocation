@@ -1,76 +1,67 @@
-import React, { Fragment, useState } from "react";
-import { clearNotificationDetail } from "store/notification";
-import { fetchNotifDetails } from "store/notification";
-import { useDispatch, useSelector } from "react-redux";
+import React, { Fragment, useId } from "react";
+import {  useSelector } from "react-redux";
 import { Collapse } from "@mui/material";
 import { T2 } from "components/Tables";
+import { getStatusEn } from "utils";
 import Row from "./Row";
 
 import down from "assets/icons/down.svg";
 import check from "assets/icons/check.svg";
 
-const headers = [
-  "ID",
-  "Product",
-  "Ordered",
-  "Fulfilled",
-  "Fulfilled (%)",
-  "Reserved",
-  "Allocated",
-  "Reserve",
-  "Action",
-  "Subtract from",
-];
-
-export default function Notification({ data }) {
-  const [open, setOpen] = useState(false);
-  const dispatch = useDispatch();
+export default function Notification({ data, active, clickHandler }) {
+  const id = useId();
+  const is_active = id === active;
   const { notification_details } = useSelector((state) => state.notification);
-
-  const clickHandler = () => {
-    setOpen((prev) => !prev);
-    if (!open) {
-      dispatch(fetchNotifDetails(data.id));
-    }
-    return () => dispatch(clearNotificationDetail());
-  };
 
   const confirmHandler = () => {};
 
   return (
     <Fragment>
-      <li onClick={clickHandler}>
+      <li onClick={() => clickHandler(id)}>
         <p className="message">
           <img src={down} alt="down" />
           {data.title} have asked to reserve extra pieces
         </p>
-        {open && (
+        <span className="date">{data.created_at}</span>
+        <span className={`status ${getStatusEn(data.status)}`}>
+          {getStatusEn(data.status)}
+        </span>
+        {is_active && data.status === 1 && (
           <button
             type="button"
             className="btn success"
-            onClick={confirmHandler}
-          >
+            onClick={confirmHandler}>
             <img src={check} alt="check" />
             Confirm reservation
           </button>
         )}
       </li>
-
       <li>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={is_active} timeout="auto" unmountOnExit>
           <div style={{ width: "100%" }}>
             {notification_details && (
               <T2>
                 <thead>
                   <tr>
-                    {headers.map((header, index) => (
-                      <th key={index}>{header}</th>
-                    ))}
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Ordered</th>
+                    <th>Fulfilled</th>
+                    <th>Fulfilled (%)</th>
+                    <th>Reserved</th>
+                    <th>Allocated</th>
+                    <th>Reserve</th>
+                    {data.status === 1 && (
+                      <Fragment>
+                        <th>Action</th>
+                        <th>Subtract from</th>
+                      </Fragment>
+                    )}
                   </tr>
                 </thead>
                 <tbody className="scroll" style={{ maxHeight: "20em" }}>
                   {notification_details.map((item, index) => (
-                    <Row item={item} key={index} />
+                    <Row item={item} key={index} status={data.status} />
                   ))}
                 </tbody>
               </T2>

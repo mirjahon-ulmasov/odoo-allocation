@@ -38,7 +38,7 @@ export const fetchNotifDetails = createAsyncThunk(
 
 const initialState = {
   notifications: [],
-  notification_details: [],
+  notification_details: null,
   loading: false,
   error: null,
 };
@@ -51,7 +51,14 @@ export const notificationSlice = createSlice({
       state.notifications = [];
     },
     clearNotificationDetail(state) {
-      state.notification_details = [];
+      state.notification_details = null;
+    },
+    addNotification(state, { payload }) {
+      const index = state.notifications.findIndex(
+        (notif) => notif.id === payload.id
+      );
+      if (index >= 0) state.notifications[index] = payload;
+      else state.notifications.unshift(payload);
     },
   },
   extraReducers: {
@@ -81,6 +88,7 @@ export const notificationSlice = createSlice({
   },
 });
 
-export const { clearNotifications, clearNotificationDetail } = notificationSlice.actions;
+export const { clearNotifications, clearNotificationDetail, addNotification } =
+  notificationSlice.actions;
 const { reducer } = notificationSlice;
 export default reducer;

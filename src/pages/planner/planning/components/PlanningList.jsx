@@ -20,7 +20,7 @@ export default function PlanningList() {
     navigate(vendorId, { state: { title } });
   };
 
-  if (error) NotificationManager.error(error);
+  if (error) NotificationManager.error(error.error);
 
   return (
     <Fragment>

@@ -93,24 +93,42 @@ export const T2 = styled(T1)`
   th,
   td {
     width: 9%;
-    .dropdown {
-      position: relative;
+    & > label {
+      width: 10rem;
+      display: flex;
+      align-items: center;
+      border-radius: 2px;
+      background: #fbfbfb;
+      padding: 0.5rem 0.7rem;
+    }
 
-      & > label {
-        width: 10rem;
+    .dropdown {
+      z-index: 2;
+      top: -4rem;
+      right: 17rem;
+      padding: 1rem;
+      position: absolute;
+      background: #ffffff;
+      border-radius: 2px;
+      box-shadow: 0px 0px 10px #ccc;
+      animation: linear 0.2s fadeInUp;
+
+      label {
         display: flex;
         align-items: center;
-        border-radius: 2px;
-        background: #fbfbfb;
-        padding: 0.5rem 0.7rem;
-      }
+        justify-content: space-between;
 
-      .drop-content {
-        position: absolute;
-        width: 10rem;
-        top: 0;
-        left: 0;
-        z-index: 2;
+        input {
+          width: 3rem;
+          height: 0.4rem;
+          margin: 0.2rem 0.5rem;
+        }
+      }
+      button {
+        width: 100%;
+        margin-top: 1rem;
+        background: #b8b8b8;
+        justify-content: center;
       }
     }
     &:first-child,

@@ -1,9 +1,11 @@
 ul.notif_list {
   max-height: 80vh;
   li {
+    position: relative;
     &:nth-child(odd) {
       display: flex;
       padding: 1.5em 2em;
+      align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid #e6e6e6;
       cursor: pointer;
@@ -15,9 +17,32 @@ ul.notif_list {
     .message {
       gap: 1rem;
       display: flex;
+      width: 25rem;
       align-items: center;
     }
-    // .status {
-    // }
+    .date {
+      color: #555;
+      padding: 0.5rem;
+      border-radius: 4px;
+      background-color: rgb(239, 239, 239);
+    }
+    .status {
+      width: 144px;
+      color: #fff;
+      padding: 0.5rem;
+      border-radius: 4px;
+      text-align: center;
+      text-transform: uppercase;
+
+      &.pending {
+        background: #ff8d69;
+      }
+      &.confirmed {
+        background: #4eb671;
+      }
+      &.rejected {
+        background: #ec5146;
+      }
+    }
   }
 }

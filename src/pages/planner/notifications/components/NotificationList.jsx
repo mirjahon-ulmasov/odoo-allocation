@@ -1,17 +1,29 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNotificationList } from "store/notification";
 import Notification from "./Notification";
 import styled from "styled-components";
+import { fetchNotifDetails } from "store/notification";
+import { clearNotificationDetail } from "store/notification";
 
 export default function NotificationList() {
+  const [activeId, setActiveId] = useState(null);
   const dispatch = useDispatch();
-  const { notifications } = useSelector(
-    (state) => state.notification
-  );
+  const { notifications } = useSelector((state) => state.notification);
   useEffect(() => {
     dispatch(fetchNotificationList());
   }, [dispatch]);
+
+  const clickHandler = (id, notificationId) => {
+    if (id !== activeId) {
+      dispatch(clearNotificationDetail());
+      dispatch(fetchNotifDetails(notificationId));
+      setActiveId(id);
+    } else {
+      dispatch(clearNotificationDetail());
+      setActiveId(null);
+    }
+  };
 
   return (
     <Fragment>
@@ -20,7 +32,12 @@ export default function NotificationList() {
       </Header>
       <ul className="notif_list scroll">
         {notifications.map((notification, index) => (
-          <Notification data={notification} key={index} />
+          <Notification
+            data={notification}
+            key={index}
+            active={activeId}
+            clickHandler={(id) => clickHandler(id, notification.id)}
+          />
         ))}
       </ul>
     </Fragment>

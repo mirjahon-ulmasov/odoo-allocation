@@ -22,7 +22,7 @@ export default function Report() {
   const [dealer, setDealer] = useState("");
   const { data, isLoading: loading, error } = useFetchSmProdsQuery();
 
-  if (error) NotificationManager.error(error);
+  if (error) NotificationManager.error(error.error);
 
   return (
     <Fragment>
