@@ -24,7 +24,6 @@ export default function LoginPage() {
   const submitHandler = (event) => {
     event.preventDefault();
     if (email === "") NotificationManager.error("Invalid Email address");
-    // if()
     if (email === "" || password === "") return;
     const data = {
       email,

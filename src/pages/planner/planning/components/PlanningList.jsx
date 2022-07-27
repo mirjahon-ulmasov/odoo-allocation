@@ -20,10 +20,11 @@ export default function PlanningList() {
     navigate(vendorId, { state: { title } });
   };
 
+  if (error) NotificationManager.error(error);
+
   return (
     <Fragment>
       {loading && <Loader />}
-      {error && NotificationManager.error(error)}
       <nav className="nav-links">
         <img onClick={() => navigate(-1)} src={back} alt="back icon" />
         <p onClick={() => navigate("/planner")} className="click">

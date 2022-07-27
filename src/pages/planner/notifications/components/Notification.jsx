@@ -8,7 +8,6 @@ import Row from "./Row";
 
 import down from "assets/icons/down.svg";
 import check from "assets/icons/check.svg";
-import Loader from "components/Loader";
 
 const headers = [
   "ID",
@@ -26,7 +25,7 @@ const headers = [
 export default function Notification({ data }) {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  const { notification_details, loading } = useSelector((state) => state.notification);
+  const { notification_details } = useSelector((state) => state.notification);
 
   const clickHandler = () => {
     setOpen((prev) => !prev);
@@ -40,7 +39,6 @@ export default function Notification({ data }) {
 
   return (
     <Fragment>
-      {loading && <Loader />}
       <li onClick={clickHandler}>
         <p className="message">
           <img src={down} alt="down" />

@@ -5,7 +5,6 @@ import { Collapse } from "@mui/material";
 import { T1 } from "components/Tables";
 
 import down from "assets/icons/down.svg";
-import Loader from "components/Loader";
 
 const headers = [
   "ID",
@@ -20,12 +19,12 @@ const headers = [
 
 export default function Notification() {
   const [open, setOpen] = useState(false);
-  const { data, isLoading: loading, error } = useFetchSmProdsQuery();
+  const { data, error } = useFetchSmProdsQuery();
+
+  if (error) NotificationManager.error(error);
 
   return (
     <Fragment>
-      {loading && <Loader />}
-      {error && NotificationManager.error(error)}
       <li onClick={() => setOpen((prev) => !prev)}>
         <p className="message">
           <img src={down} alt="down" />

@@ -2,10 +2,10 @@ import React, { Fragment, useState } from "react";
 import { useFetchSmProdsQuery } from "services/smService";
 import { NotificationManager } from "react-notifications";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import Loader from "components/Loader";
 import { T1 } from "components/Tables";
 
 import check from "assets/icons/check.svg";
-import Loader from "components/Loader";
 
 const headers = [
   "ID",
@@ -22,10 +22,11 @@ export default function Report() {
   const [dealer, setDealer] = useState("");
   const { data, isLoading: loading, error } = useFetchSmProdsQuery();
 
+  if (error) NotificationManager.error(error);
+
   return (
     <Fragment>
       {loading && <Loader />}
-      {error && NotificationManager.error(error)}
       <header className="header">
         <h1>Report</h1>
         <Box sx={{ minWidth: 200 }}>

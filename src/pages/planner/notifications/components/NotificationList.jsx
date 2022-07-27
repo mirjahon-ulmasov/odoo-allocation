@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchNotificationList } from "store/notification";
 import Notification from "./Notification";
 import styled from "styled-components";
-import Loader from "components/Loader";
 
 export default function NotificationList() {
   const dispatch = useDispatch();
-  const { notifications, loading } = useSelector(
+  const { notifications } = useSelector(
     (state) => state.notification
   );
   useEffect(() => {
@@ -16,7 +15,6 @@ export default function NotificationList() {
 
   return (
     <Fragment>
-      {loading && <Loader />}
       <Header>
         <h1>Notifications</h1>
       </Header>
