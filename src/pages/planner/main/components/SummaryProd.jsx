@@ -28,7 +28,7 @@ export default function SummaryByProd() {
   return (
     <Summary className="scroll">
       {(load1 || load2) && <Loader />}
-      {allProds && (
+      {allProds && allProds.length > 0 && (
         <table className="table_1">
           <thead>
             <tr>

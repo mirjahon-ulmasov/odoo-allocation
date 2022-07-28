@@ -43,7 +43,7 @@ export default function SummaryByFact() {
               <thead>
                 <tr>
                   <th colSpan={4}>Total</th>
-                  {data[0].products.map((prod, index) => (
+                  {data[0].vendors.map((prod, index) => (
                     <th key={index} colSpan={4}>
                       {prod.vendor}
                     </th>
@@ -51,7 +51,7 @@ export default function SummaryByFact() {
                 </tr>
                 <tr>
                   {th()}
-                  {data[0].products.map((_, index) => th(index))}
+                  {data[0].vendors.map((_, index) => th(index))}
                 </tr>
               </thead>
               <tbody>
@@ -62,12 +62,12 @@ export default function SummaryByFact() {
                       <td>{row.total.total_reserved}</td>
                       <td>{row.total.total_fulfilled}</td>
                       <td>{row.total.total_allocation}</td>
-                      {row.products.map((product, index) => (
+                      {row.vendors.map((vendor, index) => (
                         <Fragment key={index}>
-                          <td>{product.ordered}</td>
-                          <td>{product.reserved}</td>
-                          <td>{product.fulfilled}</td>
-                          <td>{product.allocation}</td>
+                          <td>{vendor.ordered}</td>
+                          <td>{vendor.reserved}</td>
+                          <td>{vendor.fulfilled}</td>
+                          <td>{vendor.allocation}</td>
                         </Fragment>
                       ))}
                     </tr>

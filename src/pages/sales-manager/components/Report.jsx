@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from "react";
-import { useFetchSmProdsQuery } from "services/smService";
-import { NotificationManager } from "react-notifications";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Loader from "components/Loader";
 import { T1 } from "components/Tables";
-
-import check from "assets/icons/check.svg";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchSmProds, fetchDealers } from "store/sales_manager";
 
 const headers = [
   "ID",
@@ -15,40 +15,66 @@ const headers = [
   "Fulfilled (%)",
   "Reserved",
   "Allocated",
-  "Reserve",
 ];
 
 export default function Report() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [dealer, setDealer] = useState("");
-  const { data, isLoading: loading, error } = useFetchSmProdsQuery();
+  const { dealers, sm_prods, loading } = useSelector(
+    (state) => state.sales_manager
+  );
 
-  if (error) NotificationManager.error(error.error);
+  useEffect(() => {
+    dispatch(fetchDealers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!dealers) return;
+    let dealerId = dealer ? dealer : dealers[0].id;
+    dispatch(fetchSmProds({ dealer: dealerId }));
+  }, [dispatch, dealers, dealer]);
+
+  console.log(sm_prods);
 
   return (
     <Fragment>
       {loading && <Loader />}
       <header className="header">
         <h1>Report</h1>
-        <Box sx={{ minWidth: 200 }}>
-          <FormControl
-            sx={{ backgroundColor: "#f1f1f1", borderRadius: "2px" }}
-            size="small"
-            fullWidth
+        <div className="actions">
+          {dealers && (
+            <Box sx={{ minWidth: 200 }}>
+              <FormControl
+                sx={{ backgroundColor: "#f1f1f1", borderRadius: "2px" }}
+                size="small"
+                fullWidth
+              >
+                <InputLabel>Select dealer</InputLabel>
+                <Select
+                  value={dealer}
+                  label="Select dealer"
+                  onChange={(e) => setDealer(e.target.value)}
+                >
+                  {dealers.map((dealer, index) => (
+                    <MenuItem key={index} value={dealer.id}>
+                      {dealer.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+          )}
+          <button
+            type="button"
+            className="btn dark"
+            onClick={() => navigate("edit")}
           >
-            <InputLabel>Select dealer</InputLabel>
-            <Select
-              value={dealer}
-              label="Select dealer"
-              onChange={(e) => setDealer(e.target.value)}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
+            Start reservation
+          </button>
+        </div>
       </header>
-      {data && (
+      {/* {data && (
         <T1 style={{ marginTop: "1.5em" }}>
           <thead>
             <tr>
@@ -68,25 +94,12 @@ export default function Report() {
                   <td>{item.fulfilled_percentage}%</td>
                   <td>{item.reserved}</td>
                   <td>{item.allocated}</td>
-                  <td>
-                    <input
-                      type="text"
-                      value={item.reserve}
-                      onChange={() => {}}
-                    />
-                  </td>
                 </tr>
               );
             })}
           </tbody>
         </T1>
-      )}
-      <div style={{ marginTop: "2rem" }} className="actions">
-        <button type="button" className="btn success">
-          <img src={check} alt="check" />
-          Submit planning
-        </button>
-      </div>
+      )} */}
     </Fragment>
   );
 }

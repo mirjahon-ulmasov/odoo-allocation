@@ -8,6 +8,8 @@
   padding: 8px 16px;
   color: #fff;
   font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  font-weight: 500;
   letter-spacing: 0.4px;
   transition: 0.2s;
   font-size: 16px;
@@ -27,7 +29,12 @@
   }
 }
 .gray {
+  color: #4d4d4d;
   background-color: #dfdfdf;
+
+  &:hover {
+    background-color: #ccc;
+  }
 }
 .danger {
   background-color: #f76060;

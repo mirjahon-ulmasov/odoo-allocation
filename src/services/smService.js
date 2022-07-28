@@ -6,9 +6,12 @@ export const smApi = createApi({
   baseQuery,
   endpoints: (builder) => ({
     fetchSmProds: builder.query({
-      query: () => ({
+      query: ({ dealer }) => ({
         url: "/material/sm_list/",
         method: "GET",
+        params: {
+          dealer,
+        },
       }),
       transformResponse: (response) => {
         return response.results.map((item) => ({
@@ -17,7 +20,16 @@ export const smApi = createApi({
         }));
       },
     }),
+    fetchDealers: builder.query({
+      query: () => ({
+        url: "/customer/default_list/",
+        method: "GET",
+      }),
+      transformResponse: (response) => {
+        return response.results;
+      },
+    }),
   }),
 });
 
-export const { useFetchSmProdsQuery } = smApi;
+export const { useFetchSmProdsQuery, useFetchDealersQuery } = smApi;

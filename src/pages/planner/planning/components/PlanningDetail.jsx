@@ -107,6 +107,9 @@ export default function PlanningDetail() {
               <img src={check} alt="check" />
               Confirm planning
             </button>
+            <button style={{ marginLeft: "2rem" }} type="button" className="btn gray">
+              Cancel reservation
+            </button>
           </div>
         </>
       )}

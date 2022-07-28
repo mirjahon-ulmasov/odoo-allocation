@@ -41,8 +41,11 @@
       font-size: 20px;
       font-weight: 600;
     }
+    .actions {
+      display: flex;
+      gap: 1rem;
+    }
     button {
-      text-transform: unset;
       font-weight: 400;
       font-size: 16px;
     }
