@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { productApi } from "services/productService";
+import { productApi } from "services/product";
 import notifReducer from "./notification";
 import smReducer from "./sales_manager"
 import prodReducer from "./product";

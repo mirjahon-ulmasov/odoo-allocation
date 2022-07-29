@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { useFetchDealersByFactQuery } from "services/productService";
+import { useFetchDealersByFactQuery } from "services/product";
 import { NotificationManager } from "react-notifications";
 import styled from "styled-components";
 import Loader from "components/Loader";

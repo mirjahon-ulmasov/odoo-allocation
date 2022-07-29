@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
-import { useFetchAllProductsQuery } from "services/productService";
+import { useFetchAllProductsQuery } from "services/product";
 import { NotificationManager } from "react-notifications";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton } from "@mui/material";

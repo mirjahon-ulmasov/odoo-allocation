@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { NotificationManager } from "react-notifications";
-import { useFetchVendorsQuery } from "services/productService";
+import { useFetchVendorsQuery } from "services/product";
 
 import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
