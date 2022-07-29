@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { NotificationManager } from "react-notifications";
 import { API } from "../services/setting";
-import axios from "axios";
 import { getPath } from "utils";
+import axios from "axios";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -27,7 +27,6 @@ export const login = createAsyncThunk(
       return user;
     } catch (err) {
       NotificationManager.error("User not found", "", 2000);
-      return thunkAPI.rejectWithValue();
     }
   }
 );
@@ -37,6 +36,7 @@ export const logout = createAsyncThunk("auth/logout", (navigate, thunkAPI) => {
   localStorage.removeItem("token");
   thunkAPI.dispatch(clearAuth());
   navigate("/login");
+  document.location.reload();
 });
 
 const getInitState = () => {
@@ -59,10 +59,10 @@ export const authSlice = createSlice({
     [login.pending]: (state) => {
       state.loading = true;
     },
-    [login.fulfilled]: (state, action) => {
+    [login.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.isLoggedIn = true;
-      state.user = action.payload;
+      state.user = payload;
     },
     [login.rejected]: (state) => {
       state.user = null;

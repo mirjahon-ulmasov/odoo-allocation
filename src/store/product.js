@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API, instance, regenerate_api } from "services/setting";
 import { NotificationManager } from "react-notifications";
-import { API, instance } from "services/setting";
 
 export const fetchProdsByDealer = createAsyncThunk(
   "product/fetchProdsByDealer",
   async () => {
     try {
+      regenerate_api();
       const response = await instance.get(API + "/customer/main_page_list/");
       if (response.status !== 200) {
         throw new Error("Bad Request");
@@ -40,6 +41,7 @@ export const fetchProdsByVendor = createAsyncThunk(
   "product/fetchProdsByVendor",
   async ({ vendor, exclude }) => {
     try {
+      regenerate_api();
       const response = await instance.get(API + "/material/list/", {
         params: { vendor, exclude },
       });

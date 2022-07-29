@@ -1,5 +1,5 @@
 import React, { Fragment, useId } from "react";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Collapse } from "@mui/material";
 import { T2 } from "components/Tables";
 import { getStatusEn } from "utils";
@@ -30,7 +30,8 @@ export default function Notification({ data, active, clickHandler }) {
           <button
             type="button"
             className="btn success"
-            onClick={confirmHandler}>
+            onClick={confirmHandler}
+          >
             <img src={check} alt="check" />
             Confirm reservation
           </button>
@@ -39,7 +40,7 @@ export default function Notification({ data, active, clickHandler }) {
       <li>
         <Collapse in={is_active} timeout="auto" unmountOnExit>
           <div style={{ width: "100%" }}>
-            {notification_details && (
+            {notification_details && notification_details.length > 0 ? (
               <T2>
                 <thead>
                   <tr>
@@ -65,6 +66,8 @@ export default function Notification({ data, active, clickHandler }) {
                   ))}
                 </tbody>
               </T2>
+            ) : (
+              <p className="empty-data">Empty Notification</p>
             )}
           </div>
         </Collapse>

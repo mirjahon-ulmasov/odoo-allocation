@@ -44,6 +44,7 @@ export const T1 = styled(Table)`
       }
       td {
         font-weight: 500;
+        height: 5rem;
         &:first-child,
         &:nth-child(2) {
           font-weight: 400;

@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from "react";
-import { useFetchSmProdsQuery } from "services/smService";
-import { NotificationManager } from "react-notifications";
+import React, { Fragment, useId } from "react";
 import { Collapse } from "@mui/material";
 import { T1 } from "components/Tables";
+import { useSelector } from "react-redux";
+import { getStatusEn } from "utils";
 
 import down from "assets/icons/down.svg";
 
@@ -17,26 +17,30 @@ const headers = [
   "Reserve",
 ];
 
-export default function Notification() {
-  const [open, setOpen] = useState(false);
-  const { data, error } = useFetchSmProdsQuery();
+export default function Notification({ data, active, clickHandler }) {
+  const id = useId();
+  const is_active = id === active;
+  const { notification_details } = useSelector((state) => state.notification);
 
-  if (error) NotificationManager.error(error.error);
+  console.log(notification_details);
 
   return (
     <Fragment>
-      <li onClick={() => setOpen((prev) => !prev)}>
+      <li onClick={() => clickHandler(id)}>
         <p className="message">
           <img src={down} alt="down" />
-          You (Texnograd) have asked to reserve extra pieces
+          You({data.title}) have asked to reserve extra pieces
         </p>
-        <span className="status">Status: Waiting</span>
+        <span className="date">{data.created_at}</span>
+        <span className={`status ${getStatusEn(data.status)}`}>
+          {getStatusEn(data.status)}
+        </span>
       </li>
 
       <li>
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={is_active} timeout="auto" unmountOnExit>
           <div style={{ width: "100%" }}>
-            {data && (
+            {notification_details && notification_details.length > 0 ? (
               <T1>
                 <thead>
                   <tr>
@@ -46,7 +50,7 @@ export default function Notification() {
                   </tr>
                 </thead>
                 <tbody className="scroll" style={{ maxHeight: "20em" }}>
-                  {data.map((item, index) => (
+                  {notification_details.map((item, index) => (
                     <tr key={index}>
                       <td>{item.material}</td>
                       <td>{item.material_name}</td>
@@ -55,11 +59,16 @@ export default function Notification() {
                       <td>{item.fulfilled_percentage}%</td>
                       <td>{item.reserved}</td>
                       <td>{item.allocated}</td>
-                      <td>{item.reserve}</td>
+                      <td>
+                        {item.reserve_material}
+                        <span>(+{item.extra_reserved})</span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </T1>
+            ) : (
+              <p className="empty-data">Empty Notification</p>
             )}
           </div>
         </Collapse>

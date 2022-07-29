@@ -18,7 +18,7 @@ export default function Row({ item, status }) {
       <td>{item.reserved}</td>
       <td>{item.allocated}</td>
       <td>
-        {item.reversed_material}
+        {item.reserve_material}
         <span>(+{item.extra_reserved})</span>
       </td>
       {status === 1 && (

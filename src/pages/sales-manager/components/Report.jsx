@@ -35,8 +35,6 @@ export default function Report() {
     dispatch(fetchSmProds({ dealer: dealerId }));
   }, [dispatch, dealers, dealer]);
 
-  console.log(sm_prods);
-
   return (
     <Fragment>
       {loading && <Loader />}
@@ -74,7 +72,7 @@ export default function Report() {
           </button>
         </div>
       </header>
-      {/* {data && (
+      {sm_prods && sm_prods.length > 0 && (
         <T1 style={{ marginTop: "1.5em" }}>
           <thead>
             <tr>
@@ -84,7 +82,7 @@ export default function Report() {
             </tr>
           </thead>
           <tbody className="scroll">
-            {data.map((item, index) => {
+            {sm_prods.map((item, index) => {
               return (
                 <tr key={index}>
                   <td>{item.material}</td>
@@ -99,7 +97,7 @@ export default function Report() {
             })}
           </tbody>
         </T1>
-      )} */}
+      )}
     </Fragment>
   );
 }
