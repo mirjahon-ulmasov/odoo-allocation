@@ -5,7 +5,7 @@ import { NotificationManager } from "react-notifications";
 export const fetchDealers = createAsyncThunk("sm/fetchDealers", async () => {
   try {
     regenerate_api();
-    const response = await instance.get(API + "/customer/default_list/");
+    const response = await instance.get(API + "/customer/list/");
     if (response.status !== 200) {
       throw new Error("Bad Request");
     }

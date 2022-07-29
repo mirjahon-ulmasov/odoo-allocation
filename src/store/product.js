@@ -19,47 +19,55 @@ export const fetchProdsByDealer = createAsyncThunk(
   }
 );
 
-export const fetchDealersByProd = createAsyncThunk(
-  "product/fetchDealersByProd",
-  async ({ material, exclude }) => {
+export const fetchAllocations = createAsyncThunk(
+  "product/fetchAllocations",
+  async ({ vendor }) => {
     try {
-      const response = await instance.get(API + "/customer/list/", {
-        params: { material, exclude },
-      });
+      const response = await instance.get(
+        API + "/material/list_for_allocation/",
+        {
+          params: { vendor },
+        }
+      );
       if (response.status !== 200) {
         throw new Error("Bad Request");
       }
       const data = await response.data;
-      return data.results;
+      return data.map((item) => ({
+        ...item,
+        total: {
+          ...item.total,
+          available_remains: item.total.total_available,
+        },
+        customers: item.customers.map((customer) => ({
+          ...customer,
+          allocated: 0,
+        })),
+      }));
     } catch (err) {
-      NotificationManager.error("Couldn't get dealers", "", 2000);
+      NotificationManager.error("Couldn't get data", "", 2000);
     }
   }
 );
 
-export const fetchProdsByVendor = createAsyncThunk(
-  "product/fetchProdsByVendor",
-  async ({ vendor, exclude }) => {
+export const postAllocations = createAsyncThunk(
+  "product/postAllocations",
+  async ({ data, cb }) => {
     try {
-      regenerate_api();
-      const response = await instance.get(API + "/material/list/", {
-        params: { vendor, exclude },
-      });
+      const response = await instance.post(API + "/allocation/create/", data);
       if (response.status !== 200) {
         throw new Error("Bad Request");
       }
-      const data = await response.data;
-      return data.results;
+      cb();
     } catch (err) {
-      NotificationManager.error("Couldn't get dealers", "", 2000);
+      NotificationManager.error("Couldn't create data", "", 2000);
     }
   }
 );
 
 const initialState = {
-  vendor_prods: null,
   dealer_prods: null,
-  prods_dealer: [],
+  allocations: null,
   loading: false,
   error: null,
 };
@@ -77,6 +85,36 @@ export const productSlice = createSlice({
         return dealer;
       });
     },
+    clearAllocation(state) {
+      state.allocations = null;
+    },
+    editAllocation(state, { payload }) {
+      const { prodId, customerId, quantity } = payload;
+
+      const prod_index = state.allocations.findIndex(
+        (prod) => prod.id === prodId
+      );
+      const product = state.allocations[prod_index];
+
+      const customer_index = product.customers.findIndex(
+        (customer) => customer.customer_id === customerId
+      );
+      const customer = product.customers[customer_index];
+
+      state.allocations[prod_index].customers[customer_index] = {
+        ...customer,
+        allocated: quantity,
+      };
+
+      state.allocations[prod_index].total = {
+        ...product.total,
+        available_remains:
+          product.total.total_available -
+          product.customers.reduce((acc, customer) => {
+            return acc + customer.allocated;
+          }, 0),
+      };
+    },
   },
   extraReducers: {
     [fetchProdsByDealer.pending]: (state) => {
@@ -91,32 +129,25 @@ export const productSlice = createSlice({
       state.dealer_prods = null;
     },
 
-    [fetchDealersByProd.pending]: (state) => {
+    [fetchAllocations.pending]: (state) => {
       state.loading = true;
     },
-    [fetchDealersByProd.fulfilled]: (state, { payload }) => {
+    [fetchAllocations.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.prods_dealer.push(payload);
+      state.allocations = payload;
     },
-    [fetchDealersByProd.rejected]: (state) => {
+    [fetchAllocations.rejected]: (state) => {
       state.loading = false;
-      state.prods_dealer = null;
-    },
-
-    [fetchProdsByVendor.pending]: (state) => {
-      state.loading = true;
-    },
-    [fetchProdsByVendor.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.vendor_prods = payload;
-    },
-    [fetchProdsByVendor.rejected]: (state) => {
-      state.loading = false;
-      state.vendor_prods = null;
+      state.allocations = null;
     },
   },
 });
 
-export const { clearDealerProds, editDealerProdisFull } = productSlice.actions;
+export const {
+  clearDealerProds,
+  editDealerProdisFull,
+  editAllocation,
+  clearAllocation,
+} = productSlice.actions;
 const { reducer } = productSlice;
 export default reducer;

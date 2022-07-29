@@ -65,6 +65,7 @@ table.t2 {
   th,
   td {
     width: 9%;
+    vertical-align: middle;
     &:first-child,
     &:last-child {
       width: 15%;

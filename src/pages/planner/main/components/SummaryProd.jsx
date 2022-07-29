@@ -7,21 +7,22 @@ import { IconButton } from "@mui/material";
 import Loader from "components/Loader";
 import styled from "styled-components";
 import {
+  clearDealerProds,
   fetchProdsByDealer,
   editDealerProdisFull,
-  clearDealerProds,
 } from "store/product";
 
 export default function SummaryByProd() {
   const dispatch = useDispatch();
   const [isFull, setIsFull] = useState(true);
-  const { data: allProds, isLoading: load1, error } = useFetchAllProductsQuery();
+  const { data: allProds, isLoading: load1, error, refetch } = useFetchAllProductsQuery();
   const { loading: load2, dealer_prods } = useSelector((state) => state.product);
 
   useEffect(() => {
+    refetch()
     dispatch(fetchProdsByDealer());
     return () => dispatch(clearDealerProds());
-  }, [dispatch]);
+  }, [dispatch, refetch]);
 
   if (error) NotificationManager.error(error.error);
 

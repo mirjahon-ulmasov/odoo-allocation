@@ -6,8 +6,10 @@ import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
 import check from "assets/icons/check.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProdsByVendor } from "store/product";
 import Loader from "components/Loader";
+import { fetchAllocations } from "store/product";
+import { clearAllocation } from "store/product";
+import { postAllocations } from "store/product";
 
 const headers = [
   "ID",
@@ -25,94 +27,144 @@ export default function PlanningDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [productFilter, setProductFilter] = useState(false);
-  const [dillerFilter, setDillerFilter] = useState(false);
-
-  const { loading, vendor_prods } = useSelector((state) => state.product);
+  const [dealerFilter, setDealerFilter] = useState(false);
+  const { loading, allocations } = useSelector((state) => state.product);
 
   useEffect(() => {
     dispatch(
-      fetchProdsByVendor({
+      fetchAllocations({
         vendor: vendorID,
-        exclude: productFilter,
       })
     );
-  }, [dispatch, vendorID, productFilter]);
+    return () => dispatch(clearAllocation());
+  }, [dispatch, vendorID]);
+
+  const filteredAllocations = React.useMemo(() => {
+    if (!allocations || allocations.length === 0) return;
+    return allocations
+      .filter((prod) => {
+        if (productFilter) return prod.total.total_ordered > 0;
+        else return true;
+      })
+      .map((prod) => {
+        if (dealerFilter) {
+          return {
+            ...prod,
+            customers: prod.customers.filter(
+              (customer) => customer.ordered > 0
+            ),
+          };
+        }
+        return prod;
+      });
+  }, [allocations, productFilter, dealerFilter]);
+
+  const cancelReservation = () => {
+    dispatch(clearAllocation());
+    navigate("/planner/planning");
+  };
+
+  const submitHandler = () => {
+    const data = allocations.map((prod) => {
+      return {
+        material: prod.id,
+        items: prod.customers
+          .filter((customer) => customer.allocated > 0)
+          .map((customer) => ({
+            customer: customer.customer_id,
+            quantity: customer.allocated,
+          })),
+      };
+    });
+
+    console.log(filteredAllocations);
+
+    dispatch(
+      postAllocations({ data, cb: () => navigate("/planner/planning") })
+    );
+  };
 
   return (
     <Fragment>
       {loading && <Loader />}
-      {vendor_prods && (
-        <>
-          <nav className="nav-links">
-            <img onClick={() => navigate(-1)} src={back} alt="back icon" />
-            <p onClick={() => navigate("/planner")} className="click">
-              Main Page -
-            </p>
-            <p onClick={() => navigate("/planner/planning")} className="click">
-              Planning -
-            </p>
-            <p className="unclick">{location.state.title}</p>
-          </nav>
-          <header className="header">
-            <h1>{location.state.title}</h1>
-            <div className="form__group">
-              <div className="form__radio-group">
-                <input
-                  id="small"
-                  name="size"
-                  type="checkbox"
-                  checked={productFilter}
-                  onChange={(e) => setProductFilter(e.target.checked)}
-                  className="form__radio-input"
-                />
-                <label htmlFor="small" className="form__radio-label">
-                  <span className="form__radio-button"></span>
-                  Show only products with a plan
-                </label>
-              </div>
-
-              <div className="form__radio-group">
-                <input
-                  type="checkbox"
-                  checked={dillerFilter}
-                  onChange={(e) => setDillerFilter(e.target.checked)}
-                  className="form__radio-input"
-                  id="large"
-                  name="size"
-                />
-                <label htmlFor="large" className="form__radio-label">
-                  <span className="form__radio-button"></span>
-                  Show only dillers with a plan
-                </label>
-              </div>
-            </div>
-          </header>
-          <table className={`${style.table} ${style.t2}`}>
-            <thead>
-              <tr>
-                {headers.map((header, index) => (
-                  <th key={index}>{header}</th>
-                ))}
-                <th></th>
-              </tr>
-            </thead>
-            <tbody className="scroll">
-              {vendor_prods.map((product, index) => (
-                <Row key={index} filter={dillerFilter} product={product} rowIndex={index}/>
-              ))}
-            </tbody>
-          </table>
-          <div style={{ marginTop: "2rem" }} className="actions">
-            <button type="button" className="btn success">
-              <img src={check} alt="check" />
-              Confirm planning
-            </button>
-            <button style={{ marginLeft: "2rem" }} type="button" className="btn gray">
-              Cancel reservation
-            </button>
+      <nav className="nav-links">
+        <img onClick={() => navigate(-1)} src={back} alt="back icon" />
+        <p onClick={() => navigate("/planner")} className="click">
+          Main Page -
+        </p>
+        <p onClick={() => navigate("/planner/planning")} className="click">
+          Planning -
+        </p>
+        <p className="unclick">{location.state.title}</p>
+      </nav>
+      <header className="header">
+        <h1>{location.state.title}</h1>
+        <div className="form__group">
+          <div className="form__radio-group">
+            <input
+              id="small"
+              name="size"
+              type="checkbox"
+              checked={productFilter}
+              onChange={(e) => setProductFilter(e.target.checked)}
+              className="form__radio-input"
+            />
+            <label htmlFor="small" className="form__radio-label">
+              <span className="form__radio-button"></span>
+              Show only products with a plan
+            </label>
           </div>
-        </>
-      )}
+
+          <div className="form__radio-group">
+            <input
+              type="checkbox"
+              checked={dealerFilter}
+              onChange={(e) => setDealerFilter(e.target.checked)}
+              className="form__radio-input"
+              id="large"
+              name="size"
+            />
+            <label htmlFor="large" className="form__radio-label">
+              <span className="form__radio-button"></span>
+              Show only dealers with a plan
+            </label>
+          </div>
+        </div>
+      </header>
+
+      <table className={`${style.table} ${style.t2}`}>
+        <thead>
+          <tr>
+            {headers.map((header, index) => (
+              <th key={index}>{header}</th>
+            ))}
+            <th></th>
+          </tr>
+        </thead>
+        {filteredAllocations && filteredAllocations.length > 0 && (
+          <tbody className="scroll">
+            {filteredAllocations.map((product, index) => (
+              <Row key={index} product={product} />
+            ))}
+          </tbody>
+        )}
+      </table>
+      <div style={{ marginTop: "2rem" }} className="actions">
+        {filteredAllocations && filteredAllocations.length > 0 && (
+          <button type="button" className="btn success" onClick={submitHandler}>
+            <img src={check} alt="check" />
+            Confirm planning
+          </button>
+        )}
+        <button
+          style={{ marginLeft: "2rem" }}
+          type="button"
+          className="btn gray"
+          onClick={cancelReservation}
+        >
+          Cancel reservation
+        </button>
+      </div>
     </Fragment>
   );
 }
