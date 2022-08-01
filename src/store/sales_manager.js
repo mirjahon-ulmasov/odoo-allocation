@@ -10,7 +10,7 @@ export const fetchDealers = createAsyncThunk("sm/fetchDealers", async () => {
       throw new Error("Bad Request");
     }
     const data = await response.data;
-    return data.results;
+    return data;
   } catch (err) {
     NotificationManager.error("Couldn't get dealers", "", 2000);
   }
@@ -37,6 +37,21 @@ export const fetchSmProds = createAsyncThunk(
   }
 );
 
+export const postReservation = createAsyncThunk(
+  "sm/postReservation",
+  async ({ data, cb }) => {
+    try {
+      const response = await instance.post(API + "/order/create/", data);
+      if (response.status !== 200) {
+        throw new Error("Bad Request");
+      }
+      cb();
+    } catch (err) {
+      NotificationManager.error("Couldn't reserve", "", 2000);
+    }
+  }
+);
+
 const initialState = {
   dealers: null,
   sm_prods: null,
@@ -53,6 +68,13 @@ export const smSlice = createSlice({
     },
     clearSmProds(state) {
       state.sm_prods = null;
+    },
+    editSmProds(state, { payload }) {
+      const { prodId, quantity } = payload;
+      state.sm_prods = state.sm_prods.map((prod) => {
+        if (prod.id === prodId) return { ...prod, reserve: quantity };
+        return prod;
+      });
     },
   },
   extraReducers: {
@@ -82,6 +104,6 @@ export const smSlice = createSlice({
   },
 });
 
-export const { clearDealers, clearSmProds } = smSlice.actions;
+export const { clearDealers, clearSmProds, editSmProds } = smSlice.actions;
 const { reducer } = smSlice;
 export default reducer;

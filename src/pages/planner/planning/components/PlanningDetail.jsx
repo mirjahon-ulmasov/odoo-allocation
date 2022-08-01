@@ -80,7 +80,7 @@ export default function PlanningDetail() {
     console.log(filteredAllocations);
 
     dispatch(
-      postAllocations({ data, cb: () => navigate("/planner/planning") })
+      postAllocations({ data, cb: () => navigate("/planner") })
     );
   };
 

@@ -1,13 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  fetchDealers,
+  fetchSmProds,
+  postReservation,
+} from "store/sales_manager";
 import Loader from "components/Loader";
 import { T1 } from "components/Tables";
-
 import check from "assets/icons/check.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { fetchDealers } from "store/sales_manager";
-import { fetchSmProds } from "store/sales_manager";
+import { editSmProds } from "store/sales_manager";
 
 const headers = [
   "ID",
@@ -39,7 +42,14 @@ export default function ReportEdit() {
   }, [dispatch, dealers, dealer]);
 
   const submitHandler = () => {
-    navigate("/sm");
+    let dealerId = dealer ? dealer : dealers[0].id;
+    const data = {
+      customer: dealerId,
+      items: sm_prods
+        .filter((prod) => prod.reserve > 0)
+        .map((prod) => ({ material: prod.id, quantity: prod.reserve })),
+    };
+    dispatch(postReservation({ data, cb: () => navigate("/sm") }));
   };
 
   return (
@@ -93,9 +103,16 @@ export default function ReportEdit() {
                     <td>{item.allocated}</td>
                     <td>
                       <input
-                        type="text"
+                        type="number"
                         value={item.reserve}
-                        onChange={() => {}}
+                        onChange={(e) => {
+                          const num = parseInt(e.target.value);
+                          if (num >= 0) {
+                            dispatch(
+                              editSmProds({ prodId: item.id, quantity: num })
+                            );
+                          }
+                        }}
                       />
                     </td>
                   </tr>

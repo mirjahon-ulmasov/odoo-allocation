@@ -60,7 +60,7 @@ export const postAllocations = createAsyncThunk(
       }
       cb();
     } catch (err) {
-      NotificationManager.error("Couldn't create data", "", 2000);
+      NotificationManager.error("Couldn't allocate", "", 2000);
     }
   }
 );
