@@ -11,7 +11,9 @@ import check from "assets/icons/check.svg";
 export default function Notification({ data, active, clickHandler }) {
   const id = useId();
   const is_active = id === active;
-  const { notification_details } = useSelector((state) => state.notification);
+  const { notification_details, loading } = useSelector(
+    (state) => state.notification
+  );
 
   const confirmHandler = () => {};
 
@@ -40,34 +42,38 @@ export default function Notification({ data, active, clickHandler }) {
       <li>
         <Collapse in={is_active} timeout="auto" unmountOnExit>
           <div style={{ width: "100%" }}>
-            {notification_details && notification_details.length > 0 ? (
-              <T2>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Product</th>
-                    <th>Ordered</th>
-                    <th>Fulfilled</th>
-                    <th>Fulfilled (%)</th>
-                    <th>Reserved</th>
-                    <th>Allocated</th>
-                    <th>Reserve</th>
-                    {data.status === 1 && (
-                      <Fragment>
-                        <th>Action</th>
-                        <th>Subtract from</th>
-                      </Fragment>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="scroll" style={{ maxHeight: "20em" }}>
-                  {notification_details.map((item, index) => (
-                    <Row item={item} key={index} status={data.status} />
-                  ))}
-                </tbody>
-              </T2>
-            ) : (
-              <p className="empty-data">Empty Notification</p>
+            {is_active && !loading && (
+              <Fragment>
+                {notification_details && notification_details.length > 0 ? (
+                  <T2>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Product</th>
+                        <th>Ordered</th>
+                        <th>Fulfilled</th>
+                        <th>Fulfilled (%)</th>
+                        <th>Reserved</th>
+                        <th>Allocated</th>
+                        <th>Reserve</th>
+                        {data.status === 1 && (
+                          <Fragment>
+                            <th>Action</th>
+                            <th>Subtract from</th>
+                          </Fragment>
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody className="scroll" style={{ maxHeight: "20em" }}>
+                      {notification_details.map((item, index) => (
+                        <Row item={item} key={index} status={data.status} />
+                      ))}
+                    </tbody>
+                  </T2>
+                ) : (
+                  <p className="empty-data">Empty Notification</p>
+                )}
+              </Fragment>
             )}
           </div>
         </Collapse>

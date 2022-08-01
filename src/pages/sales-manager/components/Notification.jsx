@@ -20,10 +20,10 @@ const headers = [
 export default function Notification({ data, active, clickHandler }) {
   const id = useId();
   const is_active = id === active;
-  const { notification_details } = useSelector((state) => state.notification);
-
-  console.log(notification_details);
-
+  const { notification_details, loading } = useSelector(
+    (state) => state.notification
+  );
+  
   return (
     <Fragment>
       <li onClick={() => clickHandler(id)}>
@@ -40,35 +40,39 @@ export default function Notification({ data, active, clickHandler }) {
       <li>
         <Collapse in={is_active} timeout="auto" unmountOnExit>
           <div style={{ width: "100%" }}>
-            {notification_details && notification_details.length > 0 ? (
-              <T1>
-                <thead>
-                  <tr>
-                    {headers.map((header, index) => (
-                      <th key={index}>{header}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="scroll" style={{ maxHeight: "20em" }}>
-                  {notification_details.map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.material}</td>
-                      <td>{item.material_name}</td>
-                      <td>{item.ordered}</td>
-                      <td>{item.fulfilled}</td>
-                      <td>{item.fulfilled_percentage}%</td>
-                      <td>{item.reserved}</td>
-                      <td>{item.allocated}</td>
-                      <td>
-                        {item.reserve_material}
-                        <span>(+{item.extra_reserved})</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </T1>
-            ) : (
-              <p className="empty-data">Empty Notification</p>
+            {is_active && !loading && (
+              <Fragment>
+                {notification_details && notification_details.length > 0 ? (
+                  <T1>
+                    <thead>
+                      <tr>
+                        {headers.map((header, index) => (
+                          <th key={index}>{header}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="scroll" style={{ maxHeight: "20em" }}>
+                      {notification_details.map((item, index) => (
+                        <tr key={index}>
+                          <td>{item.material}</td>
+                          <td>{item.material_name}</td>
+                          <td>{item.ordered}</td>
+                          <td>{item.fulfilled}</td>
+                          <td>{item.fulfilled_percentage}%</td>
+                          <td>{item.reserved}</td>
+                          <td>{item.allocated}</td>
+                          <td>
+                            {item.reserve_material}
+                            <span>(+{item.extra_reserved})</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </T1>
+                ) : (
+                  <p className="empty-data">Empty Notification</p>
+                )}
+              </Fragment>
             )}
           </div>
         </Collapse>
