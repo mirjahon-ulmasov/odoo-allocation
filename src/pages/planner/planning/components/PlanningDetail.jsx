@@ -1,15 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import {
+  fetchAllocations,
+  clearAllocation,
+  postAllocations,
+} from "store/product";
 import Row from "./Row";
-
+import Loader from "components/Loader";
 import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
 import check from "assets/icons/check.svg";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "components/Loader";
-import { fetchAllocations } from "store/product";
-import { clearAllocation } from "store/product";
-import { postAllocations } from "store/product";
 
 const headers = [
   "ID",
@@ -77,11 +78,7 @@ export default function PlanningDetail() {
       };
     });
 
-    console.log(filteredAllocations);
-
-    dispatch(
-      postAllocations({ data, cb: () => navigate("/planner") })
-    );
+    dispatch(postAllocations({ data, cb: () => navigate("/planner") }));
   };
 
   return (

@@ -1,8 +1,13 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { postReservation, editSmProds } from "store/sales_manager";
+import { 
+  postReservation, 
+  editSmProds,  
+  fetchSmProds, 
+  clearSmProds, 
+} from "store/sales_manager";
 import Loader from "components/Loader";
 import { T1 } from "components/Tables";
 import check from "assets/icons/check.svg";
@@ -21,6 +26,13 @@ const headers = [
 export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDealer }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!dealers) return;
+    let dealerId = dealer ? dealer : dealers[0].id;
+    dispatch(fetchSmProds({ dealer: dealerId }));
+    return () => dispatch(clearSmProds())
+  }, [dispatch, dealers, dealer]);
 
   const submitHandler = () => {
     let dealerId = dealer ? dealer : dealers[0].id;

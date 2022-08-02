@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useRef } from "react";
 import { useFetchDealersByFactQuery } from "services/product";
 import { NotificationManager } from "react-notifications";
 import styled from "styled-components";
@@ -6,6 +6,8 @@ import Loader from "components/Loader";
 
 export default function SummaryByFact() {
   const { data, isLoading: loading, error } = useFetchDealersByFactQuery();
+  const stickyRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const th = (index = "johon") => (
     <Fragment key={index}>
@@ -16,12 +18,17 @@ export default function SummaryByFact() {
     </Fragment>
   );
 
+  const scrollHandler = (event) => {
+    stickyRef.current.scrollTop = event.currentTarget.scrollTop;
+    scrollRef.current.scrollTop = event.currentTarget.scrollTop;
+  };
+
   if (error) NotificationManager.error(error.error);
 
   return (
-    <Summary className="scroll">
+    <Summary>
       {loading && <Loader />}
-      {data && 
+      {data && (
         <Fragment>
           <table className="sticky">
             <thead>
@@ -29,7 +36,7 @@ export default function SummaryByFact() {
                 <th>Dealers</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody ref={stickyRef} onScroll={scrollHandler}>
               {data.map((dealer, index) => (
                 <tr key={index}>
                   <td>{dealer.name}</td>
@@ -37,7 +44,8 @@ export default function SummaryByFact() {
               ))}
             </tbody>
           </table>
-          <div className="scroll"
+          <div
+            className="scroll"
             style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
             <table className="scrolling">
               <thead>
@@ -54,7 +62,7 @@ export default function SummaryByFact() {
                   {data[0].vendors.map((_, index) => th(index))}
                 </tr>
               </thead>
-              <tbody>
+              <tbody ref={scrollRef} onScroll={scrollHandler}>
                 {data.map((row, index) => {
                   return (
                     <tr key={index}>
@@ -76,15 +84,13 @@ export default function SummaryByFact() {
             </table>
           </div>
         </Fragment>
-      }
+      )}
     </Summary>
-  )
+  );
 }
 
 const Summary = styled.div`
-  max-height: 75vh;
   display: flex;
-  overflow: scroll;
 
   table {
     margin-top: 1rem;
@@ -94,7 +100,20 @@ const Summary = styled.div`
     text-transform: capitalize;
     border-collapse: collapse;
 
+    tr {
+      display: table;
+      width: 100%;
+    }
     tbody {
+      width: 100%;
+      display: block;
+      overflow: auto;
+      // change height
+      max-height: 10vh;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
       tr {
         td {
           font-weight: 500;
@@ -123,11 +142,13 @@ const Summary = styled.div`
   }
   table.scrolling {
     z-index: 1;
+
     thead {
       tr {
         border-right: 1px solid #fff;
         &:first-child {
           th {
+            width: 20rem;
             padding: 0.7rem;
             background-color: #f1f1f1;
             &:nth-child(odd) {
@@ -158,6 +179,12 @@ const Summary = styled.div`
     }
     tbody tr td:nth-child(4n) {
       border-right: 2px solid #ededed;
+    }
+    thead tr:nth-child(2),
+    tbody tr {
+      th, td {
+        width: 5rem;
+      }
     }
   }
 `;

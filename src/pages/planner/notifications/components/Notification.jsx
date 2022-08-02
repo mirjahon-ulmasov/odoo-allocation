@@ -2,7 +2,7 @@ import React, { Fragment, useId } from "react";
 import { useSelector } from "react-redux";
 import { Collapse } from "@mui/material";
 import { T2 } from "components/Tables";
-import { getStatusEn } from "utils";
+import { getStatus } from "utils";
 import Row from "./Row";
 
 import down from "assets/icons/down.svg";
@@ -25,15 +25,14 @@ export default function Notification({ data, active, clickHandler }) {
           {data.title} have asked to reserve extra pieces
         </p>
         <span className="date">{data.created_at}</span>
-        <span className={`status ${getStatusEn(data.status)}`}>
-          {getStatusEn(data.status)}
+        <span className={`status ${getStatus(data.is_confirmed)}`}>
+          {getStatus(data.is_confirmed)}
         </span>
-        {is_active && data.status === 1 && (
+        {is_active && !data.is_confirmed && (
           <button
             type="button"
             className="btn success"
-            onClick={confirmHandler}
-          >
+            onClick={confirmHandler}>
             <img src={check} alt="check" />
             Confirm reservation
           </button>
@@ -56,7 +55,7 @@ export default function Notification({ data, active, clickHandler }) {
                         <th>Reserved</th>
                         <th>Allocated</th>
                         <th>Reserve</th>
-                        {data.status === 1 && (
+                        {!data.is_confirmed && (
                           <Fragment>
                             <th>Action</th>
                             <th>Subtract from</th>
@@ -66,7 +65,7 @@ export default function Notification({ data, active, clickHandler }) {
                     </thead>
                     <tbody className="scroll" style={{ maxHeight: "20em" }}>
                       {notification_details.map((item, index) => (
-                        <Row item={item} key={index} status={data.status} />
+                        <Row item={item} key={index} isConfirmed={data.is_confirmed} />
                       ))}
                     </tbody>
                   </T2>

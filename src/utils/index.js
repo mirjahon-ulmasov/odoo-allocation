@@ -11,15 +11,6 @@ export const checkPath = (user = null, path) => {
   return false;
 };
 
-export const getStatusEn = (status) => {
-  return status === 1 ? "pending" 
-  : status === 2 ? "confirmed" 
-  : "rejected";
+export const getStatus = (is_confirmed) => {
+  return is_confirmed ? "confirmed" : "pending";
 };
-
-export const getStatusRu = (status) => {
-  return status === 1 ? "в ожидании" 
-  : status === 2 ? "подтвержденный" 
-  : "отклоненный";
-};
-

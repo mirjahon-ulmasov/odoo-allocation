@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import { Done, Close, KeyboardArrowDown } from "@mui/icons-material";
 
-export default function Row({ item, status }) {
+export default function Row({ item, isConfirmed }) {
   const [isReject, setIsReject] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -16,12 +16,12 @@ export default function Row({ item, status }) {
       <td>{item.fulfilled}</td>
       <td>{item.fulfilled_percentage}%</td>
       <td>{item.reserved}</td>
-      <td>{item.allocated}</td>
+      <td>{item.allocation}</td>
       <td>
-        {item.reserve_material}
-        <span>(+{item.extra_reserved})</span>
+        {item.current_quantity}
+        <span>(+{item.extra_required})</span>
       </td>
-      {status === 1 && (
+      {!isConfirmed && (
         <Fragment>
           <td>
             <div className="actions">
@@ -38,10 +38,13 @@ export default function Row({ item, status }) {
             </div>
           </td>
           <td>
-            <label onClick={() => setIsOpen((prev) => !prev)}>
+            <button
+              disabled={isReject}
+              className={`btn ${isReject ? "disabled" : "gray"}`}
+              onClick={() => setIsOpen((prev) => !prev)}>
               Select Dealer
               <KeyboardArrowDown />
-            </label>
+            </button>
             {isOpen && (
               <div className="dropdown">
                 <label>

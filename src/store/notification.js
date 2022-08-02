@@ -22,14 +22,12 @@ export const fetchNotifDetails = createAsyncThunk(
   "notification/fetchNotifDetails",
   async (notifId) => {
     try {
-      const response = await instance.get(API + "/notification/items_list/", {
-        params: { notification: notifId },
-      });
+      const response = await instance.get(API + `/notification/${notifId}/detail/`);
       if (response.status !== 200) {
         throw new Error("Bad Request");
       }
       const notifDetails = await response.data;
-      return notifDetails.results;
+      return notifDetails;
     } catch (err) {
       NotificationManager.error("Couldn't get notification details", "", 2000);
     }

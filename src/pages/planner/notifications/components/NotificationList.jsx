@@ -1,10 +1,12 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchNotificationList } from "store/notification";
+import {
+  fetchNotifDetails,
+  fetchNotificationList,
+  clearNotificationDetail,
+} from "store/notification";
 import Notification from "./Notification";
 import styled from "styled-components";
-import { fetchNotifDetails } from "store/notification";
-import { clearNotificationDetail } from "store/notification";
 
 export default function NotificationList() {
   const [activeId, setActiveId] = useState(null);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import NotificationList from "./components/NotificationList";
-import { fetchDealers, fetchSmProds } from "store/sales_manager";
+import { fetchDealers } from "store/sales_manager";
 import ReportEdit from "./components/ReportEdit";
 import Report from "./components/Report";
 
@@ -17,12 +17,6 @@ export default function SalesManager() {
   useEffect(() => {
     dispatch(fetchDealers());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (!dealers) return;
-    let dealerId = dealer ? dealer : dealers[0].id;
-    dispatch(fetchSmProds({ dealer: dealerId }));
-  }, [dispatch, dealers, dealer]);
 
   return (
     <Routes>

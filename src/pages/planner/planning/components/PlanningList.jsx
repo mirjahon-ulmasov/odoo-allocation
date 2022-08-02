@@ -60,19 +60,13 @@ export default function PlanningList() {
                       type="button"
                       className="btn success"
                       onClick={() =>
-                        planningHandler(
-                          vendor.id.toString(),
-                          vendor.vendor_name
-                        )
-                      }
-                    >
+                        planningHandler(vendor.id.toString(),vendor.vendor_name)}>
                       Start planning
                       <ArrowForward />
                     </button>
                   </td>
                 </tr>
-              );
-            })}
+              )})}
           </tbody>
         </table>
       )}

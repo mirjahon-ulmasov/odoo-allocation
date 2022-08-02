@@ -12,8 +12,16 @@ export default function Socket({ children }) {
   useEffect(() => {
     let websocket = null;
     if (user) {
+      // websocket = new WebSocket(
+      //   "ws://odoo-api.artelelectronics.com/ws/notification/", null, {
+      //     headers: {
+      //       "Authorization": `Token ${user.token}`
+      //     }
+      //   }
+      // );
+
       websocket = new WebSocket(
-        `ws://odoo-api.artelelectronics.com/ws/notification/${user.id}?token=${user.token}`
+        `ws://odoo-api.artelelectronics.com/ws/notification/?token=${user.token}`
       );
 
       websocket.onopen = function () {

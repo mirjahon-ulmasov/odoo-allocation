@@ -1,6 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { clearSmProds, fetchSmProds } from "store/sales_manager";
 import { T1 } from "components/Tables";
 import Loader from "components/Loader";
 const headers = [
@@ -15,6 +17,14 @@ const headers = [
 
 export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (!dealers) return;
+    let dealerId = dealer ? dealer : dealers[0].id;
+    dispatch(fetchSmProds({ dealer: dealerId }));
+    return () => dispatch(clearSmProds())
+  }, [dispatch, dealers, dealer]);
 
   return (
     <Fragment>

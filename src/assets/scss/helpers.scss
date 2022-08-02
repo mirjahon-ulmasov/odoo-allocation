@@ -33,8 +33,13 @@
   background-color: #dfdfdf;
 
   &:hover {
-    background-color: #ccc;
+    background-color: #eee;
   }
+}
+.disabled {
+  color: #dbdbdb;
+  cursor: not-allowed;
+  background-color: #dfdfdf;
 }
 .danger {
   background-color: #f76060;

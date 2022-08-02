@@ -71,7 +71,7 @@ export const T1 = styled(Table)`
             background: #42bba5;
           }
           button.danger {
-            background: #f52c2c;
+            background: #e55454;
           }
         }
       }
@@ -94,13 +94,9 @@ export const T2 = styled(T1)`
   th,
   td {
     width: 9%;
-    & > label {
-      width: 10rem;
-      display: flex;
-      align-items: center;
-      border-radius: 2px;
+    & > button {
       background: #fbfbfb;
-      padding: 0.5rem 0.7rem;
+      text-transform: capitalize;
     }
 
     .dropdown {

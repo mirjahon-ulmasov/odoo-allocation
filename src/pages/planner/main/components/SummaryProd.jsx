@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
 import { useFetchAllProductsQuery } from "services/product";
 import { NotificationManager } from "react-notifications";
@@ -14,17 +14,33 @@ import {
 
 export default function SummaryByProd() {
   const dispatch = useDispatch();
+  const table1Ref = useRef(null);
+  const table2Ref = useRef(null);
   const [isFull, setIsFull] = useState(true);
-  const { data: allProds, isLoading: load1, error, refetch } = useFetchAllProductsQuery();
-  const { loading: load2, dealer_prods } = useSelector((state) => state.product);
+  const {
+    data: allProds,
+    isLoading: load1,
+    error,
+    refetch,
+  } = useFetchAllProductsQuery();
+  const { loading: load2, dealer_prods } = useSelector(
+    (state) => state.product
+  );
 
   useEffect(() => {
-    refetch()
+    refetch();
     dispatch(fetchProdsByDealer());
     return () => dispatch(clearDealerProds());
   }, [dispatch, refetch]);
 
   if (error) NotificationManager.error(error.error);
+
+  const scrollHandler = (event) => {
+    Array.from(table2Ref.current.children).forEach((child) => {
+      Array.from(child.children)[1].scrollTop = event.currentTarget.scrollTop;
+    });
+    table1Ref.current.scrollTop = event.currentTarget.scrollTop;
+  };
 
   return (
     <Summary className="scroll">
@@ -47,14 +63,14 @@ export default function SummaryByProd() {
               <th>
                 <IconButton
                   type="button"
-                  sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#FFF" }}
+                  sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#fff" }}
                   onClick={() => setIsFull((prev) => !prev)}>
                   {isFull ? <ChevronLeft /> : <ChevronRight />}
                 </IconButton>
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody ref={table1Ref} onScroll={scrollHandler}>
             {allProds.map((prod, index) => (
               <tr key={index}>
                 <td>{prod.material}</td>
@@ -74,8 +90,14 @@ export default function SummaryByProd() {
           </tbody>
         </table>
       )}
-      <div className="scroll"
-        style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
+      <div
+        ref={table2Ref}
+        className="scroll"
+        style={{
+          display: "flex",
+          overflow: "scroll hidden",
+          height: "fit-content",
+        }}>
         {dealer_prods &&
           dealer_prods.map((dealer, index) => (
             <table
@@ -103,7 +125,7 @@ export default function SummaryByProd() {
                   )}
                 </tr>
               </thead>
-              <tbody>
+              <tbody onScroll={scrollHandler}>
                 {dealer.products.map((el, index) => (
                   <tr key={index}>
                     <td>{el.ordered}</td>
@@ -125,9 +147,7 @@ export default function SummaryByProd() {
 }
 
 const Summary = styled.div`
-  max-height: 75vh;
   display: flex;
-  overflow: scroll;
 
   table {
     color: #333333;
@@ -138,10 +158,18 @@ const Summary = styled.div`
     & * {
       box-sizing: unset;
     }
+    thead {
+      box-shadow: 0 4px 7px -2px #ccc;
+    }
     tbody {
+      width: 100%;
       display: block;
       overflow: auto;
-      width: 100%;
+      max-height: 65vh;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
       tr {
         height: 5rem;
         td {

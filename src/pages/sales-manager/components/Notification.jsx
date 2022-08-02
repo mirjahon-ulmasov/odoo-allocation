@@ -2,7 +2,7 @@ import React, { Fragment, useId } from "react";
 import { Collapse } from "@mui/material";
 import { T1 } from "components/Tables";
 import { useSelector } from "react-redux";
-import { getStatusEn } from "utils";
+import { getStatus } from "utils";
 
 import down from "assets/icons/down.svg";
 
@@ -23,7 +23,7 @@ export default function Notification({ data, active, clickHandler }) {
   const { notification_details, loading } = useSelector(
     (state) => state.notification
   );
-  
+
   return (
     <Fragment>
       <li onClick={() => clickHandler(id)}>
@@ -32,8 +32,8 @@ export default function Notification({ data, active, clickHandler }) {
           You({data.title}) have asked to reserve extra pieces
         </p>
         <span className="date">{data.created_at}</span>
-        <span className={`status ${getStatusEn(data.status)}`}>
-          {getStatusEn(data.status)}
+        <span className={`status ${getStatus(data.is_confirmed)}`}>
+          {getStatus(data.is_confirmed)}
         </span>
       </li>
 
@@ -60,10 +60,10 @@ export default function Notification({ data, active, clickHandler }) {
                           <td>{item.fulfilled}</td>
                           <td>{item.fulfilled_percentage}%</td>
                           <td>{item.reserved}</td>
-                          <td>{item.allocated}</td>
+                          <td>{item.allocation}</td>
                           <td>
-                            {item.reserve_material}
-                            <span>(+{item.extra_reserved})</span>
+                            {item.current_quantity}
+                            <span>(+{item.extra_required})</span>
                           </td>
                         </tr>
                       ))}
