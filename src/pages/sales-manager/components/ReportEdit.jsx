@@ -1,16 +1,11 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import {
-  fetchDealers,
-  fetchSmProds,
-  postReservation,
-} from "store/sales_manager";
+import { postReservation, editSmProds } from "store/sales_manager";
 import Loader from "components/Loader";
 import { T1 } from "components/Tables";
 import check from "assets/icons/check.svg";
-import { editSmProds } from "store/sales_manager";
 
 const headers = [
   "ID",
@@ -23,23 +18,9 @@ const headers = [
   "Reserve",
 ];
 
-export default function ReportEdit() {
+export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDealer }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [dealer, setDealer] = useState("");
-  const { dealers, sm_prods, loading } = useSelector(
-    (state) => state.sales_manager
-  );
-
-  useEffect(() => {
-    dispatch(fetchDealers());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!dealers) return;
-    let dealerId = dealer ? dealer : dealers[0].id;
-    dispatch(fetchSmProds({ dealer: dealerId }));
-  }, [dispatch, dealers, dealer]);
 
   const submitHandler = () => {
     let dealerId = dealer ? dealer : dealers[0].id;
@@ -62,14 +43,12 @@ export default function ReportEdit() {
             <FormControl
               sx={{ backgroundColor: "#f1f1f1", borderRadius: "2px" }}
               size="small"
-              fullWidth
-            >
+              fullWidth>
               <InputLabel>Select dealer</InputLabel>
               <Select
                 value={dealer}
                 label="Select dealer"
-                onChange={(e) => setDealer(e.target.value)}
-              >
+                onChange={(e) => onSetDealer(e.target.value)}>
                 {dealers.map((dealer, index) => (
                   <MenuItem key={index} value={dealer.id}>
                     {dealer.name}
@@ -107,25 +86,18 @@ export default function ReportEdit() {
                         value={item.reserve}
                         onChange={(e) => {
                           const num = parseInt(e.target.value);
-                          if (num >= 0) {
-                            dispatch(
-                              editSmProds({ prodId: item.id, quantity: num })
-                            );
-                          }
-                        }}
-                      />
+                          if (num >= 0) dispatch(editSmProds({ prodId: item.id, quantity: num }))
+                          }} />
                     </td>
                   </tr>
-                );
-              })}
+                )})}
             </tbody>
           </T1>
           <div style={{ marginTop: "2rem" }} className="actions">
             <button
               onClick={submitHandler}
               type="button"
-              className="btn success"
-            >
+              className="btn success">
               <img src={check} alt="check" />
               Submit planning
             </button>

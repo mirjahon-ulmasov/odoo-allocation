@@ -82,7 +82,7 @@ export default function SummaryByFact() {
 }
 
 const Summary = styled.div`
-  height: 75vh;
+  max-height: 75vh;
   display: flex;
   overflow: scroll;
 

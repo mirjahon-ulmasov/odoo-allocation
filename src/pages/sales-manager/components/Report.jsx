@@ -1,12 +1,8 @@
-import React, { Fragment, useState } from "react";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import Loader from "components/Loader";
-import { T1 } from "components/Tables";
+import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { fetchSmProds, fetchDealers } from "store/sales_manager";
-
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { T1 } from "components/Tables";
+import Loader from "components/Loader";
 const headers = [
   "ID",
   "Product",
@@ -17,23 +13,8 @@ const headers = [
   "Allocated",
 ];
 
-export default function Report() {
-  const dispatch = useDispatch();
+export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer }) {
   const navigate = useNavigate();
-  const [dealer, setDealer] = useState("");
-  const { dealers, sm_prods, loading } = useSelector(
-    (state) => state.sales_manager
-  );
-
-  useEffect(() => {
-    dispatch(fetchDealers());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!dealers) return;
-    let dealerId = dealer ? dealer : dealers[0].id;
-    dispatch(fetchSmProds({ dealer: dealerId }));
-  }, [dispatch, dealers, dealer]);
 
   return (
     <Fragment>
@@ -46,14 +27,12 @@ export default function Report() {
               <FormControl
                 sx={{ backgroundColor: "#f1f1f1", borderRadius: "2px" }}
                 size="small"
-                fullWidth
-              >
+                fullWidth>
                 <InputLabel>Select dealer</InputLabel>
                 <Select
                   value={dealer}
                   label="Select dealer"
-                  onChange={(e) => setDealer(e.target.value)}
-                >
+                  onChange={(e) => onSetDealer(e.target.value)}>
                   {dealers.map((dealer, index) => (
                     <MenuItem key={index} value={dealer.id}>
                       {dealer.name}
@@ -66,8 +45,7 @@ export default function Report() {
           <button
             type="button"
             className="btn dark"
-            onClick={() => navigate("edit")}
-          >
+            onClick={() => navigate("edit")}>
             Start reservation
           </button>
         </div>
@@ -93,8 +71,7 @@ export default function Report() {
                   <td>{item.reserved}</td>
                   <td>{item.allocated}</td>
                 </tr>
-              );
-            })}
+              )})}
           </tbody>
         </T1>
       )}

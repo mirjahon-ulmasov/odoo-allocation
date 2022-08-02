@@ -53,8 +53,7 @@ export default function NavBar() {
                     cursor: "pointer",
                     height: 35,
                     width: 35,
-                  }}
-                >
+                  }}>
                   {user.first_name.charAt()}
                 </Avatar>
                 <span ref={menuRef} onClick={() => setIsOpen((prev) => !prev)}>
@@ -68,8 +67,7 @@ export default function NavBar() {
                   onClick={() => {
                     setIsOpen(false);
                     dispatch(logout(navigate));
-                  }}
-                >
+                  }}>
                   Log out
                 </button>
               </div>
