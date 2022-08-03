@@ -6,6 +6,7 @@ table.table {
   margin-top: 1.5rem;
   border-collapse: collapse;
   animation: 0.5s linear fadeIn;
+  box-shadow: 0 0 5px #ccc;
 
   thead tr {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -31,7 +32,7 @@ table.table {
 
 table.t1 {
   text-align: left;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #ccc;
   tbody {
     max-height: 65vh;
     tr {
@@ -49,8 +50,6 @@ table.t1 {
 }
 
 table.t2 {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
   tbody {
     max-height: 65vh;
     tr.row:nth-child(4n-3) {
