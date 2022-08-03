@@ -6,8 +6,10 @@ import {
   clearAllocation,
   postAllocations,
 } from "store/product";
-import Row from "./Row";
+import { Container } from "components/Tables";
 import Loader from "components/Loader";
+import Row from "./Row";
+
 import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
 import check from "assets/icons/check.svg";
@@ -128,24 +130,25 @@ export default function PlanningDetail() {
           </div>
         </div>
       </header>
-
-      <table className={`${style.table} ${style.t2}`}>
-        <thead>
-          <tr>
-            {headers.map((header, index) => (
-              <th key={index}>{header}</th>
-            ))}
-            <th></th>
-          </tr>
-        </thead>
-        {filteredAllocations && filteredAllocations.length > 0 && (
-          <tbody className="scroll">
-            {filteredAllocations.map((product, index) => (
-              <Row key={index} product={product} />
-            ))}
-          </tbody>
-        )}
-      </table>
+      <Container className="scroll">
+        <table className={`${style.table} ${style.t2}`}>
+          <thead>
+            <tr>
+              {headers.map((header, index) => (
+                <th key={index}>{header}</th>
+              ))}
+              <th></th>
+            </tr>
+          </thead>
+          {filteredAllocations && filteredAllocations.length > 0 && (
+            <tbody className="scroll">
+              {filteredAllocations.map((product, index) => (
+                <Row key={index} product={product} />
+              ))}
+            </tbody>
+          )}
+        </table>
+      </Container>
       <div style={{ marginTop: "2rem" }} className="actions">
         {filteredAllocations && filteredAllocations.length > 0 && (
           <button type="button" className="btn success" onClick={submitHandler}>

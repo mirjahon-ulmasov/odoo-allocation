@@ -1,8 +1,14 @@
 const { default: styled } = require("styled-components");
 
-export const Table = styled.table`
+export const Container = styled.div`
   width: 100%;
+  overflow-x: scroll;
+`;
+
+export const Table = styled.table`
   color: #333;
+  width: 100%;
+  min-width: 85rem;
   text-align: center;
   border-collapse: collapse;
   animation: 0.5s linear fadeIn;
@@ -25,19 +31,20 @@ export const Table = styled.table`
     width: 100%;
   }
 
-  td,
-  th {
+  td, th {
     border: 0;
     font-size: 16px;
     vertical-align: middle;
-    padding: 1rem 0 1rem 2rem;
+    padding: 1rem 0;
   }
 `;
 
 export const T1 = styled(Table)`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
   tbody {
     max-height: 65vh;
+
     tr {
       &:nth-child(odd) {
         background-color: #f3f3f3;
@@ -66,7 +73,6 @@ export const T1 = styled(Table)`
             border-radius: 10px;
             background: #d0d0d0;
           }
-
           button.success {
             background: #42bba5;
           }
@@ -78,8 +84,7 @@ export const T1 = styled(Table)`
     }
   }
 
-  th,
-  td {
+  th, td {
     width: 11%;
     &:first-child {
       width: 14%;
@@ -91,14 +96,20 @@ export const T1 = styled(Table)`
 `;
 
 export const T2 = styled(T1)`
-  th,
-  td {
-    width: 9%;
+  th, td {
+    width: 8%;
+
+    &:first-child,
+    &:last-child {
+      width: 13%;
+    }
+    &:nth-child(2) {
+      width: 18%;
+    }
     & > button {
       background: #fbfbfb;
       text-transform: capitalize;
     }
-
     .dropdown {
       z-index: 2;
       top: -4rem;
@@ -127,13 +138,6 @@ export const T2 = styled(T1)`
         background: #b8b8b8;
         justify-content: center;
       }
-    }
-    &:first-child,
-    &:last-child {
-      width: 11%;
-    }
-    &:nth-child(2) {
-      width: 15%;
     }
   }
 `;

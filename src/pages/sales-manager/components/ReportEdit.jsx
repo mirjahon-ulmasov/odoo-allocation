@@ -2,14 +2,14 @@ import React, { Fragment, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { 
-  postReservation, 
-  editSmProds,  
-  fetchSmProds, 
-  clearSmProds, 
+import {
+  postReservation,
+  editSmProds,
+  fetchSmProds,
+  clearSmProds,
 } from "store/sales_manager";
+import { T1, Container } from "components/Tables";
 import Loader from "components/Loader";
-import { T1 } from "components/Tables";
 import check from "assets/icons/check.svg";
 
 const headers = [
@@ -23,7 +23,13 @@ const headers = [
   "Reserve",
 ];
 
-export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDealer }) {
+export default function ReportEdit({
+  dealers,
+  sm_prods,
+  loading,
+  dealer,
+  onSetDealer,
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,7 +37,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
     if (!dealers) return;
     let dealerId = dealer ? dealer : dealers[0].id;
     dispatch(fetchSmProds({ dealer: dealerId }));
-    return () => dispatch(clearSmProds())
+    return () => dispatch(clearSmProds());
   }, [dispatch, dealers, dealer]);
 
   const submitHandler = () => {
@@ -73,38 +79,42 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
       </header>
       {sm_prods && sm_prods.length > 0 && (
         <Fragment>
-          <T1 style={{ marginTop: "1.5em" }}>
-            <thead>
-              <tr>
-                {headers.map((header, index) => (
-                  <th key={index}>{header}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="scroll">
-              {sm_prods.map((item, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{item.material}</td>
-                    <td>{item.material_name}</td>
-                    <td>{item.ordered}</td>
-                    <td>{item.fulfilled}</td>
-                    <td>{item.fulfilled_percentage}%</td>
-                    <td>{item.reserved}</td>
-                    <td>{item.allocated}</td>
-                    <td>
-                      <input
-                        type="number"
-                        value={item.reserve}
-                        onChange={(e) => {
-                          const num = parseInt(e.target.value);
-                          if (num >= 0) dispatch(editSmProds({ prodId: item.id, quantity: num }))
-                          }} />
-                    </td>
-                  </tr>
-                )})}
-            </tbody>
-          </T1>
+          <Container className="scroll">
+            <T1 style={{ marginTop: "1.5em" }}>
+              <thead>
+                <tr>
+                  {headers.map((header, index) => (
+                    <th key={index}>{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="scroll">
+                {sm_prods.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{item.material}</td>
+                      <td>{item.material_name}</td>
+                      <td>{item.ordered}</td>
+                      <td>{item.fulfilled}</td>
+                      <td>{item.fulfilled_percentage}%</td>
+                      <td>{item.reserved}</td>
+                      <td>{item.allocated}</td>
+                      <td>
+                        <input
+                          type="number"
+                          value={item.reserve}
+                          onChange={(e) => {
+                            const num = parseInt(e.target.value);
+                            if (num >= 0) dispatch(editSmProds({ prodId: item.id, quantity: num }));
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </T1>
+          </Container>
           <div style={{ marginTop: "2rem" }} className="actions">
             <button
               onClick={submitHandler}

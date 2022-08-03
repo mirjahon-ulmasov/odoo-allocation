@@ -9,7 +9,7 @@ export const productApi = createApi({
       query: () => ({
         url: "/material/list/",
         method: "GET",
-      })
+      }),
     }),
     fetchDealersByFact: builder.query({
       query: () => ({

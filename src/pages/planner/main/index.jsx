@@ -1,4 +1,4 @@
-import React, { useId, useState } from "react";
+import React, { Fragment, useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Typography } from "@mui/material";
 import SummaryByFact from "./components/SummaryFact.jsx";
@@ -13,16 +13,13 @@ export default function MainPage() {
   const [active, setActive] = useState(id);
   const activeClass = (id) => (active === id ? styles.active : "");
   return (
-    <>
+    <Fragment>
       <header className="header">
         <Typography variant="h1">Summary reports</Typography>
         <button
           type="button"
           className="btn dark"
-          onClick={() => {
-            navigate("planning");
-          }}
-        >
+          onClick={() => navigate("planning")}>
           Start Planning
         </button>
       </header>
@@ -32,24 +29,22 @@ export default function MainPage() {
             <Button
               type="button"
               onClick={() => setActive(id)}
-              className={activeClass(id)}
-            >
+              className={activeClass(id)}>
               Summary by products
             </Button>
             <Button
               type="button"
               onClick={() => setActive(id2)}
-              className={activeClass(id2)}
-            >
+              className={activeClass(id2)}>
               Summary by factories
             </Button>
           </div>
         </div>
-        <>
+        <Fragment>
           {active === id && <SummaryByProd />}
           {active === id2 && <SummaryByFact />}
-        </>
+        </Fragment>
       </section>
-    </>
+    </Fragment>
   );
 }

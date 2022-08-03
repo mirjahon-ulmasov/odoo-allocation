@@ -38,8 +38,7 @@ export default function NotificationList() {
             data={notification}
             key={index}
             active={activeId}
-            clickHandler={(id) => clickHandler(id, notification.id)}
-          />
+            clickHandler={(id) => clickHandler(id, notification.id)} />
         ))}
       </ul>
     </Fragment>

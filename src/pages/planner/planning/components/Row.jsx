@@ -1,9 +1,9 @@
 import { Fragment, useState } from "react";
+import { useDispatch } from "react-redux";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Collapse, IconButton } from "@mui/material";
-import style from "../style.module.scss";
-import { useDispatch } from "react-redux";
 import { editAllocation } from "store/product";
+import style from "../style.module.scss";
 
 const headers = [
   "Dillers name",

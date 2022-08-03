@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { clearSmProds, fetchSmProds } from "store/sales_manager";
-import { T1 } from "components/Tables";
+import { T1, Container } from "components/Tables";
 import Loader from "components/Loader";
+
 const headers = [
   "ID",
   "Product",
@@ -60,6 +61,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
           </button>
         </div>
       </header>
+      <Container className="scroll">
       {sm_prods && sm_prods.length > 0 && (
         <T1 style={{ marginTop: "1.5em" }}>
           <thead>
@@ -85,6 +87,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
           </tbody>
         </T1>
       )}
+      </Container>
     </Fragment>
   );
 }

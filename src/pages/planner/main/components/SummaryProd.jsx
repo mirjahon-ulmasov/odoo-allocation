@@ -93,23 +93,16 @@ export default function SummaryByProd() {
       <div
         ref={table2Ref}
         className="scroll"
-        style={{
-          display: "flex",
-          overflow: "scroll hidden",
-          height: "fit-content",
-        }}>
-        {dealer_prods &&
-          dealer_prods.map((dealer, index) => (
+        style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
+        {dealer_prods && dealer_prods.map((dealer, index) => (
             <table
               key={index}
               className={`table_2 ${dealer.isFull ? "active" : ""}`}>
               <thead>
                 <tr>
-                  <th colSpan={4}>
+                  <th colSpan={4} onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
                     <span>{dealer.name}</span>
-                    <IconButton
-                      type="button"
-                      onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
+                    <IconButton type="button">
                       {dealer.isFull ? <ChevronRight /> : <ChevronLeft />}
                     </IconButton>
                   </th>

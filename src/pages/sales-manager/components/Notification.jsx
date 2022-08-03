@@ -1,6 +1,6 @@
 import React, { Fragment, useId } from "react";
 import { Collapse } from "@mui/material";
-import { T1 } from "components/Tables";
+import { T1, Container } from "components/Tables";
 import { useSelector } from "react-redux";
 import { getStatus } from "utils";
 
@@ -39,7 +39,7 @@ export default function Notification({ data, active, clickHandler }) {
 
       <li>
         <Collapse in={is_active} timeout="auto" unmountOnExit>
-          <div style={{ width: "100%" }}>
+          <Container className="scroll">
             {is_active && !loading && (
               <Fragment>
                 {notification_details && notification_details.length > 0 ? (
@@ -74,7 +74,7 @@ export default function Notification({ data, active, clickHandler }) {
                 )}
               </Fragment>
             )}
-          </div>
+          </Container>
         </Collapse>
       </li>
     </Fragment>

@@ -24,7 +24,7 @@ export default function Row({ item, isConfirmed }) {
       {!isConfirmed && (
         <Fragment>
           <td>
-            <div className="actions">
+            <div className="actions" style={{ justifyContent: "center" }}>
               <button
                 className={!isReject ? "success" : ""}
                 onClick={() => setIsReject(false)}>

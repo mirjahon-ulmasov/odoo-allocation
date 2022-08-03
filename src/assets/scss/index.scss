@@ -13,8 +13,8 @@
     padding: 0 2rem;
     align-items: center;
     margin-bottom: 1rem;
-    img,
-    p {
+
+    img, p {
       cursor: pointer;
     }
     p {
@@ -36,6 +36,7 @@
     align-items: center;
     letter-spacing: 0.4px;
     justify-content: space-between;
+    
     h1 {
       color: #333;
       font-size: 20px;

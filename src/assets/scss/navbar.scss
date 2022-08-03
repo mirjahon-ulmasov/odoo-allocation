@@ -16,6 +16,7 @@ $navbar-color: #714b67;
     gap: 0.7rem;
     cursor: pointer;
     align-items: center;
+
     h2 {
       font-size: 22px;
       font-weight: 400;
@@ -28,6 +29,7 @@ $navbar-color: #714b67;
       gap: 2rem;
       display: flex;
       align-items: center;
+
       li {
         gap: 0.5rem;
         display: flex;
@@ -60,6 +62,7 @@ $navbar-color: #714b67;
         cursor: pointer;
         transition: 0.2s;
         background-color: #eae8e8;
+        
         &:hover {
           background-color: #d6d4d4;
         }

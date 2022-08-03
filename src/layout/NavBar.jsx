@@ -48,12 +48,7 @@ export default function NavBar() {
               </li>
               <li>
                 <Avatar
-                  sx={{
-                    bgcolor: deepOrange[500],
-                    cursor: "pointer",
-                    height: 35,
-                    width: 35,
-                  }}>
+                  sx={{ bgcolor: deepOrange[500], cursor: "pointer", height: 35, width: 35 }}>
                   {user.first_name.charAt()}
                 </Avatar>
                 <span ref={menuRef} onClick={() => setIsOpen((prev) => !prev)}>

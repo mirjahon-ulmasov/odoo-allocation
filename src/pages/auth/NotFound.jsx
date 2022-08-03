@@ -14,8 +14,7 @@ export default function NotFound() {
         type="button"
         style={{ textTransform: "uppercase", padding: "0.7rem 2rem" }}
         className="btn dark"
-        onClick={() => navigate(getPath(user))}
-      >
+        onClick={() => navigate(getPath(user))}>
         Back
       </button>
     </div>

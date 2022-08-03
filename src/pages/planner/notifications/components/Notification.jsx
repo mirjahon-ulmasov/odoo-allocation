@@ -1,7 +1,7 @@
 import React, { Fragment, useId } from "react";
 import { useSelector } from "react-redux";
+import { T2, Container } from "components/Tables";
 import { Collapse } from "@mui/material";
-import { T2 } from "components/Tables";
 import { getStatus } from "utils";
 import Row from "./Row";
 
@@ -29,10 +29,7 @@ export default function Notification({ data, active, clickHandler }) {
           {getStatus(data.is_confirmed)}
         </span>
         {is_active && !data.is_confirmed && (
-          <button
-            type="button"
-            className="btn success"
-            onClick={confirmHandler}>
+          <button type="button" className="btn success" onClick={confirmHandler}>
             <img src={check} alt="check" />
             Confirm reservation
           </button>
@@ -40,7 +37,7 @@ export default function Notification({ data, active, clickHandler }) {
       </li>
       <li>
         <Collapse in={is_active} timeout="auto" unmountOnExit>
-          <div style={{ width: "100%" }}>
+          <Container className="scroll">
             {is_active && !loading && (
               <Fragment>
                 {notification_details && notification_details.length > 0 ? (
@@ -65,7 +62,11 @@ export default function Notification({ data, active, clickHandler }) {
                     </thead>
                     <tbody className="scroll" style={{ maxHeight: "20em" }}>
                       {notification_details.map((item, index) => (
-                        <Row item={item} key={index} isConfirmed={data.is_confirmed} />
+                        <Row
+                          item={item}
+                          key={index}
+                          isConfirmed={data.is_confirmed}
+                        />
                       ))}
                     </tbody>
                   </T2>
@@ -74,7 +75,7 @@ export default function Notification({ data, active, clickHandler }) {
                 )}
               </Fragment>
             )}
-          </div>
+          </Container>
         </Collapse>
       </li>
     </Fragment>

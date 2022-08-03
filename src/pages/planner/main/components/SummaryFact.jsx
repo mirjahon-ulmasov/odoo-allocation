@@ -100,6 +100,9 @@ const Summary = styled.div`
     text-transform: capitalize;
     border-collapse: collapse;
 
+    thead {
+      box-shadow: 0 1px 4px #ccc ;
+    }
     tr {
       display: table;
       width: 100%;
@@ -108,8 +111,7 @@ const Summary = styled.div`
       width: 100%;
       display: block;
       overflow: auto;
-      // change height
-      max-height: 10vh;
+      max-height: 65vh;
 
       &::-webkit-scrollbar {
         display: none;
@@ -117,7 +119,7 @@ const Summary = styled.div`
       tr {
         td {
           font-weight: 500;
-          padding: 1.2rem 1.5rem;
+          padding: 1.2rem 0;
         }
         &:nth-child(odd) {
           background-color: #f3f3f3;
@@ -127,7 +129,7 @@ const Summary = styled.div`
   }
   table.sticky {
     z-index: 10;
-    box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.08);
+    box-shadow: 5px 0px 4px #00000014;
 
     tr th {
       padding: 1.56rem;

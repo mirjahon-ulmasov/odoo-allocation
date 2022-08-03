@@ -1,6 +1,7 @@
 table.table {
   width: 100%;
   color: #333;
+  min-width: 80rem;
   text-align: center;
   margin-top: 1.5rem;
   border-collapse: collapse;
@@ -12,20 +13,16 @@ table.table {
       font-weight: 500;
     }
   }
-
   tbody {
     display: block;
     overflow: auto;
     width: 100%;
   }
-
   tr {
     display: table;
     width: 100%;
   }
-
-  td,
-  th {
+  td, th {
     border: 0;
     font-size: 16px;
     padding: 1rem 0 1rem 2rem;
@@ -43,10 +40,11 @@ table.t1 {
       }
     }
   }
-
-  th,
-  td {
-    width: 25%;
+  th, td {
+    width: 28%;
+    &:first-child {
+      width: 16%;
+    }
   }
 }
 
@@ -62,8 +60,7 @@ table.t2 {
   td:last-child {
     font-weight: 500;
   }
-  th,
-  td {
+  th, td {
     width: 9%;
     vertical-align: middle;
     &:first-child,
@@ -109,8 +106,7 @@ table.nested_table {
     }
   }
   tr.nested {
-    th,
-    td {
+    th, td {
       width: 20%;
     }
   }

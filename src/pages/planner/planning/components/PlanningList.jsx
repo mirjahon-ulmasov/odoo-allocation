@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { NotificationManager } from "react-notifications";
 import { useFetchVendorsQuery } from "services/product";
+import { Container } from "components/Tables";
+import Loader from "components/Loader";
+import moment from "moment";
 
 import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
-import Loader from "components/Loader";
 
 const headers = ["ID", "Organization", "Status", "Action"];
 
@@ -40,35 +42,36 @@ export default function PlanningList() {
         </button>
       </header>
       {data && (
-        <table className={`${style.table} ${style.t1}`}>
-          <thead>
-            <tr>
-              {headers.map((header, index) => (
-                <th key={index}>{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="scroll">
-            {data.map((vendor, index) => {
-              return (
-                <tr key={index}>
-                  <td>{vendor.vendor}</td>
-                  <td>{vendor.vendor_name}</td>
-                  <td>Last update 17:00, 24th may</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="btn success"
-                      onClick={() =>
-                        planningHandler(vendor.id.toString(),vendor.vendor_name)}>
-                      Start planning
-                      <ArrowForward />
-                    </button>
-                  </td>
-                </tr>
-              )})}
-          </tbody>
-        </table>
+        <Container className="scroll">
+          <table className={`${style.table} ${style.t1}`}>
+            <thead>
+              <tr>
+                {headers.map((header, index) => (
+                  <th key={index}>{header}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="scroll">
+              {data.map((vendor, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{vendor.vendor}</td>
+                    <td>{vendor.vendor_name}</td>
+                    <td>{moment().format("LLL")}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn success"
+                        onClick={() => planningHandler(vendor.id.toString(),vendor.vendor_name)}>
+                        Start planning
+                        <ArrowForward />
+                      </button>
+                    </td>
+                  </tr>
+                )})}
+            </tbody>
+          </table>
+        </Container>
       )}
     </Fragment>
   );
