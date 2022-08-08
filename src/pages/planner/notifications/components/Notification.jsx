@@ -89,7 +89,7 @@ export default function Notification({ data, active, clickHandler }) {
             )}
           </Container>
         </Collapse>
-      </
+      </li>
     </Fragment>
   );
 }
