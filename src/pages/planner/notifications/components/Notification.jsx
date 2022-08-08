@@ -1,5 +1,6 @@
 import React, { Fragment, useId } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { postNotification } from "store/notification";
 import { T2, Container } from "components/Tables";
 import { Collapse } from "@mui/material";
 import { getStatus } from "utils";
@@ -10,12 +11,24 @@ import check from "assets/icons/check.svg";
 
 export default function Notification({ data, active, clickHandler }) {
   const id = useId();
+  const dispatch = useDispatch();
   const is_active = id === active;
-  const { notification_details, loading } = useSelector(
-    (state) => state.notification
-  );
+  const { notification_details, loading } = useSelector((state) => state.notification);
 
-  const confirmHandler = () => {};
+  const confirmHandler = () => {
+    const data = {
+      order_id: notification_details[0].order_id || 1, // ------ CHANGE
+      materials: notification_details.map((notif) => ({
+        material_id: notif.material_id,
+        confirmed: true, // ------------------------------------ CHANGE
+        dealers: notif.dealers.map((dealer) => ({
+          dealer_id: dealer.dealer_id,
+          given: dealer.given,
+        })),
+      })),
+    };
+    dispatch(postNotification(data));
+  };
 
   return (
     <Fragment>
@@ -29,7 +42,10 @@ export default function Notification({ data, active, clickHandler }) {
           {getStatus(data.is_confirmed)}
         </span>
         {is_active && !data.is_confirmed && (
-          <button type="button" className="btn success" onClick={confirmHandler}>
+          <button
+            type="button"
+            className="btn success"
+            onClick={confirmHandler}>
             <img src={check} alt="check" />
             Confirm reservation
           </button>
@@ -62,11 +78,7 @@ export default function Notification({ data, active, clickHandler }) {
                     </thead>
                     <tbody className="scroll" style={{ maxHeight: "20em" }}>
                       {notification_details.map((item, index) => (
-                        <Row
-                          item={item}
-                          key={index}
-                          isConfirmed={data.is_confirmed}
-                        />
+                        <Row item={item} key={index} isConfirmed={data.is_confirmed}/>
                       ))}
                     </tbody>
                   </T2>
@@ -77,7 +89,7 @@ export default function Notification({ data, active, clickHandler }) {
             )}
           </Container>
         </Collapse>
-      </li>
+      </
     </Fragment>
   );
 }

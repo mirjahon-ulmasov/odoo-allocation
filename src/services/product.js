@@ -26,10 +26,17 @@ export const productApi = createApi({
         return response.results;
       },
     }),
+    updateStock: builder.query({
+      query: () => ({
+        url: "/stock/update_all_stock/",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const {
+  useUpdateStockQuery,
   useFetchVendorsQuery,
   useFetchAllProductsQuery,
   useFetchDealersByFactQuery,

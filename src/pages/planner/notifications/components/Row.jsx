@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from "react";
 import { Done, Close, KeyboardArrowDown } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { editDealerCount } from "store/notification";
 
 export default function Row({ item, isConfirmed }) {
+  const dispatch = useDispatch()
   const [isReject, setIsReject] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,18 +50,29 @@ export default function Row({ item, isConfirmed }) {
             </button>
             {isOpen && (
               <div className="dropdown">
-                <label>
-                  Saturn (2)
-                  <input type="number" />
-                </label>
-                <label>
-                  Texnology diller (29)
-                  <input type="number" />
-                </label>
-                <label>
-                  Texnology diller 212 (29)
-                  <input type="number" />
-                </label>
+                {item.dealers.map((dealer, index) => {
+                  return (
+                    <label key={index}>
+                      {dealer.dealer_name} ({dealer.remain})
+                      <input
+                        type="number"
+                        value={dealer.given}
+                        onChange={(e) => {
+                          const num = parseInt(e.target.value);
+                          if (num >= 0) {
+                            dispatch(
+                              editDealerCount({
+                                materialId: item.material_id,
+                                dealerId: dealer.dealer_id,
+                                quantity: num,
+                              })
+                            );
+                          }
+                        }}
+                      />
+                    </label>
+                  );
+                })}
                 <button onClick={applyHandler} className="btn success">
                   Apply
                 </button>

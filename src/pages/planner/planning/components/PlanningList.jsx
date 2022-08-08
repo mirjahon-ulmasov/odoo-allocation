@@ -1,8 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { NotificationManager } from "react-notifications";
-import { useFetchVendorsQuery } from "services/product";
+import { useFetchVendorsQuery, useUpdateStockQuery } from "services/product";
 import { Container } from "components/Tables";
 import Loader from "components/Loader";
 import moment from "moment";
@@ -14,19 +14,25 @@ const headers = ["ID", "Organization", "Status", "Action"];
 
 export default function PlanningList() {
   const navigate = useNavigate();
-  const { data, isLoading: loading, error } = useFetchVendorsQuery();
+  const { data, isFetching: loading, error } = useFetchVendorsQuery();
+  const { data: data2, isFetching: loading2, refetch } = useUpdateStockQuery();
 
-  const updateDB = () => {};
+  const updateDB = () => {
+    refetch();
+    if (data2) NotificationManager.success("Successfully Updated");
+  };
+
+  useEffect(() => {
+    if (error) NotificationManager.error(error.error);
+  }, []);
 
   const planningHandler = (vendorId, title) => {
     navigate(vendorId, { state: { title } });
   };
 
-  if (error) NotificationManager.error(error.error);
-
   return (
     <Fragment>
-      {loading && <Loader />}
+      {(loading || loading2) && <Loader />}
       <nav className="nav-links">
         <img onClick={() => navigate(-1)} src={back} alt="back icon" />
         <p onClick={() => navigate("/planner")} className="click">
@@ -68,7 +74,8 @@ export default function PlanningList() {
                       </button>
                     </td>
                   </tr>
-                )})}
+                );
+              })}
             </tbody>
           </table>
         </Container>

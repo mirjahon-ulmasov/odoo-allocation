@@ -27,9 +27,28 @@ export const fetchNotifDetails = createAsyncThunk(
         throw new Error("Bad Request");
       }
       const notifDetails = await response.data;
-      return notifDetails;
+      return notifDetails.map((notif) => ({
+        ...notif,
+        dealers: notif.dealers.map((dealer) => ({
+          ...dealer,
+          given: 0,
+          remain: dealer.dealer_allocation,
+        })),
+      }));
     } catch (err) {
       NotificationManager.error("Couldn't get notification details", "", 2000);
+    }
+  }
+);
+
+export const postNotification = createAsyncThunk(
+  "notification/postNotification",
+  async (data) => {
+    try {
+      const response = await instance.post(API + "/order/confirm_reserve/ ", data);
+      if (response.status !== 200) throw new Error("Bad Request")
+    } catch (err) {
+      NotificationManager.error("Couldn't confirm", "", 2000);
     }
   }
 );
@@ -57,6 +76,33 @@ export const notificationSlice = createSlice({
       );
       if (index >= 0) state.notifications[index] = payload;
       else state.notifications.unshift(payload);
+    },
+    editDealerCount(state, { payload }) {
+      const { materialId, dealerId, quantity } = payload;
+      state.notification_details = state.notification_details.map((item) => {
+        if (item.material_id === materialId) {
+          return {
+            ...item,
+            dealers: item.dealers.map((dealer) => {
+              if (dealer.dealer_id === dealerId) {
+                return {
+                  ...dealer,
+                  given:
+                    dealer.dealer_allocation > quantity
+                      ? quantity
+                      : dealer.dealer_allocation,
+                  remain:
+                    dealer.dealer_allocation > quantity
+                      ? dealer.dealer_allocation - quantity
+                      : 0,
+                };
+              }
+              return dealer;
+            }),
+          };
+        }
+        return item;
+      });
     },
   },
   extraReducers: {
@@ -86,7 +132,11 @@ export const notificationSlice = createSlice({
   },
 });
 
-export const { clearNotifications, clearNotificationDetail, addNotification } =
-  notificationSlice.actions;
+export const {
+  clearNotifications,
+  clearNotificationDetail,
+  addNotification,
+  editDealerCount,
+} = notificationSlice.actions;
 const { reducer } = notificationSlice;
 export default reducer;

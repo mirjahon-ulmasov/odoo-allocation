@@ -3,7 +3,7 @@ import { Bars } from "react-loader-spinner";
 const Loader = () => {
   return (
     <div className="center">
-      <Bars color="#00BFFF" height={100} width={100} timeout={300000} />
+      <Bars color="#946687" height={100} width={100} timeout={300000} />
     </div>
   );
 };
