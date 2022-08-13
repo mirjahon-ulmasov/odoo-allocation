@@ -27,7 +27,7 @@ export const fetchSmProds = createAsyncThunk(
         throw new Error("Bad Request");
       }
       const data = await response.data;
-      return data.results.map((item) => ({
+      return data.map((item) => ({
         ...item,
         reserve: item.allocated,
       }));

@@ -4,7 +4,7 @@ import { NotificationManager } from "react-notifications";
 
 export const fetchProdsByDealer = createAsyncThunk(
   "product/fetchProdsByDealer",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       regenerate_api();
       const response = await instance.get(API + "/customer/main_page_list/");
@@ -14,20 +14,17 @@ export const fetchProdsByDealer = createAsyncThunk(
       const data = await response.data;
       return data.map((el) => ({ ...el, isFull: false }));
     } catch (err) {
-      NotificationManager.error("Couldn't get products", "", 2000);
+      return rejectWithValue("Couldn't get products");
     }
   }
 );
 
 export const fetchAllocations = createAsyncThunk(
   "product/fetchAllocations",
-  async ({ vendor }) => {
+  async ({ vendor }, { rejectWithValue }) => {
     try {
-      const response = await instance.get(
-        API + "/material/list_for_allocation/",
-        {
-          params: { vendor },
-        }
+      const response = await instance.get(API + "/material/list_for_allocation/",
+        { params: { vendor } }
       );
       if (response.status !== 200) {
         throw new Error("Bad Request");
@@ -45,7 +42,20 @@ export const fetchAllocations = createAsyncThunk(
         })),
       }));
     } catch (err) {
-      NotificationManager.error("Couldn't get data", "", 2000);
+      return rejectWithValue("Couldn't get data");
+    }
+  }
+);
+
+export const fetchVendors = createAsyncThunk(
+  "product/fetchVendors",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await instance.get(API + "/vendor/list/");
+      if (response.status !== 200) throw new Error("Bad Request");
+      return response.data
+    } catch (err) {
+      return rejectWithValue("Couldn't get data");
     }
   }
 );
@@ -65,11 +75,25 @@ export const postAllocations = createAsyncThunk(
   }
 );
 
+export const updateStock = createAsyncThunk(
+  "product/updateStock",
+  async (_, thunkAPI) => {
+    try {
+      const response = await instance.get(API + "/stock/update_all_stock/");
+      if (response.status !== 200) throw new Error("Bad Request");
+      thunkAPI.dispatch(fetchVendors()); 
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Unable to Update");
+    }
+  }
+);
+
+
 const initialState = {
   dealer_prods: null,
   allocations: null,
+  vendors: null,
   loading: false,
-  error: null,
 };
 
 export const productSlice = createSlice({
@@ -119,35 +143,65 @@ export const productSlice = createSlice({
   extraReducers: {
     [fetchProdsByDealer.pending]: (state) => {
       state.loading = true;
+      state.dealer_prods = null;
     },
     [fetchProdsByDealer.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.dealer_prods = payload;
     },
-    [fetchProdsByDealer.rejected]: (state) => {
+    [fetchProdsByDealer.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.dealer_prods = null;
+      NotificationManager.error(payload, "", 2000);
     },
+
 
     [fetchAllocations.pending]: (state) => {
       state.loading = true;
+      state.allocations = null;
     },
     [fetchAllocations.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.allocations = payload;
     },
-    [fetchAllocations.rejected]: (state) => {
+    [fetchAllocations.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.allocations = null;
+      NotificationManager.error(payload, "", 2000);
+    },
+
+
+    [fetchVendors.pending]: (state) => {
+      state.loading = true;
+      state.vendors = null;
+    },
+    [fetchVendors.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.vendors = payload;
+    },
+    [fetchVendors.rejected]: (state, { payload }) => {
+      state.loading = false;
+      NotificationManager.error(payload, "", 2000);
+    },
+
+    
+    [updateStock.pending]: (state) => {
+      state.loading = true;
+    },
+    [updateStock.fulfilled]: (state) => {
+      state.loading = false;
+      NotificationManager.success("Successfully Updated", "", 2000);
+    },
+    [updateStock.rejected]: (state, { payload }) => {
+      state.loading = false;
+      NotificationManager.error(payload, "", 2000);
     },
   },
 });
 
 export const {
-  clearDealerProds,
-  editDealerProdisFull,
   editAllocation,
   clearAllocation,
+  clearDealerProds,
+  editDealerProdisFull,
 } = productSlice.actions;
 const { reducer } = productSlice;
 export default reducer;

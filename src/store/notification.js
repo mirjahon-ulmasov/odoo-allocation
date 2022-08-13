@@ -11,7 +11,7 @@ export const fetchNotificationList = createAsyncThunk(
         throw new Error("Bad Request");
       }
       const notifications = await response.data;
-      return notifications.results;
+      return notifications;
     } catch (err) {
       NotificationManager.error("Couldn't get notifications", "", 2000);
     }

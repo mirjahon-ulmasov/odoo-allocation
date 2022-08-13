@@ -33,7 +33,7 @@ export default function NotificationList() {
         <h1>Notifications</h1>
       </Header>
       <ul className="notif_list scroll">
-        {notifications.map((notification, index) => (
+        {notifications && notifications.map((notification, index) => (
           <Notification
             data={notification}
             key={index}

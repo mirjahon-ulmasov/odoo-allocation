@@ -11,6 +11,6 @@ export const checkPath = (user = null, path) => {
   return false;
 };
 
-export const getStatus = (is_confirmed) => {
-  return is_confirmed ? "confirmed" : "pending";
+export const getStatus = (processed) => {
+  return processed ? "confirmed" : "pending";
 };

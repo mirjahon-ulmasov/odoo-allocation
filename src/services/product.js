@@ -17,27 +17,7 @@ export const productApi = createApi({
         method: "GET",
       }),
     }),
-    fetchVendors: builder.query({
-      query: () => ({
-        url: "/vendor/list/",
-        method: "GET",
-      }),
-      transformResponse: (response) => {
-        return response.results;
-      },
-    }),
-    updateStock: builder.query({
-      query: () => ({
-        url: "/stock/update_all_stock/",
-        method: "GET",
-      }),
-    }),
   }),
 });
 
-export const {
-  useUpdateStockQuery,
-  useFetchVendorsQuery,
-  useFetchAllProductsQuery,
-  useFetchDealersByFactQuery,
-} = productApi;
+export const { useFetchAllProductsQuery, useFetchDealersByFactQuery } = productApi;

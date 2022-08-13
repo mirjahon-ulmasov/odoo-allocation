@@ -1,11 +1,10 @@
 import React, { Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateStock, fetchVendors } from "store/product";
 import { ArrowForward, Cached } from "@mui/icons-material";
-import { NotificationManager } from "react-notifications";
-import { useFetchVendorsQuery, useUpdateStockQuery } from "services/product";
 import { Container } from "components/Tables";
 import Loader from "components/Loader";
-import moment from "moment";
 
 import style from "../style.module.scss";
 import back from "assets/icons/back.svg";
@@ -14,17 +13,17 @@ const headers = ["ID", "Organization", "Status", "Action"];
 
 export default function PlanningList() {
   const navigate = useNavigate();
-  const { data, isFetching: loading, error } = useFetchVendorsQuery();
-  const { data: data2, isFetching: loading2, refetch } = useUpdateStockQuery();
+  const dispatch = useDispatch();
+
+  const { loading, vendors } = useSelector(state => state.product)
 
   const updateDB = () => {
-    refetch();
-    if (data2) NotificationManager.success("Successfully Updated");
+    dispatch(updateStock());
   };
 
   useEffect(() => {
-    if (error) NotificationManager.error(error.error);
-  }, []);
+    dispatch(fetchVendors());
+  }, [dispatch]);
 
   const planningHandler = (vendorId, title) => {
     navigate(vendorId, { state: { title } });
@@ -32,7 +31,7 @@ export default function PlanningList() {
 
   return (
     <Fragment>
-      {(loading || loading2) && <Loader />}
+      {loading && <Loader />}
       <nav className="nav-links">
         <img onClick={() => navigate(-1)} src={back} alt="back icon" />
         <p onClick={() => navigate("/planner")} className="click">
@@ -47,7 +46,7 @@ export default function PlanningList() {
           Update
         </button>
       </header>
-      {data && (
+      {vendors && (
         <Container className="scroll">
           <table className={`${style.table} ${style.t1}`}>
             <thead>
@@ -58,17 +57,23 @@ export default function PlanningList() {
               </tr>
             </thead>
             <tbody className="scroll">
-              {data.map((vendor, index) => {
+              {vendors.map((vendor, index) => {
                 return (
                   <tr key={index}>
                     <td>{vendor.vendor}</td>
                     <td>{vendor.vendor_name}</td>
-                    <td>{moment().format("LLL")}</td>
+                    <td>{vendor.last_updated}</td>
                     <td>
                       <button
                         type="button"
                         className="btn success"
-                        onClick={() => planningHandler(vendor.id.toString(),vendor.vendor_name)}>
+                        onClick={() =>
+                          planningHandler(
+                            vendor.id.toString(),
+                            vendor.vendor_name
+                          )
+                        }
+                      >
                         Start planning
                         <ArrowForward />
                       </button>

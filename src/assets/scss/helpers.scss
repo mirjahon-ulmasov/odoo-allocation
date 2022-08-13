@@ -114,3 +114,18 @@
   background: #f4f4f4;
   padding: 1rem;
 }
+
+.excel-container {
+  position: absolute;
+  right: 2rem;
+  top: 9.5rem;
+
+  .excel-button {
+    cursor: pointer;
+    font-size: 14px;
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    text-transform: uppercase;
+    background-color: #efefef;
+  }
+}

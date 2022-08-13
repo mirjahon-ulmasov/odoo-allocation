@@ -32,8 +32,8 @@ export default function Notification({ data, active, clickHandler }) {
           You({data.title}) have asked to reserve extra pieces
         </p>
         <span className="date">{data.created_at}</span>
-        <span className={`status ${getStatus(data.is_confirmed)}`}>
-          {getStatus(data.is_confirmed)}
+        <span className={`status ${getStatus(data.processed)}`}>
+          {getStatus(data.processed)}
         </span>
       </li>
 

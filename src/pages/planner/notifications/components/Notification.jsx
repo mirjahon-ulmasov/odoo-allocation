@@ -16,17 +16,16 @@ export default function Notification({ data, active, clickHandler }) {
   const { notification_details, loading } = useSelector((state) => state.notification);
 
   const confirmHandler = () => {
-    const data = {
-      order_id: notification_details[0].order_id || 1, // ------ CHANGE
-      materials: notification_details.map((notif) => ({
+    const data =  notification_details.map((notif) => ({
+        order_item_id: notif.order_item_id,
         material_id: notif.material_id,
-        confirmed: true, // ------------------------------------ CHANGE
+        is_confirmed: notif.dealers.reduce((acc, dealer) => acc + dealer.given, 0) > 0 ? true : false, 
         dealers: notif.dealers.map((dealer) => ({
           dealer_id: dealer.dealer_id,
-          given: dealer.given,
+          given_quantity: dealer.given,
         })),
-      })),
-    };
+      }));
+    
     dispatch(postNotification(data));
   };
 
@@ -38,10 +37,10 @@ export default function Notification({ data, active, clickHandler }) {
           {data.title} have asked to reserve extra pieces
         </p>
         <span className="date">{data.created_at}</span>
-        <span className={`status ${getStatus(data.is_confirmed)}`}>
-          {getStatus(data.is_confirmed)}
+        <span className={`status ${getStatus(data.processed)}`}>
+          {getStatus(data.processed)}
         </span>
-        {is_active && !data.is_confirmed && (
+        {is_active && !data.processed && (
           <button
             type="button"
             className="btn success"
@@ -68,7 +67,7 @@ export default function Notification({ data, active, clickHandler }) {
                         <th>Reserved</th>
                         <th>Allocated</th>
                         <th>Reserve</th>
-                        {!data.is_confirmed && (
+                        {!data.processed && (
                           <Fragment>
                             <th>Action</th>
                             <th>Subtract from</th>
@@ -78,7 +77,7 @@ export default function Notification({ data, active, clickHandler }) {
                     </thead>
                     <tbody className="scroll" style={{ maxHeight: "20em" }}>
                       {notification_details.map((item, index) => (
-                        <Row item={item} key={index} isConfirmed={data.is_confirmed}/>
+                        <Row item={item} key={index} isConfirmed={data.processed}/>
                       ))}
                     </tbody>
                   </T2>

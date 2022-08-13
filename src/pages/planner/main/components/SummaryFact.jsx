@@ -1,6 +1,7 @@
 import React, { Fragment, useRef } from "react";
 import { useFetchDealersByFactQuery } from "services/product";
 import { NotificationManager } from "react-notifications";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import styled from "styled-components";
 import Loader from "components/Loader";
 
@@ -21,6 +22,29 @@ export default function SummaryByFact() {
   const scrollHandler = (event) => {
     stickyRef.current.scrollTop = event.currentTarget.scrollTop;
     scrollRef.current.scrollTop = event.currentTarget.scrollTop;
+  };
+
+  ReactHTMLTableToExcel.format = (s, c) => {
+    if (c && c["table"]) {
+      const html = c.table;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const rows = doc.querySelectorAll("tr");
+
+      const dealerTable = document.querySelector(".sticky");
+      const dealers = Array.from(dealerTable.querySelectorAll("tr"));
+
+      let i = 0, j = 0;
+      for (const row of rows) {
+        if (j++ === 1) row.insertBefore(document.createElement("th"), row.firstChild);
+        else row.insertBefore(dealers[i++].firstChild, row.firstChild);
+         
+      }
+
+      c.table = doc.querySelector("table").outerHTML;
+    }
+
+    return s.replace(/{(\w+)}/g, (m, p) => c[p]);
   };
 
   if (error) NotificationManager.error(error.error);
@@ -46,8 +70,13 @@ export default function SummaryByFact() {
           </table>
           <div
             className="scroll"
-            style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
-            <table className="scrolling">
+            style={{
+              display: "flex",
+              overflow: "scroll hidden",
+              height: "fit-content",
+            }}
+          >
+            <table id="table-to-xls" className="scrolling">
               <thead>
                 <tr>
                   <th colSpan={4}>Total</th>
@@ -79,12 +108,23 @@ export default function SummaryByFact() {
                         </Fragment>
                       ))}
                     </tr>
-                  )})}
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </Fragment>
       )}
+      <div className="excel-container">
+        <ReactHTMLTableToExcel
+          id="test-table-xls-button"
+          className="excel-button"
+          table="table-to-xls"
+          filename="summary_factory"
+          sheet="tablexls"
+          buttonText="Excel"
+        />
+      </div>
     </Summary>
   );
 }
@@ -101,7 +141,7 @@ const Summary = styled.div`
     border-collapse: collapse;
 
     thead {
-      box-shadow: 0 1px 4px #ccc ;
+      box-shadow: 0 1px 4px #ccc;
     }
     tr {
       display: table;
@@ -138,7 +178,8 @@ const Summary = styled.div`
     tr:last-child td {
       padding: 1.45rem;
     }
-    td, th {
+    td,
+    th {
       font-weight: 400;
     }
   }
@@ -184,7 +225,8 @@ const Summary = styled.div`
     }
     thead tr:nth-child(2),
     tbody tr {
-      th, td {
+      th,
+      td {
         width: 5rem;
       }
     }
