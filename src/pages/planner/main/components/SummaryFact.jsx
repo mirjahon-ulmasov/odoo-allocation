@@ -38,7 +38,6 @@ export default function SummaryByFact() {
       for (const row of rows) {
         if (j++ === 1) row.insertBefore(document.createElement("th"), row.firstChild);
         else row.insertBefore(dealers[i++].firstChild, row.firstChild);
-         
       }
 
       c.table = doc.querySelector("table").outerHTML;

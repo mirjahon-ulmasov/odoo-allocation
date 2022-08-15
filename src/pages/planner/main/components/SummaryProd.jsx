@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
-import { ChevronRight, ChevronLeft } from "@mui/icons-material";
-import { useFetchAllProductsQuery } from "services/product";
-import { NotificationManager } from "react-notifications";
 import { useDispatch, useSelector } from "react-redux";
+import { NotificationManager } from "react-notifications";
+import { useFetchAllProductsQuery } from "services/product";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import { ChevronRight, ChevronLeft } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import Loader from "components/Loader";
 import styled from "styled-components";
@@ -42,11 +43,35 @@ export default function SummaryByProd() {
     table1Ref.current.scrollTop = event.currentTarget.scrollTop;
   };
 
+  // ReactHTMLTableToExcel.format = (s, c) => {
+  //   if (c && c["table"]) {
+  //     const html = c.table;
+  //     const parser = new DOMParser();
+  //     const doc = parser.parseFromString(html, "text/html");
+  //     const rows = doc.querySelectorAll("tr");
+
+  //     const dealerTable = document.querySelectorAll(".table_2");
+  //     // const dealers = Array.from(dealerTable.querySelectorAll("tr"));
+
+  //     console.log(dealerTable[0].querySelectorAll("tr"));
+
+  //     // let i = 0, j = 0;
+  //     // for (const row of rows) {
+  //     //   if (j++ === 1) row.insertBefore(document.createElement("th"), row.firstChild);
+  //     //   else row.insertBefore(dealers[i++].firstChild, row.firstChild);
+  //     // }
+
+  //     c.table = doc.querySelector("table").outerHTML;
+  //   }
+
+  //   return s.replace(/{(\w+)}/g, (m, p) => c[p]);
+  // };
+
   return (
     <Summary className="scroll">
       {(load1 || load2) && <Loader />}
       {allProds && allProds.length > 0 && (
-        <table className="table_1">
+        <table id="table-to-xls" className="table_1">
           <thead>
             <tr>
               <th>ID</th>
@@ -64,7 +89,8 @@ export default function SummaryByProd() {
                 <IconButton
                   type="button"
                   sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#fff" }}
-                  onClick={() => setIsFull((prev) => !prev)}>
+                  onClick={() => setIsFull((prev) => !prev)}
+                >
                   {isFull ? <ChevronLeft /> : <ChevronRight />}
                 </IconButton>
               </th>
@@ -93,14 +119,24 @@ export default function SummaryByProd() {
       <div
         ref={table2Ref}
         className="scroll"
-        style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
-        {dealer_prods && dealer_prods.map((dealer, index) => (
+        style={{
+          display: "flex",
+          overflow: "scroll hidden",
+          height: "fit-content",
+        }}
+      >
+        {dealer_prods &&
+          dealer_prods.map((dealer, index) => (
             <table
               key={index}
-              className={`table_2 ${dealer.isFull ? "active" : ""}`}>
+              className={`table_2 ${dealer.isFull ? "active" : ""}`}
+            >
               <thead>
                 <tr>
-                  <th colSpan={4} onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
+                  <th
+                    colSpan={4}
+                    onClick={() => dispatch(editDealerProdisFull(dealer.id))}
+                  >
                     <span>{dealer.name}</span>
                     <IconButton type="button">
                       {dealer.isFull ? <ChevronRight /> : <ChevronLeft />}
@@ -134,6 +170,16 @@ export default function SummaryByProd() {
               </tbody>
             </table>
           ))}
+      </div>
+      <div className="excel-container">
+        <ReactHTMLTableToExcel
+          id="test-table-xls-button"
+          className="excel-button"
+          table="table-to-xls"
+          filename="summary_products"
+          sheet="tablexls"
+          buttonText="Excel"
+        />
       </div>
     </Summary>
   );
@@ -204,7 +250,8 @@ const Summary = styled.div`
         font-weight: 400;
       }
     }
-    th, td {
+    th,
+    td {
       width: 4rem;
       &:first-child {
         width: 12rem;
