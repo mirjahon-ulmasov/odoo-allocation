@@ -12,9 +12,9 @@ import "./assets/css/index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Provider store={store}>
-    <Socket>
-      <App />
-    </Socket>
-  </Provider>
+	<Provider store={store}>
+		<Socket>
+			<App />
+		</Socket>
+	</Provider>
 );

@@ -6,11 +6,11 @@ import prodReducer from "./product";
 import authReducer from "./auth";
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    product: prodReducer,
-    notification: notifReducer,
-    sales_manager: smReducer,
-    [productApi.reducerPath]: productApi.reducer,
-  },
+	reducer: {
+		auth: authReducer,
+		product: prodReducer,
+		notification: notifReducer,
+		sales_manager: smReducer,
+		[productApi.reducerPath]: productApi.reducer,
+	},
 });

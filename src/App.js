@@ -9,20 +9,20 @@ import { useSelector } from "react-redux";
 import { getPath } from "utils";
 
 function App() {
-  const { user } = useSelector(state => state.auth);
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Navigate to={getPath(user)}/>}/>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/sm/*" element={<RequireAuth><SalesManager /></RequireAuth>} />
-          <Route path="/planner/*" element={<RequireAuth><Planner /></RequireAuth>} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </Router>
-  );
+	const { user } = useSelector(state => state.auth);
+	return (
+		<Router>
+			<Routes>
+				<Route path="/" element={<MainLayout />}>
+					<Route index element={<Navigate to={getPath(user)}/>}/>
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/sm/*" element={<RequireAuth><SalesManager /></RequireAuth>} />
+					<Route path="/planner/*" element={<RequireAuth><Planner /></RequireAuth>} />
+					<Route path="*" element={<NotFound />} />
+				</Route>
+			</Routes>
+		</Router>
+	);
 }
 
 export default App;

@@ -1,131 +1,131 @@
 // Buttons
 .btn {
-  border: none;
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: center;
-  border-radius: 4px;
-  padding: 8px 16px;
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
-  font-weight: 500;
-  letter-spacing: 0.4px;
-  transition: 0.2s;
-  font-size: 16px;
-  cursor: pointer;
+	border: none;
+	display: inline-flex;
+	gap: 0.5rem;
+	align-items: center;
+	border-radius: 4px;
+	padding: 8px 16px;
+	color: #fff;
+	font-family: "Roboto", sans-serif;
+	text-transform: uppercase;
+	font-weight: 500;
+	letter-spacing: 0.4px;
+	transition: 0.2s;
+	font-size: 16px;
+	cursor: pointer;
 }
 
 .dark {
-  background-color: #036f75;
-  &:hover {
-    background-color: #025b5f;
-  }
+	background-color: #036f75;
+	&:hover {
+		background-color: #025b5f;
+	}
 }
 .info {
-  background-color: #42a4db;
-  &:hover {
-    background-color: #388fc1;
-  }
+	background-color: #42a4db;
+	&:hover {
+		background-color: #388fc1;
+	}
 }
 .gray {
-  color: #4d4d4d;
-  background-color: #dfdfdf;
+	color: #4d4d4d;
+	background-color: #dfdfdf;
 
-  &:hover {
-    background-color: #eee;
-  }
+	&:hover {
+		background-color: #eee;
+	}
 }
 .disabled {
-  color: #dbdbdb;
-  cursor: not-allowed;
-  background-color: #dfdfdf;
+	color: #dbdbdb;
+	cursor: not-allowed;
+	background-color: #dfdfdf;
 }
 .danger {
-  background-color: #f76060;
-  &:hover {
-    background-color: #e75959;
-  }
+	background-color: #f76060;
+	&:hover {
+		background-color: #e75959;
+	}
 }
 .success {
-  background-color: #40a568;
-  &:hover {
-    background-color: #39935d;
-  }
+	background-color: #40a568;
+	&:hover {
+		background-color: #39935d;
+	}
 }
 
 // Checkbox
 .form {
-  &__radio-group {
-    display: inline-block;
-    margin-right: 50px;
-  }
+	&__radio-group {
+		display: inline-block;
+		margin-right: 50px;
+	}
 
-  &__radio-input {
-    display: none;
-  }
+	&__radio-input {
+		display: none;
+	}
 
-  &__radio-label {
-    font-weight: 400;
-    line-height: 16px;
-    color: #000000;
-    font-size: 16px;
-    cursor: pointer;
-    position: relative;
-    padding-left: 32px;
-    text-align: center;
-  }
+	&__radio-label {
+		font-weight: 400;
+		line-height: 16px;
+		color: #000000;
+		font-size: 16px;
+		cursor: pointer;
+		position: relative;
+		padding-left: 32px;
+		text-align: center;
+	}
 
-  &__radio-button {
-    height: 22px;
-    width: 22px;
-    background: #ffffff;
-    border: 1px solid #c2c2c2;
-    display: inline-block;
-    position: absolute;
-    left: 0;
-    top: -1.5px;
+	&__radio-button {
+		height: 22px;
+		width: 22px;
+		background: #ffffff;
+		border: 1px solid #c2c2c2;
+		display: inline-block;
+		position: absolute;
+		left: 0;
+		top: -1.5px;
 
-    &::after {
-      content: "";
-      display: block;
-      height: 16px;
-      width: 16px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #c2c2c2;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-  }
+		&::after {
+			content: "";
+			display: block;
+			height: 16px;
+			width: 16px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: #c2c2c2;
+			opacity: 0;
+			transition: opacity 0.2s;
+		}
+	}
 
-  &__radio-input:checked ~ &__radio-label &__radio-button::after {
-    opacity: 1;
-  }
+	&__radio-input:checked ~ &__radio-label &__radio-button::after {
+		opacity: 1;
+	}
 }
 
 .empty-data {
-  font-size: 1.5em;
-  text-align: center;
-  color: #aaa;
-  text-transform: uppercase;
-  background: #f4f4f4;
-  padding: 1rem;
+	font-size: 1.5em;
+	text-align: center;
+	color: #aaa;
+	text-transform: uppercase;
+	background: #f4f4f4;
+	padding: 1rem;
 }
 
 .excel-container {
-  position: absolute;
-  right: 2rem;
-  top: 9.5rem;
+	position: absolute;
+	right: 2rem;
+	top: 9.5rem;
 
-  .excel-button {
-    cursor: pointer;
-    font-size: 14px;
-    padding: 7px 10px;
-    border: 1px solid #ccc;
-    text-transform: uppercase;
-    background-color: #efefef;
-  }
+	.excel-button {
+		cursor: pointer;
+		font-size: 14px;
+		padding: 7px 10px;
+		border: 1px solid #ccc;
+		text-transform: uppercase;
+		background-color: #efefef;
+	}
 }
