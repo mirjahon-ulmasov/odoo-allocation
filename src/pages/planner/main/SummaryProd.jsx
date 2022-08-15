@@ -36,6 +36,16 @@ export default function SummaryByProd() {
 		table1Ref.current.scrollTop = event.currentTarget.scrollTop;
 	};
 
+	ReactHTMLTableToExcel.format = (s, c) => {
+		if (c && c["table"]) {
+			const html = c.table;
+			const parser = new DOMParser();
+			const doc = parser.parseFromString(html, "text/html");
+			c.table = doc.querySelector("table").outerHTML;
+		}
+		return s.replace(/{(\w+)}/g, (m, p) => c[p]);
+	};
+
 	return (
 		<Summary className="scroll">
 			{(load1 || load2) && <Loader />}
