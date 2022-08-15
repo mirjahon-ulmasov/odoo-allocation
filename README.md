@@ -1,16 +1,22 @@
-## Available Scripts
+# Odoo Allocation
 
-In the project directory, you can run:
+## Build Setup
 
-### `npm start`
+``` bash
+# install dependencies
+npm installl
 
-### `npm test`
+# serve with hot reload at localhost:3000
+npm start
 
-### `npm run build`
+# build for production with minification
+npm run build
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Git Flow
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To add a feature or make changes, follow these steps:
 
+1. Create feature-* branch from develop branch
+2. After developing your feature or making changes, please make sure everything works well.
+3. Commit your changes to the feature-* branch and open pull-request to merge it to develop branch by adding 'mirjahon-ulmasov' for a quick code review.
