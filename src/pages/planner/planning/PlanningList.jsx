@@ -44,7 +44,7 @@ export default function PlanningList() {
 					Update
 				</button>
 			</header>
-			{vendors && (
+			{vendors && vendors.length !== 0 && (
 				<Container className="scroll">
 					<table className={`${style.table} ${style.t1}`}>
 						<thead>

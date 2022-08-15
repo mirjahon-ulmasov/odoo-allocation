@@ -21,7 +21,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		if (!dealers) return;
+		if (!dealers || dealers.length === 0) return;
 		let dealerId = dealer ? dealer : dealers[0].id;
 		dispatch(fetchSmProds({ dealer: dealerId }));
 		return () => dispatch(clearSmProds())
@@ -53,7 +53,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 				</div>
 			</header>
 			<Container className="scroll">
-			{sm_prods && sm_prods.length > 0 && (
+			{sm_prods && sm_prods.length !== 0 && (
 				<T1 style={{ marginTop: "1.5em" }}>
 					<thead>
 						<tr>

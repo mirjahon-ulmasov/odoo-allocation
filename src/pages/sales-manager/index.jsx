@@ -17,7 +17,7 @@ export default function SalesManager() {
 	}, [dispatch]);
 
 	useEffect(() => {
-		if(dealer || !dealers) return;
+		if(dealer || !dealers || dealers.length === 0) return;
 		setDealer(dealers[0].id)
 	}, [dispatch, dealers, dealer]);
 

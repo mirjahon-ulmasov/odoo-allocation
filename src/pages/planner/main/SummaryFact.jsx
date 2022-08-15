@@ -49,7 +49,7 @@ export default function SummaryByFact() {
 	return (
 		<Summary>
 			{loading && <Loader />}
-			{data && (
+			{data && data.length !== 0 && (
 				<Fragment>
 					<table className="sticky">
 						<thead>
@@ -64,7 +64,7 @@ export default function SummaryByFact() {
 						</tbody>
 					</table>
 					<div className="scroll" style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
-						<table id="table-to-xls" className="scrolling">
+						<table id="summary_factory" className="scrolling">
 							<thead>
 								<tr>
 									<th colSpan={4}>Total</th>
@@ -105,9 +105,9 @@ export default function SummaryByFact() {
 			)}
 			<div className="excel-container">
 				<ReactHTMLTableToExcel
-					id="test-table-xls-button"
+					id="summary_factory-xls-button"
 					className="excel-button"
-					table="table-to-xls"
+					table="summary_factory"
 					filename="summary_factory"
 					sheet="tablexls"
 					buttonText="Excel"

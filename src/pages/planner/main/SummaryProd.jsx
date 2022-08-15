@@ -39,8 +39,8 @@ export default function SummaryByProd() {
 	return (
 		<Summary className="scroll">
 			{(load1 || load2) && <Loader />}
-			{allProds && allProds.length > 0 && (
-				<table id="table-to-xls" className="table_1">
+			{allProds && allProds.length !== 0 && (
+				<table id="summary_products" className="table_1">
 					<thead>
 						<tr>
 							<th>ID</th>
@@ -126,9 +126,9 @@ export default function SummaryByProd() {
 			</div>
 			<div className="excel-container">
 				<ReactHTMLTableToExcel
-					id="test-table-xls-button"
+					id="summary_products-xls-button"
 					className="excel-button"
-					table="table-to-xls"
+					table="summary_products"
 					filename="summary_products"
 					sheet="tablexls"
 					buttonText="Excel"

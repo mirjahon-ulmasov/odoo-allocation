@@ -28,7 +28,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!dealers) return;
+		if (!dealers || dealers.length === 0) return;
 		let dealerId = dealer ? dealer : dealers[0].id;
 		dispatch(fetchSmProds({ dealer: dealerId }));
 		return () => dispatch(clearSmProds());
@@ -65,7 +65,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 					</Box>
 				)}
 			</header>
-			{sm_prods && sm_prods.length > 0 && (
+			{sm_prods && sm_prods.length !== 0 && (
 				<Fragment>
 					<Container className="scroll">
 						<T1 style={{ marginTop: "1.5em" }}>
