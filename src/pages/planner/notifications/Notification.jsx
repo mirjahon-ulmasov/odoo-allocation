@@ -46,7 +46,7 @@ export default function Notification({ data, active, clickHandler }) {
 						className="btn success"
 						onClick={confirmHandler}>
 						<img src={check} alt="check" />
-						Confirm reservation
+						Confirm
 					</button>
 				)}
 			</li>
@@ -66,7 +66,7 @@ export default function Notification({ data, active, clickHandler }) {
 												<th>Fulfilled (%)</th>
 												<th>Reserved</th>
 												<th>Allocated</th>
-												<th>Reserve</th>
+												<th>Requested</th>
 												{!data.processed && (
 													<Fragment>
 														<th>Action</th>

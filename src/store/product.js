@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API, instance, regenerate_api } from "services/setting";
 import { NotificationManager } from "react-notifications";
+import i18next from "i18n.js";
 
 export const fetchProdsByDealer = createAsyncThunk(
 	"product/fetchProdsByDealer",
@@ -14,7 +15,7 @@ export const fetchProdsByDealer = createAsyncThunk(
 			const data = await response.data;
 			return data.map((el) => ({ ...el, isFull: false }));
 		} catch (err) {
-			return rejectWithValue("Couldn't get products");
+			return rejectWithValue(i18next.t("error.fetchProdsByDealer"));
 		}
 	}
 );
@@ -23,7 +24,8 @@ export const fetchAllocations = createAsyncThunk(
 	"product/fetchAllocations",
 	async ({ vendor }, { rejectWithValue }) => {
 		try {
-			const response = await instance.get(API + "/material/list_for_allocation/",
+			const response = await instance.get(
+				API + "/material/list_for_allocation/",
 				{ params: { vendor } }
 			);
 			if (response.status !== 200) {
@@ -38,7 +40,7 @@ export const fetchAllocations = createAsyncThunk(
 				},
 				customers: item.customers.map((customer) => ({
 					...customer,
-					allocated: 0,
+					allocate: 0,
 				})),
 			}));
 		} catch (err) {
@@ -53,7 +55,7 @@ export const fetchVendors = createAsyncThunk(
 		try {
 			const response = await instance.get(API + "/vendor/list/");
 			if (response.status !== 200) throw new Error("Bad Request");
-			return response.data
+			return response.data;
 		} catch (err) {
 			return rejectWithValue("Couldn't get data");
 		}
@@ -81,13 +83,12 @@ export const updateStock = createAsyncThunk(
 		try {
 			const response = await instance.get(API + "/stock/update_all_stock/");
 			if (response.status !== 200) throw new Error("Bad Request");
-			thunkAPI.dispatch(fetchVendors()); 
+			thunkAPI.dispatch(fetchVendors());
 		} catch (err) {
 			return thunkAPI.rejectWithValue("Unable to Update");
 		}
 	}
 );
-
 
 const initialState = {
 	dealer_prods: null,
@@ -127,7 +128,14 @@ export const productSlice = createSlice({
 
 			state.allocations[prod_index].customers[customer_index] = {
 				...customer,
-				allocated: quantity,
+				allocate:
+					product.total.total_available -
+						product.customers.reduce((acc, customer) => {
+							if (customer.customer_id === customerId) return acc + quantity;
+							return acc + customer.allocate;
+						}, 0) >= 0
+						? quantity
+						: customer.allocate,
 			};
 
 			state.allocations[prod_index].total = {
@@ -135,7 +143,7 @@ export const productSlice = createSlice({
 				available_remains:
 					product.total.total_available -
 					product.customers.reduce((acc, customer) => {
-						return acc + customer.allocated;
+						return acc + customer.allocate;
 					}, 0),
 			};
 		},
@@ -154,7 +162,6 @@ export const productSlice = createSlice({
 			NotificationManager.error(payload, "", 2000);
 		},
 
-
 		[fetchAllocations.pending]: (state) => {
 			state.loading = true;
 			state.allocations = null;
@@ -167,7 +174,6 @@ export const productSlice = createSlice({
 			state.loading = false;
 			NotificationManager.error(payload, "", 2000);
 		},
-
 
 		[fetchVendors.pending]: (state) => {
 			state.loading = true;
@@ -182,7 +188,6 @@ export const productSlice = createSlice({
 			NotificationManager.error(payload, "", 2000);
 		},
 
-		
 		[updateStock.pending]: (state) => {
 			state.loading = true;
 		},

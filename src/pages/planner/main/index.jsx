@@ -1,5 +1,6 @@
 import React, { Fragment, useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button, Typography } from "@mui/material";
 import SummaryByFact from "./SummaryFact.jsx";
 import SummaryByProd from "./SummaryProd.jsx";
@@ -7,6 +8,7 @@ import SummaryByProd from "./SummaryProd.jsx";
 import styles from "./style.module.scss";
 
 export default function MainPage() {
+	const { t } = useTranslation();
 	const id = useId();
 	const id2 = useId();
 	const navigate = useNavigate();
@@ -20,7 +22,7 @@ export default function MainPage() {
 					type="button"
 					className="btn dark"
 					onClick={() => navigate("planning")}>
-					Start Planning
+					{t("buttons.main")}
 				</button>
 			</header>
 			<section className={styles.container}>

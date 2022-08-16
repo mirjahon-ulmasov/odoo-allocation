@@ -6,6 +6,7 @@ import {
 	clearAllocation,
 	postAllocations,
 } from "store/product";
+import { useTranslation } from "react-i18next";
 import { Container } from "components/Tables";
 import Loader from "components/Loader";
 import Row from "./Row";
@@ -29,6 +30,7 @@ export default function PlanningDetail() {
 	const location = useLocation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
 	const [productFilter, setProductFilter] = useState(false);
 	const [dealerFilter, setDealerFilter] = useState(false);
 	const { loading, allocations } = useSelector((state) => state.product);
@@ -88,8 +90,8 @@ export default function PlanningDetail() {
 			{loading && <Loader />}
 			<nav className="nav-links">
 				<img onClick={() => navigate(-1)} src={back} alt="back icon" />
-				<p onClick={() => navigate("/planner")} className="click">Main Page -</p>
-				<p onClick={() => navigate("/planner/planning")} className="click">Planning -</p>
+				<p onClick={() => navigate("/planner")} className="click">{t("main.mainPage")} -</p>
+				<p onClick={() => navigate("/planner/planning")} className="click">{t("main.allocation")} -</p>
 				<p className="unclick">{location.state.title}</p>
 			</nav>
 			<header className="header">
@@ -102,7 +104,7 @@ export default function PlanningDetail() {
 						/>
 						<label htmlFor="small" className="form__radio-label">
 							<span className="form__radio-button"></span>
-							Show only products with an order
+							{t("others.checkbox1")}
 						</label>
 					</div>
 
@@ -113,7 +115,7 @@ export default function PlanningDetail() {
 						/>
 						<label htmlFor="large" className="form__radio-label">
 							<span className="form__radio-button"></span>
-							Show only dealers with an order
+							{t("others.checkbox2")}
 						</label>
 					</div>
 				</div>
@@ -130,11 +132,11 @@ export default function PlanningDetail() {
 							</tr>
 						</thead>
 					
-							<tbody className="scroll">
-								{filteredAllocations.map((product, index) => (
-									<Row key={index} product={product} />
-								))}
-							</tbody>
+						<tbody className="scroll">
+							{filteredAllocations.map((product, index) => (
+								<Row key={index} product={product} />
+							))}
+						</tbody>
 					</table>
 				</Container>
 			)}
@@ -142,12 +144,12 @@ export default function PlanningDetail() {
 				{filteredAllocations && filteredAllocations.length > 0 && (
 					<button type="button" className="btn success" onClick={submitHandler}>
 						<img src={check} alt="check" />
-						Confirm planning
+						{t("buttons.confirm")}
 					</button>
 				)}
 				<button style={{ marginLeft: "2rem" }} type="button" className="btn gray"
 					onClick={cancelReservation}>
-					Cancel reservation
+					{t("buttons.cancel")}
 				</button>
 			</div>
 		</Fragment>

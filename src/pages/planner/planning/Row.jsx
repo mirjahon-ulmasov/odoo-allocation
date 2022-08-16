@@ -6,11 +6,12 @@ import { editAllocation } from "store/product";
 import style from "./style.module.scss";
 
 const headers = [
-	"Dillers name",
+	"Dealer name",
 	"Ordered",
 	"Fulfilled",
 	"Reserved",
-	"Allocation",
+	"Allocated",
+	"Allocate",
 ];
 
 const Row = ({ product }) => {
@@ -57,8 +58,9 @@ const Row = ({ product }) => {
 												<td>{dealer.ordered}</td>
 												<td>{dealer.fulfilled}</td>
 												<td>{dealer.reserved}</td>
+												<td>{dealer.allocated}</td>
 												<td>
-													<input type="number" value={dealer.allocated}
+													<input type="number" value={dealer.allocate}
 														onChange={(event) => {
 															let value = parseInt(event.target.value);
 															if (value >= 0) {

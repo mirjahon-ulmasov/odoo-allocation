@@ -1,6 +1,7 @@
 import React, { Fragment, useRef } from "react";
 import styled from "styled-components";
 import Loader from "components/Loader";
+import { checkCount } from "utils";
 import { NotificationManager } from "react-notifications";
 import { useFetchDealersByFactQuery } from "services/product";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
@@ -15,7 +16,7 @@ export default function SummaryByFact() {
 			<th>Ordered</th>
 			<th>Fulfilled</th>
 			<th>Reserved</th>
-			<th>Allocation</th>
+			<th>Allocated</th>
 		</Fragment>
 	);
 
@@ -83,15 +84,19 @@ export default function SummaryByFact() {
 								{data.map((row, index) => {
 									return (
 										<tr key={index}>
-											<td>{row.total.total_ordered}</td>
-											<td>{row.total.total_reserved}</td>
+											<td className={checkCount(row.total.total_ordered, row.total.total_fulfilled)}>
+												{row.total.total_ordered}
+											</td>
 											<td>{row.total.total_fulfilled}</td>
+											<td>{row.total.total_reserved}</td>
 											<td>{row.total.total_allocation}</td>
 											{row.vendors.map((vendor, index) => (
 												<Fragment key={index}>
-													<td>{vendor.ordered}</td>
-													<td>{vendor.reserved}</td>
+													<td className={checkCount(vendor.ordered, vendor.fulfilled)}>
+														{vendor.ordered}
+													</td>
 													<td>{vendor.fulfilled}</td>
+													<td>{vendor.reserved}</td>
 													<td>{vendor.allocation}</td>
 												</Fragment>
 											))}

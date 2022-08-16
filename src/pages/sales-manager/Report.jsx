@@ -14,6 +14,7 @@ const headers = [
 	"Fulfilled (%)",
 	"Reserved",
 	"Allocated",
+	"Requested",
 ];
 
 export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer }) {
@@ -48,7 +49,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 						</Box>
 					)}
 					<button type="button" className="btn dark" onClick={() => navigate("edit")}>
-						Start reservation
+						Request
 					</button>
 				</div>
 			</header>
@@ -73,6 +74,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 									<td>{item.fulfilled_percentage}%</td>
 									<td>{item.reserved}</td>
 									<td>{item.allocated}</td>
+									<td>-</td>
 								</tr>
 							)})}
 					</tbody>

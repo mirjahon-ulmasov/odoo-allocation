@@ -7,6 +7,7 @@ import { ChevronRight, ChevronLeft } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import Loader from "components/Loader";
 import styled from "styled-components";
+import { checkCount } from "utils"
 import {
 	clearDealerProds,
 	fetchProdsByDealer,
@@ -79,7 +80,7 @@ export default function SummaryByProd() {
 								<td>{prod.material_name}</td>
 								{isFull && (
 									<Fragment>
-										<td>{prod.ordered}</td>
+										<td className={checkCount(prod.ordered, prod.fulfilled)}>{prod.ordered}</td>
 										<td>{prod.fulfilled}</td>
 										<td>{prod.reserved}</td>
 										<td>{prod.in_stock}</td>
@@ -112,7 +113,7 @@ export default function SummaryByProd() {
 										<Fragment>
 											<th>Fulfilled</th>
 											<th>Reserved</th>
-											<th>Allocation</th>
+											<th>Allocated</th>
 										</Fragment>
 									)}
 								</tr>
@@ -120,7 +121,7 @@ export default function SummaryByProd() {
 							<tbody onScroll={scrollHandler}>
 								{dealer.products.map((el, index) => (
 									<tr key={index}>
-										<td>{el.ordered}</td>
+										<td className={checkCount(el.ordered, el.fulfilled)}>{el.ordered}</td>
 										{dealer.isFull && (
 											<Fragment>
 												<td>{el.fulfilled}</td>
@@ -153,7 +154,7 @@ const Summary = styled.div`
 
 	table {
 		color: #333333;
-		text-align: center;
+		text-align: left;
 		min-width: max-content;
 		border-collapse: collapse;
 
@@ -229,6 +230,7 @@ const Summary = styled.div`
 		}
 	}
 	table.table_2 {
+		text-align: center;
 		thead {
 			tr {
 				border-right: 1px solid #fff;

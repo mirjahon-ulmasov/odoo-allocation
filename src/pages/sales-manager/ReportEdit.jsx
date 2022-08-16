@@ -20,7 +20,8 @@ const headers = [
 	"Fulfilled (%)",
 	"Reserved",
 	"Allocated",
-	"Reserve",
+	"Requested",
+	"Request",
 ];
 
 export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDealer }) {
@@ -87,6 +88,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 											<td>{item.fulfilled_percentage}%</td>
 											<td>{item.reserved}</td>
 											<td>{item.allocated}</td>
+											<td>-</td>
 											<td>
 												<input type="number" value={item.reserve}
 													onChange={(e) => {
@@ -104,7 +106,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 					<div style={{ marginTop: "2rem" }} className="actions">
 						<button type="button" className="btn success" onClick={submitHandler}>
 							<img src={check} alt="check" />
-							Submit planning
+							Confirm
 						</button>
 					</div>
 				</Fragment>
