@@ -8,11 +8,11 @@ import { logout } from "store/auth";
 import { getPath } from "utils";
 
 import icon from "assets/icons/dashboard.svg";
-import document from "assets/icons/document.svg";
+// import document from "assets/icons/document.svg";
 import notification from "assets/icons/notification.svg";
 
 export default function NavBar() {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const menuRef = useRef(null);
@@ -29,13 +29,15 @@ export default function NavBar() {
 			setIsOpen(false);
 		}
 	};
-//Order
+
 	return (
 		<Suspense fallback="loading">
 			<div className="navbar">
 				<div className="left" onClick={() => navigate("/")}>
 					<img src={icon} alt="dashboard" />
-					<Typography variant="h2">{t("main.allocation")}</Typography>
+					<Typography variant="h2">
+						{!user || user.role === 'planner' ? t("main.allocation") : t("main.order")}
+					</Typography>
 				</div>
 				{user && (
 					<div className="right">
@@ -62,7 +64,7 @@ export default function NavBar() {
 							<div className="menu">
 								<button
 									onClick={() => { setIsOpen(false); dispatch(logout(navigate))}}>
-									Log out
+									{t("buttons.logOut")}
 								</button>
 							</div>
 						)}

@@ -2,6 +2,7 @@
   "main": {
     "allocation": "Allocation",
     "mainPage": "Main Page",
+    "order": "Order",
     "edit": "Edit"
   },
   "buttons": {
@@ -11,7 +12,8 @@
     "request": "Request",
     "cancel": "Cancel",
     "logIn": "Log In",
-    "back": "Back to home"
+    "logOut": "Log Out",
+    "back": "Back"
   },
   "headers": {
     "notifications": "Notifications",

@@ -1,10 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { getPath } from "utils";
 
 export default function NotFound() {
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const { user } = useSelector((state) => state.auth);
 	return (
 		<div className="not-found">
@@ -15,7 +17,7 @@ export default function NotFound() {
 				style={{ textTransform: "uppercase", padding: "0.7rem 2rem" }}
 				className="btn dark"
 				onClick={() => navigate(getPath(user))}>
-				Back
+				{t("buttons.back")}
 			</button>
 		</div>
 	);

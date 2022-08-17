@@ -29,7 +29,7 @@ export const fetchSmProds = createAsyncThunk(
 			const data = await response.data;
 			return data.map((item) => ({
 				...item,
-				reserve: item.allocated,
+				request: item.allocated,
 			}));
 		} catch (err) {
 			NotificationManager.error("Couldn't get products", "", 2000);
@@ -72,7 +72,7 @@ export const smSlice = createSlice({
 		editSmProds(state, { payload }) {
 			const { prodId, quantity } = payload;
 			state.sm_prods = state.sm_prods.map((prod) => {
-				if (prod.id === prodId) return { ...prod, reserve: quantity };
+				if (prod.id === prodId) return { ...prod, request: quantity };
 				return prod;
 			});
 		},

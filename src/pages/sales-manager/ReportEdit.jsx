@@ -45,8 +45,8 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 		const data = {
 			customer: dealerId,
 			items: sm_prods
-				.filter((prod) => prod.reserve > 0)
-				.map((prod) => ({ material: prod.id, quantity: prod.reserve })),
+				.filter((prod) => prod.request > 0)
+				.map((prod) => ({ material: prod.id, quantity: prod.request })),
 		};
 		dispatch(postReservation({ data, cb: () => navigate("/sm") }));
 	};
@@ -100,7 +100,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 											<td>{item.allocated}</td>
 											<td>-</td>
 											<td>
-												<input type="number" value={item.reserve}
+												<input type="number" value={item.request}
 													onChange={(e) => {
 														const num = parseInt(e.target.value);
 														if (num >= 0) dispatch(editSmProds({ prodId: item.id, quantity: num }));

@@ -1,3 +1,9 @@
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login } from "store/auth";
+import { useTranslation } from "react-i18next";
+import { NotificationManager } from "react-notifications";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
 	Button,
@@ -8,18 +14,14 @@ import {
 	OutlinedInput,
 	TextField,
 } from "@mui/material";
-import React, { useState } from "react";
-import { NotificationManager } from "react-notifications";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { login } from "../../store/auth";
 
 export default function LoginPage() {
-	const [email, setEmail] = useState(localStorage.getItem("email") || "");
-	const [showPassword, setShowPassword] = useState(false);
-	const [password, setPassword] = useState("");
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const [password, setPassword] = useState("");
+	const [email, setEmail] = useState(localStorage.getItem("email") || "");
+	const [showPassword, setShowPassword] = useState(false);
 
 	const submitHandler = (event) => {
 		event.preventDefault();
@@ -63,7 +65,7 @@ export default function LoginPage() {
 					/>
 				</FormControl>
 				<Button type="submit" variant="contained">
-					Sign In
+					{t("buttons.logIn")}
 				</Button>
 			</form>
 		</div>
