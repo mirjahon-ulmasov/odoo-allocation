@@ -17,7 +17,7 @@ export default function MainPage() {
 	return (
 		<Fragment>
 			<header className="header">
-				<Typography variant="h1">Summary reports</Typography>
+				<Typography variant="h1">{t("headers.summary")}</Typography>
 				<button
 					type="button"
 					className="btn dark"

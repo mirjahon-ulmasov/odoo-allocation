@@ -2,6 +2,7 @@ import React, { Fragment, useId } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { postNotification } from "store/notification";
 import { T2, Container } from "components/Tables";
+import { useTranslation } from "react-i18next";
 import { Collapse } from "@mui/material";
 import { getStatus } from "utils";
 import Row from "./Row";
@@ -11,6 +12,7 @@ import check from "assets/icons/check.svg";
 
 export default function Notification({ data, active, clickHandler }) {
 	const id = useId();
+	const { t } = useTranslation();
 	const dispatch = useDispatch();
 	const is_active = id === active;
 	const { notification_details, loading } = useSelector((state) => state.notification);
@@ -46,7 +48,7 @@ export default function Notification({ data, active, clickHandler }) {
 						className="btn success"
 						onClick={confirmHandler}>
 						<img src={check} alt="check" />
-						Confirm
+						{t("buttons.confirm")}
 					</button>
 				)}
 			</li>

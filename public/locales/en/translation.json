@@ -1,20 +1,23 @@
 {
   "main": {
     "allocation": "Allocation",
-    "mainPage": "Main Page"
-  },
-  "errors": {
-    "fetchProdsByDealer": "Couldn't get products"
+    "mainPage": "Main Page",
+    "edit": "Edit"
   },
   "buttons": {
     "main": "Allocate",
     "update": "Update",
     "confirm": "Confirm",
+    "request": "Request",
     "cancel": "Cancel",
     "logIn": "Log In",
     "back": "Back to home"
   },
-  "headers": {},
+  "headers": {
+    "notifications": "Notifications",
+    "summary": "Summary reports",
+    "report": "Report"
+  },
   "others": {
     "checkbox1": "Show only products with an order",
     "checkbox2": "Show only dealers with an order"

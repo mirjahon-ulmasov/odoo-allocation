@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
 	fetchNotifDetails,
 	fetchNotificationList,
@@ -9,8 +10,9 @@ import Notification from "./Notification";
 import styled from "styled-components";
 
 export default function NotificationList() {
-	const [activeId, setActiveId] = useState(null);
 	const dispatch = useDispatch();
+	const { t } = useTranslation(); 
+	const [activeId, setActiveId] = useState(null);
 	const { notifications } = useSelector((state) => state.notification);
 	useEffect(() => {
 		dispatch(fetchNotificationList());
@@ -30,7 +32,7 @@ export default function NotificationList() {
 	return (
 		<Fragment>
 			<Header>
-				<h1>Notifications</h1>
+				<h1>{t("headers.notifications")}</h1>
 			</Header>
 			<ul className="notif_list scroll">
 				{notifications && notifications.map((notification, index) => (

@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { clearSmProds, fetchSmProds } from "store/sales_manager";
 import { T1, Container } from "components/Tables";
@@ -19,7 +20,8 @@ const headers = [
 
 export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer }) {
 	const navigate = useNavigate();
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (!dealers || dealers.length === 0) return;
@@ -32,7 +34,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 		<Fragment>
 			{loading && <Loader />}
 			<header className="header">
-				<h1>Report</h1>
+				<h1>{t("headers.report")}</h1>
 				<div className="actions">
 					{dealers && (
 						<Box sx={{ minWidth: 200 }}>
@@ -49,7 +51,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 						</Box>
 					)}
 					<button type="button" className="btn dark" onClick={() => navigate("edit")}>
-						Request
+						{t("buttons.request")}
 					</button>
 				</div>
 			</header>

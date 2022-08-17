@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { API, instance, regenerate_api } from "services/setting";
 import { NotificationManager } from "react-notifications";
-import i18next from "i18n.js";
 
 export const fetchProdsByDealer = createAsyncThunk(
 	"product/fetchProdsByDealer",
@@ -15,7 +14,7 @@ export const fetchProdsByDealer = createAsyncThunk(
 			const data = await response.data;
 			return data.map((el) => ({ ...el, isFull: false }));
 		} catch (err) {
-			return rejectWithValue(i18next.t("error.fetchProdsByDealer"));
+			return rejectWithValue("Couldn't get products");
 		}
 	}
 );

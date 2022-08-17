@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import {
 	postReservation,
@@ -10,7 +11,10 @@ import {
 } from "store/sales_manager";
 import { T1, Container } from "components/Tables";
 import Loader from "components/Loader";
+
 import check from "assets/icons/check.svg";
+import back from "assets/icons/back.svg";
+
 
 const headers = [
 	"ID",
@@ -27,6 +31,7 @@ const headers = [
 export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDealer }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (!dealers || dealers.length === 0) return;
@@ -49,8 +54,13 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 	return (
 		<Fragment>
 			{loading && <Loader />}
+			<nav className="nav-links">
+				<img onClick={() => navigate(-1)} src={back} alt="back icon" />
+				<p onClick={() => navigate("/sm")} className="click">{t("main.mainPage")} -</p>
+				<p className="unclick">{t("main.edit")}</p>
+			</nav>
 			<header className="header">
-				<h1>Report</h1>
+				<h1>{t("headers.report")}</h1>
 				{dealers && (
 					<Box sx={{ minWidth: 200 }}>
 						<FormControl sx={{ backgroundColor: "#f1f1f1", borderRadius: "2px" }} size="small" fullWidth>
@@ -106,7 +116,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 					<div style={{ marginTop: "2rem" }} className="actions">
 						<button type="button" className="btn success" onClick={submitHandler}>
 							<img src={check} alt="check" />
-							Confirm
+							{t("buttons.confirm")}
 						</button>
 					</div>
 				</Fragment>
