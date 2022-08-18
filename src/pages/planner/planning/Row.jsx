@@ -4,6 +4,7 @@ import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { Collapse, IconButton } from "@mui/material";
 import { editAllocation } from "store/product";
 import style from "./style.module.scss";
+import { useRef } from "react";
 
 const headers = [
 	"Dealer name",
@@ -15,6 +16,7 @@ const headers = [
 ];
 
 const Row = ({ product }) => {
+	const inputRef = useRef();
 	const dispatch = useDispatch();
 	const [open, setOpen] = useState(false);
 
@@ -32,7 +34,7 @@ const Row = ({ product }) => {
 				<td>{product.total.total_stock}</td>
 				<td>{product.total.available_remains}</td>
 				<td>
-					{open ? "Hide dillers" : "Show dillers"}
+					{open ? "Hide dealers" : "Show dealers"}
 					<IconButton>
 						{open ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
 					</IconButton>
@@ -60,18 +62,16 @@ const Row = ({ product }) => {
 												<td>{dealer.reserved}</td>
 												<td>{dealer.allocated}</td>
 												<td>
-													<input type="number" value={dealer.allocate}
-														onChange={(event) => {
-															let value = parseInt(event.target.value);
-															if (value >= 0) {
+													<input ref={inputRef} onFocus={(e) => e.currentTarget.select()} 
+														type="text" value={dealer.allocate} onChange={(event) => {
+															if(isNaN(event.target.value) || event.target.value.includes('-')) return;
 																dispatch(
 																	editAllocation({
 																		prodId: product.id,
 																		customerId: dealer.customer_id,
-																		quantity: value,
+																		quantity: event.target.value,
 																	})
 																);
-															}
 														}}
 													/>
 												</td>

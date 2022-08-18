@@ -39,7 +39,7 @@ export const fetchAllocations = createAsyncThunk(
 				},
 				customers: item.customers.map((customer) => ({
 					...customer,
-					allocate: 0,
+					allocate: "",
 				})),
 			}));
 		} catch (err) {
@@ -114,6 +114,7 @@ export const productSlice = createSlice({
 		},
 		editAllocation(state, { payload }) {
 			const { prodId, customerId, quantity } = payload;
+			const number = quantity !== '' ? parseInt(quantity) : 0;
 
 			const prod_index = state.allocations.findIndex(
 				(prod) => prod.id === prodId
@@ -130,11 +131,11 @@ export const productSlice = createSlice({
 				allocate:
 					product.total.total_available -
 						product.customers.reduce((acc, customer) => {
-							if (customer.customer_id === customerId) return acc + quantity;
-							return acc + customer.allocate;
+							if (customer.customer_id === customerId) return acc + number;
+							return acc + parseInt(customer.allocate !== '' ? customer.allocate : 0);
 						}, 0) >= 0
 						? quantity
-						: customer.allocate,
+						: parseInt(customer.allocate !== '' ? customer.allocate : 0) + state.allocations[prod_index].total.available_remains,
 			};
 
 			state.allocations[prod_index].total = {
@@ -142,7 +143,7 @@ export const productSlice = createSlice({
 				available_remains:
 					product.total.total_available -
 					product.customers.reduce((acc, customer) => {
-						return acc + customer.allocate;
+						return acc + parseInt(customer.allocate !== '' ? customer.allocate : 0);
 					}, 0),
 			};
 		},

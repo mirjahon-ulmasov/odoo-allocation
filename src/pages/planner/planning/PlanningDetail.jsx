@@ -74,10 +74,10 @@ export default function PlanningDetail() {
 			return {
 				material: prod.id,
 				items: prod.customers
-					.filter((customer) => customer.allocate > 0)
+					.filter((customer) => customer.allocate !== '')
 					.map((customer) => ({
 						customer: customer.customer_id,
-						quantity: customer.allocate,
+						quantity: parseInt(customer.allocate),
 					})),
 			};
 		});
