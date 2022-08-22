@@ -3,8 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDealers } from "store/sales_manager";
 import NotificationList from "./NotificationList";
+import OrderDetails from "./OrderDetails";
 import ReportEdit from "./ReportEdit";
 import Report from "./Report";
+import Orders from "./Orders";
 
 export default function SalesManager() {
 	const [dealer, setDealer] = useState("");
@@ -30,6 +32,10 @@ export default function SalesManager() {
 					<ReportEdit sm_prods={sm_prods} loading={loading}  dealers={dealers} 
 						dealer={dealer} onSetDealer={(dealer) => setDealer(dealer)}/>} />
 			<Route path="/notifications" element={<NotificationList />} />
+			<Route path="/orders" element={
+				<Orders sm_prods={sm_prods} loading={loading} dealers={dealers} 
+						dealer={dealer} onSetDealer={(dealer) => setDealer(dealer)}/>} />
+			<Route path="/orders/:id" element={<OrderDetails/>} />
 		</Routes>
 	);
 }

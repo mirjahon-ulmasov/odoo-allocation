@@ -96,6 +96,34 @@ export const T1 = styled(Table)`
 	}
 `;
 
+export const T1v1 = styled(T1)`
+	th, td {
+		width: 15%;
+		cursor: pointer;
+		&:first-child, &:nth-child(2) {
+			width: 15%;
+		}
+	}
+`
+
+export const T1v2 = styled(T1)`
+	min-width: 50rem;
+	th, td {
+		cursor: pointer;
+		&, &:first-child {
+			width: 25%;
+		}
+		&:nth-child(2) {
+			width: 50%;
+		}
+	}
+	th {
+		color: #fff;
+		background: #017E84;
+		border-bottom: 1px solid #DFDFDF;
+	}
+`
+
 export const T2 = styled(T1)`
 	min-width: 90rem;
 
@@ -146,3 +174,4 @@ export const T2 = styled(T1)`
 		}
 	}
 `;
+

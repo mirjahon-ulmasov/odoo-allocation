@@ -22,3 +22,16 @@ export const checkCount = (num1, num2) => {
 	? "warning-font" 
 	: "danger-font";
 };
+
+export const getStatusOrder = (status) => {
+	switch(status) {
+		case '1':
+			return 'Valid';
+		case '2':
+			return 'Pending';
+		case '3':
+			return 'Completed';
+		default:
+			return 'Fail';
+	}
+}

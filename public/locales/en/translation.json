@@ -18,7 +18,9 @@
   "headers": {
     "notifications": "Notifications",
     "summary": "Summary reports",
-    "report": "Report"
+    "report": "Report",
+    "orders": "Orders",
+    "orderDetails": "Order Details"
   },
   "others": {
     "checkbox1": "Show only products with an order",

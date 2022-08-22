@@ -8,7 +8,7 @@ import { logout } from "store/auth";
 import { getPath } from "utils";
 
 import icon from "assets/icons/dashboard.svg";
-// import document from "assets/icons/document.svg";
+import document from "assets/icons/document.svg";
 import notification from "assets/icons/notification.svg";
 
 export default function NavBar() {
@@ -42,17 +42,18 @@ export default function NavBar() {
 				{user && (
 					<div className="right">
 						<ul className="nav-links">
-							{/* <li>
-								<img src={document} alt="document icon" />
-								<span>History</span>
-							</li> */}
+							{user.role === 'sales_manager' && (
+								<li onClick={() => navigate(`${getPath(user)}/orders`)}>
+									<img src={document} alt="document icon" />
+									<span>Orders</span>
+								</li>
+							)}
 							<li onClick={() => navigate(`${getPath(user)}/notifications`)}>
 								<img src={notification} alt="notification icon" />
 								<span>Notifications</span>
 							</li>
 							<li>
-								<Avatar
-									sx={{ bgcolor: deepOrange[500], cursor: "pointer", height: 35, width: 35 }}>
+								<Avatar sx={{ bgcolor: deepOrange[500], cursor: "pointer", height: 35, width: 35 }}>
 									{user.first_name.charAt()}
 								</Avatar>
 								<span ref={menuRef} onClick={() => setIsOpen((prev) => !prev)}>

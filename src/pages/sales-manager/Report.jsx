@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { clearSmProds, fetchSmProds } from "store/sales_manager";
+import { fetchSmProds } from "store/sales_manager";
 import { T1, Container } from "components/Tables";
 import Loader from "components/Loader";
 
@@ -27,7 +27,6 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 		if (!dealers || dealers.length === 0) return;
 		let dealerId = dealer ? dealer : dealers[0].id;
 		dispatch(fetchSmProds({ dealer: dealerId }));
-		return () => dispatch(clearSmProds())
 	}, [dispatch, dealers, dealer]);
 
 	return (
