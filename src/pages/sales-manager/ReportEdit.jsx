@@ -92,7 +92,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 											<td>{item.fulfilled_percentage}%</td>
 											<td>{item.reserved}</td>
 											<td>{item.allocated}</td>
-											<td>-</td>
+											<td>{item.requested}</td>
 											<td>
 												<input type="number" value={item.request}
 													onChange={(e) => {

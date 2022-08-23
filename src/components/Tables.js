@@ -42,6 +42,7 @@ export const Table = styled.table`
 export const T1 = styled(Table)`
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	border-bottom: 1px solid #ccc;
+	text-align: center;
 
 	tbody {
 		max-height: 65vh;

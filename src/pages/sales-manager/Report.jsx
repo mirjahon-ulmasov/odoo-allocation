@@ -75,7 +75,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 									<td>{item.fulfilled_percentage}%</td>
 									<td>{item.reserved}</td>
 									<td>{item.allocated}</td>
-									<td>-</td>
+									<td>{item.requested}</td>
 								</tr>
 							)})}
 					</tbody>
