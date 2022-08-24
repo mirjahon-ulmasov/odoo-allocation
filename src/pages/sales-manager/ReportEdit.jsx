@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,7 @@ const headers = [
 export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDealer }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const inputRef = useRef();
 	const { t } = useTranslation();
 
 	useEffect(() => {
@@ -39,9 +40,10 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 		const data = {
 			customer: dealerId,
 			items: sm_prods
-				.filter((prod) => prod.request > 0)
-				.map((prod) => ({ material: prod.id, quantity: prod.request })),
+				.filter((prod) => prod.request !== '' && parseInt(prod.request) > 0)
+				.map((prod) => ({ material: prod.id, quantity: parseInt(prod.request) })),
 		};
+
 		dispatch(postReservation({ data, cb: () => navigate("/sm") }));
 	};
 
@@ -94,11 +96,11 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 											<td>{item.allocated}</td>
 											<td>{item.requested}</td>
 											<td>
-												<input type="number" value={item.request}
-													onChange={(e) => {
-														const num = parseInt(e.target.value);
-														if (num >= 0) dispatch(editSmProds({ prodId: item.id, quantity: num }));
-													}}
+												<input ref={inputRef} onFocus={(e) => e.currentTarget.select()} 
+													type="text" value={item.request} onChange={(event) => {
+															if(isNaN(event.target.value) || event.target.value.includes('-')) return;
+															dispatch(editSmProds({ prodId: item.id, quantity: event.target.value }));
+														}}
 												/>
 											</td>
 										</tr>

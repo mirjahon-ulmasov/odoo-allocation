@@ -6,6 +6,7 @@ import { Done, Close, KeyboardArrowDown } from "@mui/icons-material";
 export default function Row({ item, isConfirmed }) {
 	const btnRef = useRef();
 	const selectRef = useRef();
+	const inputRef = useRef();
 	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
 	const [isReject, setIsReject] = useState(true);
@@ -59,20 +60,16 @@ export default function Row({ item, isConfirmed }) {
 									return (
 										<label key={index}>
 											{dealer.dealer_name} ({dealer.remain})
-											<input
-												type="number"
-												value={dealer.given}
-												onChange={(e) => {
-													const num = parseInt(e.target.value);
-													if (num >= 0) {
+											<input ref={inputRef} onFocus={(e) => e.currentTarget.select()} 
+												type="text" value={dealer.given} onChange={(event) => {
+													if(isNaN(event.target.value) || event.target.value.includes('-')) return;
 														dispatch(
 															editDealerCount({
 																materialId: item.material_id,
 																dealerId: dealer.dealer_id,
-																quantity: num,
+																quantity: event.target.value,
 															})
 														);
-													}
 												}}
 											/>
 										</label>

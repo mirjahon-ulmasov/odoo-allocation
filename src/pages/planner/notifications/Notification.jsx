@@ -18,17 +18,24 @@ export default function Notification({ data, active, clickHandler }) {
 	const { notification_details, loading } = useSelector((state) => state.notification);
 
 	const confirmHandler = () => {
-		const data =  notification_details.map((notif) => ({
+		
+		const data =  notification_details.map((notif) => {
+			const validDealers = notif.dealers
+				.filter(dealer => dealer.given !== '')
+				.map(dealer => ({...dealer, given: parseInt(dealer.given)}));
+			
+			return {
 				order_item_id: notif.order_item_id,
 				material_id: notif.material_id,
-				is_confirmed: notif.dealers.reduce((acc, dealer) => acc + dealer.given, 0) > 0 ? true : false, 
-				dealers: notif.dealers.map((dealer) => ({
+				is_confirmed: validDealers.reduce((acc, dealer) => acc + dealer.given, 0) > 0 ? true : false, 
+				dealers: validDealers.map((dealer) => ({
 					dealer_id: dealer.dealer_id,
 					given_quantity: dealer.given,
 				})),
-			}));
+			}
+		});
 		
-		dispatch(postNotification(data));
+	dispatch(postNotification(data));
 	};
 
 	return (

@@ -31,7 +31,7 @@ export const fetchNotifDetails = createAsyncThunk(
 				...notif,
 				dealers: notif.dealers.map((dealer) => ({
 					...dealer,
-					given: 0,
+					given: "",
 					remain: dealer.dealer_allocation,
 				})),
 			}));
@@ -79,6 +79,7 @@ export const notificationSlice = createSlice({
 		},
 		editDealerCount(state, { payload }) {
 			const { materialId, dealerId, quantity } = payload;
+			const number = quantity !== "" ? parseInt(quantity) : 0;
 			state.notification_details = state.notification_details.map((item) => {
 				if (item.material_id === materialId) {
 					return {
@@ -88,12 +89,14 @@ export const notificationSlice = createSlice({
 								return {
 									...dealer,
 									given:
-										dealer.dealer_allocation > quantity
+										dealer.dealer_allocation > number
 											? quantity
-											: dealer.dealer_allocation,
+											: dealer.dealer_allocation > 0 
+												? dealer.dealer_allocation 
+												: "" ,
 									remain:
-										dealer.dealer_allocation > quantity
-											? dealer.dealer_allocation - quantity
+										dealer.dealer_allocation > number
+											? dealer.dealer_allocation - number
 											: 0,
 								};
 							}
