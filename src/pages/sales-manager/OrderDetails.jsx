@@ -83,7 +83,7 @@ export default function OrderDetails() {
 										{order_detail.items.map((item, index) => {
 											return (
 												<tr key={index}>
-													<td>{item.id}</td>
+													<td>{item.material.material}</td>
 													<td>{item.material.material_name}</td>
 													<td>{item.quantity}</td>
 												</tr>
