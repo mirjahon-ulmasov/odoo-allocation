@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from "react";
+import React, { Fragment, useEffect, useRef } from "react";
 import styled from "styled-components";
 import Loader from "components/Loader";
 import { checkCount } from "utils";
@@ -6,10 +6,15 @@ import { NotificationManager } from "react-notifications";
 import { useFetchDealersByFactQuery } from "services/product";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
-export default function SummaryByFact() {
+export default function SummaryByFact({date}) {
 	const { data, isLoading: loading, error } = useFetchDealersByFactQuery();
 	const stickyRef = useRef(null);
 	const scrollRef = useRef(null);
+
+	useEffect(() => {
+		if(!date) return;
+		console.log(date.toISOString().slice(0, 10));
+	})
 
 	const th = (index = "johon") => (
 		<Fragment key={index}>

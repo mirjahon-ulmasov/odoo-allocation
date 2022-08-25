@@ -45,6 +45,7 @@
 		.actions {
 			display: flex;
 			gap: 1rem;
+			align-items: center;
 		}
 		button {
 			font-weight: 400;
@@ -124,6 +125,64 @@
 	overflow: hidden;
 	margin: 0 auto;
 	background: rgba(255, 255, 255, 0.8);
+}
+
+
+.modal {
+	gap: 2rem;
+	display: flex;
+	flex-direction: column;
+
+	h2 {
+		font-size: 18px;
+		color: #000000;
+		font-weight: 400;
+		letter-spacing: 0.01em;
+	}
+
+	.inputs {
+		gap: 1rem;
+		display: flex;
+		flex-direction: column;
+
+		input {
+			color: #555;
+			font-size: 16px;
+			padding: 0.7rem 1rem;
+			background: #FFFFFF;
+			border: 1px solid #D6D6D6;
+
+			&.error {
+				border: 2px solid #e07171;
+			}
+		}
+	}
+
+	.modal-action {
+		gap: 1rem;
+		display: flex;
+		justify-content: flex-end;
+
+		button {
+			border: none;
+			cursor: pointer;
+			font-size: 14px;
+			color: #414141;
+			font-weight: 500;
+			padding: 0.7rem 1rem;
+			text-transform: uppercase;
+			background-color: transparent;
+
+			&:first-child:hover {
+				background-color: #efefef;
+			}
+
+			&:nth-child(2) {
+				color: #fff;
+				background: #017E84;
+			}
+		}
+	}
 }
 
 .scroll {

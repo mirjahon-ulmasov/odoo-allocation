@@ -14,13 +14,18 @@ import {
 	editDealerProdisFull,
 } from "store/product";
 
-export default function SummaryByProd() {
+export default function SummaryByProd({date}) {
 	const dispatch = useDispatch();
 	const table1Ref = useRef(null);
 	const table2Ref = useRef(null);
 	const [isFull, setIsFull] = useState(true);
 	const { data: allProds, isLoading: load1, error, refetch } = useFetchAllProductsQuery();
 	const { loading: load2, dealer_prods } = useSelector((state) => state.product);
+
+	useEffect(() => {
+		if(!date) return;
+		console.log(date.toISOString().slice(0, 10));
+	})
 
 	useEffect(() => {
 		refetch();
