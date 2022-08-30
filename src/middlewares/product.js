@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { instance } from "services/setting";
+import { instance } from "services/config";
 import { NotificationManager } from "react-notifications";
 
 export const fetchProdsByDealer = createAsyncThunk(
 	"product/fetchProdsByDealer",
-	async ({ date_from }, { rejectWithValue }) => {
+	async ({ date_from, date_to }, { rejectWithValue }) => {
 		try {
 			const response = await instance.get("/customer/main_page_list/", 
-                { params: { date_from }}
+                { params: { date_from, date_to }}
             );
 			if (response.status !== 200) {
 				throw new Error("Bad Request");
@@ -66,9 +66,9 @@ export const fetchVendors = createAsyncThunk(
 
 export const fetchAllProducts = createAsyncThunk(
 	'product/fetchAllProducts',
-	async({ date_from }, { rejectWithValue }) => {
+	async({ date_from, date_to }, { rejectWithValue }) => {
 		try {
-			const response = await instance.get('/material/list/', { params: { date_from }});
+			const response = await instance.get('/material/list/', { params: { date_from, date_to }});
 			if(response.status !== 200) throw new Error("Bad Request");
 			return response.data;
 		} catch(err) {
@@ -80,9 +80,9 @@ export const fetchAllProducts = createAsyncThunk(
 
 export const fetchDealersByFact = createAsyncThunk(
 	'product/fetchDealersByFact',
-	async({ date_from }, { rejectWithValue }) => {
+	async({ date_from, date_to }, { rejectWithValue }) => {
 		try {
-			const response = await instance.get('/customer/stat_by_factory/', { params: { date_from }});
+			const response = await instance.get('/customer/stat_by_factory/', { params: { date_from, date_to }});
 			if(response.status !== 200) throw new Error("Bad Request");
 			return response.data;
 		} catch(err) {

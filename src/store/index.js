@@ -3,6 +3,7 @@ import notifReducer from "./notification";
 import smReducer from "./sales_manager";
 import prodReducer from "./product";
 import authReducer from "./auth";
+import setting from "./setting";
 
 export const store = configureStore({
 	reducer: {
@@ -10,5 +11,6 @@ export const store = configureStore({
 		product: prodReducer,
 		sales_manager: smReducer,
 		notification: notifReducer,
+		setting
 	},
 });

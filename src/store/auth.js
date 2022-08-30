@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { NotificationManager } from "react-notifications";
-import { API } from "../services/setting";
+import { API } from "../services/config";
 import { getPath } from "utils";
 import axios from "axios";
 

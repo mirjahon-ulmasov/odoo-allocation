@@ -1,10 +1,11 @@
 import React, { Fragment, useId, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import moment from "moment";
 import { Button, Typography, TextField } from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { changeDate } from "store/setting.js";
 import SummaryByFact from "./SummaryFact.jsx";
 import SummaryByProd from "./SummaryProd.jsx";
 
@@ -15,6 +16,7 @@ export default function MainPage() {
 	const id = useId();
 	const id2 = useId();
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [active, setActive] = useState(id);
 	const [date, setDate] = useState(new Date());
 	const activeClass = (id) => (active === id ? styles.active : "");
@@ -25,9 +27,10 @@ export default function MainPage() {
 				<Typography variant="h1">{t("headers.summary")}</Typography>
 				<div className="actions">
 					<LocalizationProvider dateAdapter={AdapterDateFns}>
-								<DatePicker label="Date" value={date} onChange={(value) => {setDate(value)}}
-									renderInput={(params) => <TextField {...params} />}
-									/>
+						<DatePicker label="Date" value={date} onChange={(value) => {
+								dispatch(changeDate(value));
+								setDate(value);
+							}} renderInput={(params) => <TextField {...params} />} />
 					</LocalizationProvider>
 					<button
 						type="button"
@@ -55,8 +58,8 @@ export default function MainPage() {
 					</div>
 				</div>
 				<Fragment>
-					{active === id && <SummaryByProd date={moment(date).format("YYYY-MM-DD")}/>}
-					{active === id2 && <SummaryByFact date={moment(date).format("YYYY-MM-DD")}/>}
+					{active === id && <SummaryByProd />}
+					{active === id2 && <SummaryByFact />}
 				</Fragment>
 			</section>
 		</Fragment>

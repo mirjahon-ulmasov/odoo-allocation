@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { instance, regenerate_api } from "services/setting";
+import { instance, regenerate_api } from "services/config";
 import { NotificationManager } from "react-notifications";
 
 export const fetchDealers = createAsyncThunk("sm/fetchDealers", async () => {

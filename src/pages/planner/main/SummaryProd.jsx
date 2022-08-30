@@ -4,25 +4,26 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
 import { fetchAllProducts, fetchProdsByDealer } from "middlewares/product";
 import { editDealerProdisFull } from "store/product";
-import { regenerate_api } from "services/setting.js";
+import { regenerate_api } from "services/config.js";
 import { IconButton } from "@mui/material";
 import Loader from "components/Loader";
 import styled from "styled-components";
-import { checkCount } from "utils"
+import { checkCount} from "utils"
 
 
-export default function SummaryByProd({ date }) {
+export default function SummaryByProd() {
 	const dispatch = useDispatch();
 	const table1Ref = useRef(null);
 	const table2Ref = useRef(null);
 	const [isFull, setIsFull] = useState(true);
+	const { date_from, date_to } = useSelector(state => state.setting);
 	const { loading, dealer_prods, all_products } = useSelector((state) => state.product);
 
 	useEffect(() => {
 		regenerate_api();
-		dispatch(fetchAllProducts({ date_from: date }))
-		dispatch(fetchProdsByDealer({ date_from: date }));
-	}, [dispatch, date]);
+		dispatch(fetchAllProducts({ date_from, date_to }))
+		dispatch(fetchProdsByDealer({ date_from, date_to }));
+	}, [dispatch, date_from, date_to]);
 
 	const scrollHandler = (event) => {
 		Array.from(table2Ref.current.children).forEach((child) => {

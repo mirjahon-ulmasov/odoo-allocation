@@ -6,15 +6,16 @@ import Loader from "components/Loader";
 import styled from "styled-components";
 import { checkCount } from "utils";
 
-export default function SummaryByFact({date}) {
+export default function SummaryByFact() {
 	const stickyRef = useRef(null);
 	const scrollRef = useRef(null);
 	const dispatch = useDispatch();
 	const { loading, dealer_factory } = useSelector(state => state.product);
+	const { date_from, date_to } = useSelector(state => state.setting);
 
 	useEffect(() => {
-		dispatch(fetchDealersByFact({ date_from: date }));
-	}, [dispatch, date])
+		dispatch(fetchDealersByFact({ date_from, date_to }));
+	}, [dispatch, date_from, date_to])
 
 	const th = (index = "johon") => (
 		<Fragment key={index}>

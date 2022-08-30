@@ -44,6 +44,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 	const [invoice, setInvoice] = useState("");
 	const [address, setAddress] = useState("");
 	const [open, setOpen] = useState(false);
+	const [warning, setWarning] = useState(false);
 
 	useEffect(() => {
 		if (!dealers || dealers.length === 0) return;
@@ -51,15 +52,25 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 		dispatch(fetchSmProds({ dealer: dealerId }));
 	}, [dispatch, dealers, dealer]);
 
+	const openModal = () => {
+		const isWarning = sm_prods.some(prod => {
+			if(prod.request === '') return false;
+			if(parseInt(prod.request) > prod.allocated) return true;
+			return false;
+		})
+		setOpen(true);
+		setWarning(isWarning)
+	}
+
 	const submitHandler = () => {
 		if(invoice === "" || address === "") {
 			NotificationManager.error("Please fill out the form");
 			return;
 		}
-
 		let dealerId = dealer ? dealer : dealers[0].id;
+
 		const data = {
-			details: invoice.concat(`,${address}`),
+			purch_no_c: invoice.concat(`,${address}`),
 			customer: dealerId,
 			items: sm_prods
 				.filter((prod) => prod.request !== '' && parseInt(prod.request) > 0)
@@ -132,25 +143,36 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 						</T1>
 					</Container>
 					<div style={{ marginTop: "2rem" }} className="actions">
-						<button type="button" className="btn success" onClick={() => setOpen(true)}>
+						<button type="button" className="btn success" onClick={openModal}>
 							<img src={check} alt="check" />
 							{t("buttons.confirm")}
 						</button>
 					</div>
 					<Modal open={open} onClose={() => setOpen(false)}>
-							<Box className="modal" sx={style}>
-								<h2>Please enter Invoice number and Delivery address</h2>
-								<div className="inputs">
-									<input required value={invoice} onChange={(e) => setInvoice(e.target.value)} 
-										className={invoice === '' ? 'error' : ""} type="text" placeholder="Invoice number"/>
-									<input value={address} onChange={(e) => setAddress(e.target.value)} 
-										className={address === '' ? 'error' : ""} type="text" placeholder="Delivery address"/>
-								</div>
-								<div className="modal-action">
-									<button onClick={() => setOpen(false)}>Cancel</button>
-									<button onClick={submitHandler}>Submit</button>
-								</div>
-							</Box>
+						{warning ? (
+								<Box className="modal" sx={style}>
+									<h2>Do you want to request more than allocated to you?</h2>
+									<div className="modal-action">
+										<button onClick={() => setOpen(false)}>Cancel</button>
+										<button onClick={() => setWarning(false)}>Continue</button>
+									</div>
+								</Box>
+							):(
+								<Box className="modal" sx={style}>
+									<h2>Please enter Invoice number and Delivery address</h2>
+									<div className="inputs">
+										<input required value={invoice} onChange={(e) => setInvoice(e.target.value)} 
+											className={invoice === '' ? 'error' : ""} type="text" placeholder="Invoice number"/>
+										<input value={address} onChange={(e) => setAddress(e.target.value)} 
+											className={address === '' ? 'error' : ""} type="text" placeholder="Delivery address"/>
+									</div>
+									<div className="modal-action">
+										<button onClick={() => setOpen(false)}>Cancel</button>
+										<button onClick={submitHandler}>Submit</button>
+									</div>
+								</Box>
+							)
+						}
 					</Modal>
 				</Fragment>
 			)}
