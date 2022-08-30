@@ -1,11 +1,8 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import {
-	fetchNotifDetails,
-	fetchNotificationList,
-	clearNotificationDetail,
-} from "store/notification";
+import { clearNotificationDetail } from "store/notification"
+import { fetchNotifDetails, fetchNotificationList } from "middlewares/notification";
 import Notification from "./Notification";
 import styled from "styled-components";
 

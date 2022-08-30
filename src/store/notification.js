@@ -1,57 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { NotificationManager } from "react-notifications";
-import { API, instance } from "services/setting";
-
-export const fetchNotificationList = createAsyncThunk(
-	"notification/fetchNotificationList",
-	async () => {
-		try {
-			const response = await instance.get(API + "/notification/list/");
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			const notifications = await response.data;
-			return notifications;
-		} catch (err) {
-			NotificationManager.error("Couldn't get notifications", "", 2000);
-		}
-	}
-);
-
-export const fetchNotifDetails = createAsyncThunk(
-	"notification/fetchNotifDetails",
-	async (notifId) => {
-		try {
-			const response = await instance.get(API + `/notification/${notifId}/detail/`);
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			const notifDetails = await response.data;
-			return notifDetails.map((notif) => ({
-				...notif,
-				dealers: notif.dealers.map((dealer) => ({
-					...dealer,
-					given: "",
-					remain: dealer.dealer_allocation,
-				})),
-			}));
-		} catch (err) {
-			NotificationManager.error("Couldn't get notification details", "", 2000);
-		}
-	}
-);
-
-export const postNotification = createAsyncThunk(
-	"notification/postNotification",
-	async (data) => {
-		try {
-			const response = await instance.post(API + "/order/confirm_reserve/ ", data);
-			if (response.status !== 200) throw new Error("Bad Request")
-		} catch (err) {
-			NotificationManager.error("Couldn't confirm", "", 2000);
-		}
-	}
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchNotificationList, fetchNotifDetails } from "middlewares/notification"
 
 const initialState = {
 	notifications: [],

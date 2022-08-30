@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { fetchSmProds } from "store/sales_manager";
+import { fetchSmProds } from "middlewares/sales_manager";
 import { T1, Container } from "components/Tables";
 import Loader from "components/Loader";
 

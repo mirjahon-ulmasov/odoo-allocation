@@ -1,6 +1,6 @@
 import React, { Fragment, useId } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postNotification } from "store/notification";
+import { postNotification } from "middlewares/notification";
 import { T2, Container } from "components/Tables";
 import { useTranslation } from "react-i18next";
 import { Collapse } from "@mui/material";

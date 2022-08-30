@@ -1,12 +1,12 @@
 import React, { Fragment, useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 import { Button, Typography, TextField } from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import SummaryByFact from "./SummaryFact.jsx";
 import SummaryByProd from "./SummaryProd.jsx";
-
 
 import styles from "./style.module.scss";
 
@@ -16,7 +16,7 @@ export default function MainPage() {
 	const id2 = useId();
 	const navigate = useNavigate();
 	const [active, setActive] = useState(id);
-	const [date, setDate] = useState(null);
+	const [date, setDate] = useState(new Date());
 	const activeClass = (id) => (active === id ? styles.active : "");
 
 	return (
@@ -55,8 +55,8 @@ export default function MainPage() {
 					</div>
 				</div>
 				<Fragment>
-					{active === id && <SummaryByProd date={date}/>}
-					{active === id2 && <SummaryByFact date={date}/>}
+					{active === id && <SummaryByProd date={moment(date).format("YYYY-MM-DD")}/>}
+					{active === id2 && <SummaryByFact date={moment(date).format("YYYY-MM-DD")}/>}
 				</Fragment>
 			</section>
 		</Fragment>

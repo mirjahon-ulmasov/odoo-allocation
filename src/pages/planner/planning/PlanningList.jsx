@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateStock, fetchVendors } from "store/product";
+import { updateStock, fetchVendors } from "middlewares/product";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { Container } from "components/Tables";
 import { useTranslation } from "react-i18next";

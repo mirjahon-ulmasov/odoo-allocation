@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { fetchOrders } from "store/sales_manager";
+import { fetchOrders } from "middlewares/sales_manager";
 import { T1v1, Container } from "components/Tables";
 import Loader from "components/Loader";
 import { getStatusOrder } from "utils";

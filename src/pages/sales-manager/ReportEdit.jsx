@@ -3,13 +3,14 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Modal, Select } from "@mui/material";
-import { postReservation, editSmProds, fetchSmProds } from "store/sales_manager";
+import { postReservation, fetchSmProds } from "middlewares/sales_manager";
+import { NotificationManager } from "react-notifications";
+import { editSmProds } from "store/sales_manager";
 import { T1, Container } from "components/Tables";
 import Loader from "components/Loader";
 
 import check from "assets/icons/check.svg";
 import back from "assets/icons/back.svg";
-import { NotificationManager } from "react-notifications";
 
 
 const headers = [

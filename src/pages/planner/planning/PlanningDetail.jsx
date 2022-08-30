@@ -1,11 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import {
-	fetchAllocations,
-	clearAllocation,
-	postAllocations,
-} from "store/product";
+import { fetchAllocations, postAllocations } from "middlewares/product";
 import { useTranslation } from "react-i18next";
 import { Container } from "components/Tables";
 import Loader from "components/Loader";
@@ -41,7 +37,6 @@ export default function PlanningDetail() {
 				vendor: vendorID,
 			})
 		);
-		return () => dispatch(clearAllocation());
 	}, [dispatch, vendorID]);
 
 	const filteredAllocations = React.useMemo(() => {
@@ -65,7 +60,6 @@ export default function PlanningDetail() {
 	}, [allocations, productFilter, dealerFilter]);
 
 	const cancelReservation = () => {
-		dispatch(clearAllocation());
 		navigate("/planner/planning");
 	};
 

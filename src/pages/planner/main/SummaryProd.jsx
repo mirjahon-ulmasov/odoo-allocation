@@ -1,39 +1,28 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NotificationManager } from "react-notifications";
-import { useFetchAllProductsQuery } from "services/product";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
+import { fetchAllProducts, fetchProdsByDealer } from "middlewares/product";
+import { editDealerProdisFull } from "store/product";
+import { regenerate_api } from "services/setting.js";
 import { IconButton } from "@mui/material";
 import Loader from "components/Loader";
 import styled from "styled-components";
 import { checkCount } from "utils"
-import {
-	clearDealerProds,
-	fetchProdsByDealer,
-	editDealerProdisFull,
-} from "store/product";
 
-export default function SummaryByProd({date}) {
+
+export default function SummaryByProd({ date }) {
 	const dispatch = useDispatch();
 	const table1Ref = useRef(null);
 	const table2Ref = useRef(null);
 	const [isFull, setIsFull] = useState(true);
-	const { data: allProds, isLoading: load1, error, refetch } = useFetchAllProductsQuery();
-	const { loading: load2, dealer_prods } = useSelector((state) => state.product);
+	const { loading, dealer_prods, all_products } = useSelector((state) => state.product);
 
 	useEffect(() => {
-		if(!date) return;
-		console.log(date.toISOString().slice(0, 10));
-	})
-
-	useEffect(() => {
-		refetch();
-		dispatch(fetchProdsByDealer());
-		return () => dispatch(clearDealerProds());
-	}, [dispatch, refetch]);
-
-	if (error) NotificationManager.error(error.error);
+		regenerate_api();
+		dispatch(fetchAllProducts({ date_from: date }))
+		dispatch(fetchProdsByDealer({ date_from: date }));
+	}, [dispatch, date]);
 
 	const scrollHandler = (event) => {
 		Array.from(table2Ref.current.children).forEach((child) => {
@@ -54,8 +43,8 @@ export default function SummaryByProd({date}) {
 
 	return (
 		<Summary className="scroll">
-			{(load1 || load2) && <Loader />}
-			{allProds && allProds.length !== 0 && (
+			{loading && <Loader />}
+			{all_products && all_products.length !== 0 && (
 				<table id="summary_products" className="table_1">
 					<thead>
 						<tr>
@@ -79,7 +68,7 @@ export default function SummaryByProd({date}) {
 						</tr>
 					</thead>
 					<tbody ref={table1Ref} onScroll={scrollHandler}>
-						{allProds.map((prod, index) => (
+						{all_products.map((prod, index) => (
 							<tr key={index}>
 								<td>{prod.material}</td>
 								<td>{prod.material_name}</td>

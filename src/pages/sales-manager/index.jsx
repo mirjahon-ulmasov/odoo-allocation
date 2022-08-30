@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDealers } from "store/sales_manager";
+import { fetchDealers } from "middlewares/sales_manager";
 import NotificationList from "./NotificationList";
 import OrderDetails from "./OrderDetails";
 import ReportEdit from "./ReportEdit";

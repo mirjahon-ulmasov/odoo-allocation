@@ -1,84 +1,10 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { API, instance, regenerate_api } from "services/setting";
-import { NotificationManager } from "react-notifications";
-
-export const fetchDealers = createAsyncThunk("sm/fetchDealers", async () => {
-	try {
-		regenerate_api();
-		const response = await instance.get(API + "/customer/list/");
-		if (response.status !== 200) {
-			throw new Error("Bad Request");
-		}
-		const data = await response.data;
-		return data;
-	} catch (err) {
-		NotificationManager.error("Couldn't get dealers", "", 2000);
-	}
-});
-
-export const fetchSmProds = createAsyncThunk(
-	"sm/fetchSmProds",
-	async ({ dealer }) => {
-		try {
-			const response = await instance.get(API + "/material/sm_list/", {
-				params: { dealer },
-			});
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			const data = await response.data;
-			return data.map((item) => ({
-				...item,
-				request: item.allocated,
-			}));
-		} catch (err) {
-			NotificationManager.error("Couldn't get products", "", 2000);
-		}
-	}
-);
-
-export const fetchOrders = createAsyncThunk("sm/fetchOrders", 
-	async(dealerId, thunkAPI) => {
-		try {
-			const response = await instance.get(API + "/order/list/", {
-				params: {customer: dealerId }
-			});
-			if(response.status !== 200) throw new Error("Bad request");
-		
-			const data = await response.data;
-			return data;
-		} catch(err) {
-			NotificationManager.error("Couldn't get orders", "", 2000);
-		}
-})
-
-export const fetchOrderDetail = createAsyncThunk("sm/fetchOrderDetail", 
-	async(orderId, thunkAPI) => {
-		try {
-			const response = await instance.get(API + `/order/${orderId}/detail/`);
-			if(response.status !== 200) throw new Error("Bad request");
-			const data = await response.data;
-			return data;
-
-		} catch(err) {
-			NotificationManager.error("Couldn't get order detail", "", 2000);
-		}
-})
-
-export const postReservation = createAsyncThunk(
-	"sm/postReservation",
-	async ({ data, cb }) => {
-		try {
-			const response = await instance.post(API + "/order/create/", data);
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			cb();
-		} catch (err) {
-			NotificationManager.error("Couldn't reserve", "", 2000);
-		}
-	}
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { 
+	fetchDealers, 
+	fetchSmProds, 
+	fetchOrders, 
+	fetchOrderDetail 
+} from "middlewares/sales_manager";
 
 const initialState = {
 	dealers: null,

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchOrderDetail } from "store/sales_manager";
+import { fetchOrderDetail } from "middlewares/sales_manager";
 import { T1v2, Container } from "components/Tables";
 import { useTranslation } from "react-i18next";
 import Loader from "components/Loader";
