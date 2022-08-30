@@ -12,6 +12,7 @@ import {
 
 const initialState = {
 	loading: false,
+	loading2: false,
 	vendors: null,
 	allocations: null,
 	all_products: null,
@@ -67,15 +68,15 @@ export const productSlice = createSlice({
 	},
 	extraReducers: {
 		[fetchProdsByDealer.pending]: (state) => {
-			state.loading = true;
+			state.loading2 = true;
 			state.dealer_prods = null;
 		},
 		[fetchProdsByDealer.fulfilled]: (state, { payload }) => {
-			state.loading = false;
+			state.loading2 = false;
 			state.dealer_prods = payload;
 		},
 		[fetchProdsByDealer.rejected]: (state, { payload }) => {
-			state.loading = false;
+			state.loading2 = false;
 			NotificationManager.error(payload, "", 2000);
 		},
 

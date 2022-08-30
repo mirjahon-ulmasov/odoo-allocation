@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDealers } from "middlewares/sales_manager";
+import { regenerate_api } from "services/config";
 import NotificationList from "./NotificationList";
 import OrderDetails from "./OrderDetails";
 import ReportEdit from "./ReportEdit";
@@ -13,6 +14,10 @@ export default function SalesManager() {
 
 	const dispatch = useDispatch();
 	const { dealers, sm_prods, loading } = useSelector((state) => state.sales_manager);
+
+	useEffect(() => {
+		regenerate_api();
+	}, [])
 
 	useEffect(() => {
 		dispatch(fetchDealers());

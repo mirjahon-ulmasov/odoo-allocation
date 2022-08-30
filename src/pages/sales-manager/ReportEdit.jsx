@@ -154,7 +154,7 @@ export default function ReportEdit({ dealers, sm_prods, loading, dealer, onSetDe
 									<h2>Do you want to request more than allocated to you?</h2>
 									<div className="modal-action">
 										<button onClick={() => setOpen(false)}>Cancel</button>
-										<button onClick={() => setWarning(false)}>Continue</button>
+										<button onClick={() => setWarning(false)}>Yes, Continue</button>
 									</div>
 								</Box>
 							):(

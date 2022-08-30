@@ -4,7 +4,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
 import { fetchAllProducts, fetchProdsByDealer } from "middlewares/product";
 import { editDealerProdisFull } from "store/product";
-import { regenerate_api } from "services/config.js";
+import { regenerate_api } from "services/config";
 import { IconButton } from "@mui/material";
 import Loader from "components/Loader";
 import styled from "styled-components";
@@ -17,7 +17,7 @@ export default function SummaryByProd() {
 	const table2Ref = useRef(null);
 	const [isFull, setIsFull] = useState(true);
 	const { date_from, date_to } = useSelector(state => state.setting);
-	const { loading, dealer_prods, all_products } = useSelector((state) => state.product);
+	const { loading, loading2, dealer_prods, all_products } = useSelector((state) => state.product);
 
 	useEffect(() => {
 		regenerate_api();
@@ -44,102 +44,105 @@ export default function SummaryByProd() {
 
 	return (
 		<Summary className="scroll">
-			{loading && <Loader />}
-			{all_products && all_products.length !== 0 && (
-				<table id="summary_products" className="table_1">
-					<thead>
-						<tr>
-							<th>ID</th>
-							<th>Product</th>
-							{isFull && (
-								<Fragment>
-									<th>Ordered</th>
-									<th>Fulfilled</th>
-									<th>Reserved</th>
-									<th>In stock</th>
-									<th>Available</th>
-								</Fragment>
-							)}
-							<th>
-								<IconButton type="button" sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#fff" }}
-									onClick={() => setIsFull((prev) => !prev)}>
-										{isFull ? <ChevronLeft /> : <ChevronRight />}
-								</IconButton>
-							</th>
-						</tr>
-					</thead>
-					<tbody ref={table1Ref} onScroll={scrollHandler}>
-						{all_products.map((prod, index) => (
-							<tr key={index}>
-								<td>{prod.material}</td>
-								<td>{prod.material_name}</td>
-								{isFull && (
-									<Fragment>
-										<td className={checkCount(prod.ordered, prod.fulfilled)}>{prod.ordered}</td>
-										<td>{prod.fulfilled}</td>
-										<td>{prod.reserved}</td>
-										<td>{prod.in_stock}</td>
-										<td>{prod.is_available}</td>
-									</Fragment>
-								)}
-								<td></td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			)}
-			<div ref={table2Ref} className="scroll"
-				style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
-				{dealer_prods &&
-					dealer_prods.map((dealer, index) => (
-						<table key={index} className={`table_2 ${dealer.isFull ? "active" : ""}`}>
+			{(loading || loading2) ? <Loader /> : (
+				<Fragment>
+					{all_products && all_products.length !== 0 && (
+						<table id="summary_products" className="table_1">
 							<thead>
 								<tr>
-									<th colSpan={4} onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
-										<span>{dealer.name}</span>
-										<IconButton type="button">
-											{dealer.isFull ? <ChevronRight /> : <ChevronLeft />}
+									<th>ID</th>
+									<th>Product</th>
+									{isFull && (
+										<Fragment>
+											<th>Ordered</th>
+											<th>Fulfilled</th>
+											<th>Reserved</th>
+											<th>In stock</th>
+											<th>Available</th>
+										</Fragment>
+									)}
+									<th>
+										<IconButton type="button" sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#fff" }}
+											onClick={() => setIsFull((prev) => !prev)}>
+												{isFull ? <ChevronLeft /> : <ChevronRight />}
 										</IconButton>
 									</th>
 								</tr>
-								<tr>
-									<th>Ordered</th>
-									{dealer.isFull && (
-										<Fragment>
-											<th>Fulfilled</th>
-											<th>Reserved</th>
-											<th>Allocated</th>
-										</Fragment>
-									)}
-								</tr>
 							</thead>
-							<tbody onScroll={scrollHandler}>
-								{dealer.products.map((el, index) => (
+							<tbody ref={table1Ref} onScroll={scrollHandler}>
+								{all_products.map((prod, index) => (
 									<tr key={index}>
-										<td className={checkCount(el.ordered, el.fulfilled)}>{el.ordered}</td>
-										{dealer.isFull && (
+										<td>{prod.material}</td>
+										<td>{prod.material_name}</td>
+										{isFull && (
 											<Fragment>
-												<td>{el.fulfilled}</td>
-												<td>{el.reserved}</td>
-												<td>{el.allocation}</td>
+												<td className={checkCount(prod.ordered, prod.fulfilled)}>{prod.ordered}</td>
+												<td>{prod.fulfilled}</td>
+												<td>{prod.reserved}</td>
+												<td>{prod.in_stock}</td>
+												<td>{prod.is_available}</td>
 											</Fragment>
 										)}
+										<td></td>
 									</tr>
 								))}
 							</tbody>
 						</table>
-					))}
-			</div>
-			<div className="excel-container">
-				<ReactHTMLTableToExcel
-					id="summary_products-xls-button"
-					className="excel-button"
-					table="summary_products"
-					filename="summary_products"
-					sheet="tablexls"
-					buttonText="Excel"
-				/>
-			</div>
+					)}
+					<div ref={table2Ref} className="scroll"
+						style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
+						{dealer_prods &&
+							dealer_prods.map((dealer, index) => (
+								<table key={index} className={`table_2 ${dealer.isFull ? "active" : ""}`}>
+									<thead>
+										<tr>
+											<th colSpan={4} onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
+												<span>{dealer.name}</span>
+												<IconButton type="button">
+													{dealer.isFull ? <ChevronRight /> : <ChevronLeft />}
+												</IconButton>
+											</th>
+										</tr>
+										<tr>
+											<th>Ordered</th>
+											{dealer.isFull && (
+												<Fragment>
+													<th>Fulfilled</th>
+													<th>Reserved</th>
+													<th>Allocated</th>
+												</Fragment>
+											)}
+										</tr>
+									</thead>
+									<tbody onScroll={scrollHandler}>
+										{dealer.products.map((el, index) => (
+											<tr key={index}>
+												<td className={checkCount(el.ordered, el.fulfilled)}>{el.ordered}</td>
+												{dealer.isFull && (
+													<Fragment>
+														<td>{el.fulfilled}</td>
+														<td>{el.reserved}</td>
+														<td>{el.allocation}</td>
+													</Fragment>
+												)}
+											</tr>
+										))}
+									</tbody>
+								</table>
+							))}
+					</div>
+					<div className="excel-container">
+						<ReactHTMLTableToExcel
+							id="summary_products-xls-button"
+							className="excel-button"
+							table="summary_products"
+							filename="summary_products"
+							sheet="tablexls"
+							buttonText="Excel"
+						/>
+					</div>
+				</Fragment>
+			)}
 		</Summary>
 	);
 }

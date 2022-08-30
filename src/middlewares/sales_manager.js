@@ -1,10 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { instance, regenerate_api } from "services/config";
+import { instance } from "services/config";
 import { NotificationManager } from "react-notifications";
 
 export const fetchDealers = createAsyncThunk("sm/fetchDealers", async () => {
 	try {
-		regenerate_api();
 		const response = await instance.get("/customer/list/");
 		if (response.status !== 200) {
 			throw new Error("Bad Request");
