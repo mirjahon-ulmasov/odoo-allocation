@@ -32,6 +32,10 @@ export default function Orders({ dealers, loading, dealer, onSetDealer }) {
 		dispatch(fetchOrders(dealerId));
 	}, [dispatch, dealers, dealer]);
 
+	const resendHandler = (id) => {
+		console.log(id);
+	}
+
     return (
 		<Fragment>
 			{loading && <Loader />}
@@ -77,7 +81,14 @@ export default function Orders({ dealers, loading, dealer, onSetDealer }) {
 											<td>{item.orderdate} {item.orderetime}</td>
 											<td>{item.customer.name}</td>
 											<td>{item.owner.email}</td>
-											<td>{getStatusOrder(item.status)}</td>
+											<td>
+												{getStatusOrder(item.status)} 
+												{item.status === '2' && (
+													<button onClick={() => resendHandler(item.id)} 
+														style={{ marginLeft: '1rem' }} className="btn danger">
+														  	Resend
+													</button>)}
+											</td>
 										</tr>
 									);
 								})}

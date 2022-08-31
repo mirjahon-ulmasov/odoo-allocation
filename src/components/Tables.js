@@ -98,6 +98,7 @@ export const T1 = styled(Table)`
 `;
 
 export const T1v1 = styled(T1)`
+	text-align: left;
 	th, td {
 		width: 15%;
 		cursor: pointer;
