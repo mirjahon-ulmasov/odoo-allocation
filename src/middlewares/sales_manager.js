@@ -64,6 +64,20 @@ export const fetchOrderDetail = createAsyncThunk("sm/fetchOrderDetail",
 		}
 })
 
+export const resendOrder = createAsyncThunk("sm/resendOrder", 
+	async(orderId, thunkAPI) => {
+		try {
+			const response = await instance.get(`/order/resend/`, {
+				params: { order: orderId }
+			});
+			if(response.status !== 200) throw new Error("Bad request");
+			NotificationManager.success("Successfully resended", "", 2000);
+
+		} catch(err) {
+			NotificationManager.error("Couldn't resend", "", 2000);
+		}
+})
+
 export const postReservation = createAsyncThunk(
 	"sm/postReservation",
 	async ({ data, cb }) => {

@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchOrderDetail } from "middlewares/sales_manager";
+import { fetchOrderDetail, resendOrder } from "middlewares/sales_manager";
 import { T1v2, Container } from "components/Tables";
 import { useTranslation } from "react-i18next";
 import Loader from "components/Loader";
@@ -27,6 +27,10 @@ export default function OrderDetails() {
 	useEffect(() => {
 		dispatch(fetchOrderDetail(id));
 	}, [dispatch, id]);
+
+	const resendHandler = (id) => {
+		dispatch(resendOrder(id));
+	}
 
     return (
 		<Fragment>
@@ -66,7 +70,14 @@ export default function OrderDetails() {
 							</li>
 							<li>
 								<p>Status</p>
-								<h3>{getStatusOrder(order_detail.status)}</h3>
+								<h3>
+									{getStatusOrder(order_detail.status)}
+									{order_detail.status === '5' && (
+										<button onClick={() => resendHandler(order_detail.id)} 
+											style={{ marginLeft: '1rem' }} className="btn danger">
+											  	Resend
+										</button>)}
+								</h3>
 							</li>
 						</Left>
 						<Right>

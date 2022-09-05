@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { fetchOrders } from "middlewares/sales_manager";
+import { fetchOrders, resendOrder } from "middlewares/sales_manager";
 import { T1v1, Container } from "components/Tables";
 import Loader from "components/Loader";
 import { getStatusOrder } from "utils";
@@ -32,8 +32,9 @@ export default function Orders({ dealers, loading, dealer, onSetDealer }) {
 		dispatch(fetchOrders(dealerId));
 	}, [dispatch, dealers, dealer]);
 
-	const resendHandler = (id) => {
-		console.log(id);
+	const resendHandler = (event, id) => {
+		event.stopPropagation();
+	    dispatch(resendOrder(id));
 	}
 
     return (
@@ -83,8 +84,8 @@ export default function Orders({ dealers, loading, dealer, onSetDealer }) {
 											<td>{item.owner.email}</td>
 											<td>
 												{getStatusOrder(item.status)} 
-												{item.status === '2' && (
-													<button onClick={() => resendHandler(item.id)} 
+												{item.status === '5' && (
+													<button onClick={(event) => resendHandler(event, item.id)} 
 														style={{ marginLeft: '1rem' }} className="btn danger">
 														  	Resend
 													</button>)}

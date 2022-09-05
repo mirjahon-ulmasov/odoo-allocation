@@ -31,7 +31,11 @@ export const getStatusOrder = (status) => {
 			return 'Pending';
 		case '3':
 			return 'Completed';
+		case '4':
+			return 'Manually Closed';
+		case '5':
+			return 'Failed';
 		default:
-			return 'Fail';
+			return;
 	}
 }
