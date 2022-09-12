@@ -23,6 +23,7 @@ export default function SummaryByProd() {
 		regenerate_api();
 		dispatch(fetchAllProducts({ date_from, date_to }))
 		// dispatch(fetchProdsByDealer({ date_from, date_to }));
+		
 	}, [dispatch, date_from, date_to]);
 
 	const scrollHandler = (event) => {
