@@ -56,9 +56,13 @@
 
 // Checkbox
 .form {
+	&__group {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
 	&__radio-group {
 		display: inline-block;
-		margin-right: 50px;
 	}
 
 	&__radio-input {
