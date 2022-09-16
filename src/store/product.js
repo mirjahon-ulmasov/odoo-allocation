@@ -4,7 +4,6 @@ import {
 	updateStock,
 	fetchVendors,
 	fetchAllocations,
-	fetchAllProducts,
 	fetchProdsByDealer,
 	fetchDealersByFact,
 } from "middlewares/product"
@@ -12,10 +11,8 @@ import {
 
 const initialState = {
 	loading: false,
-	loading2: false,
 	vendors: null,
 	allocations: null,
-	all_products: null,
 	dealer_prods: null,
 	dealer_factory: null,
 };
@@ -25,10 +22,13 @@ export const productSlice = createSlice({
 	initialState,
 	reducers: {
 		editDealerProdisFull(state, { payload }) {
-			state.dealer_prods = state.dealer_prods.map((dealer) => {
-				if (dealer.id === payload) return { ...dealer, isFull: !dealer.isFull };
-				return dealer;
-			});
+			state.dealer_prods = state.dealer_prods.map((prod) => ({
+				...prod,
+				customers: prod.customers.map(customer => {
+					if(customer.customer_id === payload) return {...customer, isFull: !customer.isFull}
+					return customer
+				})
+			}))
 		},
 		editAllocation(state, { payload }) {
 			const { prodId, customerId, quantity } = payload;
@@ -68,15 +68,15 @@ export const productSlice = createSlice({
 	},
 	extraReducers: {
 		[fetchProdsByDealer.pending]: (state) => {
-			state.loading2 = true;
+			state.loading = true;
 			state.dealer_prods = null;
 		},
 		[fetchProdsByDealer.fulfilled]: (state, { payload }) => {
-			state.loading2 = false;
+			state.loading = false;
 			state.dealer_prods = payload;
 		},
 		[fetchProdsByDealer.rejected]: (state, { payload }) => {
-			state.loading2 = false;
+			state.loading = false;
 			NotificationManager.error(payload, "", 2000);
 		},
 
@@ -102,20 +102,6 @@ export const productSlice = createSlice({
 			state.vendors = payload;
 		},
 		[fetchVendors.rejected]: (state, { payload }) => {
-			state.loading = false;
-			NotificationManager.error(payload, "", 2000);
-		},
-
-
-		[fetchAllProducts.pending]: (state) => {
-			state.loading = true;
-			state.all_products = null;
-		},
-		[fetchAllProducts.fulfilled]: (state, { payload }) => {
-			state.loading = false;
-			state.all_products = payload;
-		},
-		[fetchAllProducts.rejected]: (state, { payload }) => {
 			state.loading = false;
 			NotificationManager.error(payload, "", 2000);
 		},

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { ChevronRight, ChevronLeft } from "@mui/icons-material";
-import { fetchAllProducts, fetchProdsByDealer } from "middlewares/product";
+import { fetchProdsByDealer } from "middlewares/product";
 import { editDealerProdisFull } from "store/product";
 import { regenerate_api } from "services/config";
 import { IconButton } from "@mui/material";
@@ -17,13 +17,11 @@ export default function SummaryByProd() {
 	const table2Ref = useRef(null);
 	const [isFull, setIsFull] = useState(true);
 	const { date_from, date_to } = useSelector(state => state.setting);
-	const { loading, loading2, dealer_prods, all_products } = useSelector((state) => state.product);
+	const { loading, dealer_prods } = useSelector((state) => state.product);
 
 	useEffect(() => {
 		regenerate_api();
-		dispatch(fetchAllProducts({ date_from, date_to }))
-		// dispatch(fetchProdsByDealer({ date_from, date_to }));
-		
+		dispatch(fetchProdsByDealer({ date_from, date_to, page: 0 }));
 	}, [dispatch, date_from, date_to]);
 
 	const scrollHandler = (event) => {
@@ -45,93 +43,103 @@ export default function SummaryByProd() {
 
 	return (
 		<Summary className="scroll">
-			{(loading || loading2) ? <Loader /> : (
+			{loading ? <Loader /> : (
 				<Fragment>
-					{all_products && all_products.length !== 0 && (
-						<table id="summary_products" className="table_1">
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>Product</th>
-									{isFull && (
-										<Fragment>
-											<th>Ordered</th>
-											<th>Fulfilled</th>
-											<th>Reserved</th>
-											<th>In stock</th>
-											<th>Available</th>
-										</Fragment>
-									)}
-									<th>
-										<IconButton type="button" sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#fff" }}
-											onClick={() => setIsFull((prev) => !prev)}>
-												{isFull ? <ChevronLeft /> : <ChevronRight />}
-										</IconButton>
-									</th>
-								</tr>
-							</thead>
-							<tbody ref={table1Ref} onScroll={scrollHandler}>
-								{all_products.map((prod, index) => (
-									<tr key={index}>
-										<td>{prod.material}</td>
-										<td>{prod.material_name}</td>
+					{dealer_prods && dealer_prods.length !== 0 && (
+						<Fragment>
+							<table id="summary_products" className="table_1">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Product</th>
 										{isFull && (
 											<Fragment>
-												<td className={checkCount(prod.ordered, prod.fulfilled)}>{prod.ordered}</td>
-												<td>{prod.fulfilled}</td>
-												<td>{prod.reserved}</td>
-												<td>{prod.in_stock}</td>
-												<td>{prod.is_available}</td>
+												<th>Ordered</th>
+												<th>Fulfilled</th>
+												<th>Reserved</th>
+												<th>In stock</th>
+												<th>Available</th>
 											</Fragment>
 										)}
-										<td></td>
+										<th>
+											<IconButton type="button" sx={{ bgcolor: "#130F2670", padding: 0.5, color: "#fff" }}
+												onClick={() => setIsFull((prev) => !prev)}>
+													{isFull ? <ChevronLeft /> : <ChevronRight />}
+											</IconButton>
+										</th>
 									</tr>
-								))}
-							</tbody>
-						</table>
-					)}
-					<div ref={table2Ref} className="scroll"
-						style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
-						{dealer_prods &&
-							dealer_prods.map((dealer, index) => (
-								<table key={index} className={`table_2 ${dealer.isFull ? "active" : ""}`}>
-									<thead>
-										<tr>
-											<th colSpan={4} onClick={() => dispatch(editDealerProdisFull(dealer.id))}>
-												<span>{dealer.name}</span>
-												<IconButton type="button">
-													{dealer.isFull ? <ChevronRight /> : <ChevronLeft />}
-												</IconButton>
-											</th>
-										</tr>
-										<tr>
-											<th>Ordered</th>
-											{dealer.isFull && (
+								</thead>
+								<tbody ref={table1Ref} onScroll={scrollHandler}>
+									{dealer_prods.map((prod, index) => (
+										<tr key={index}>
+											<td>{prod.material}</td>
+											<td>{prod.name}</td>
+											{isFull && (
 												<Fragment>
-													<th>Fulfilled</th>
-													<th>Reserved</th>
-													<th>Allocated</th>
+													<td className={checkCount(prod.total.total_ordered, prod.total.total_fulfilled)}>
+														{prod.total.total_ordered}
+													</td>
+													<td>{prod.total.total_fulfilled}</td>
+													<td>{prod.total.total_reserved}</td>
+													<td>{prod.total.total_stock}</td>
+													<td>{prod.total.total_available}</td>
 												</Fragment>
 											)}
+											<td></td>
 										</tr>
-									</thead>
-									<tbody onScroll={scrollHandler}>
-										{dealer.products.map((el, index) => (
-											<tr key={index}>
-												<td className={checkCount(el.ordered, el.fulfilled)}>{el.ordered}</td>
-												{dealer.isFull && (
-													<Fragment>
-														<td>{el.fulfilled}</td>
-														<td>{el.reserved}</td>
-														<td>{el.allocation}</td>
-													</Fragment>
-												)}
-											</tr>
-										))}
-									</tbody>
-								</table>
-							))}
-					</div>
+									))}
+								</tbody>
+							</table>
+							<div ref={table2Ref} className="scroll"
+								style={{ display: "flex", overflow: "scroll hidden", height: "fit-content" }}>
+									<table className="table_2">
+										<thead>
+											{dealer_prods[0].customers.map((customer, index) => (
+												<div className={`column ${customer.isFull ? 'active' : ''}`} key={index}>
+													<tr>
+														<th colSpan={4} onClick={() => dispatch(editDealerProdisFull(customer.customer_id))}>
+															<span>{customer.customer_name}</span>
+															<IconButton type="button">
+																{customer.isFull ? <ChevronRight /> : <ChevronLeft />}
+															</IconButton>
+														</th>
+													</tr>
+													<tr>
+														<th>Ordered</th>
+														{customer.isFull && (
+															<Fragment>
+																<th>Fulfilled</th>
+																<th>Reserved</th>
+																<th>Allocated</th>
+															</Fragment>
+														)}
+													</tr>
+												</div>
+											))}
+										</thead>
+										<tbody onScroll={scrollHandler}>
+											{dealer_prods.map((prod, index) => (
+												<tr key={index}>
+													{prod.customers.map((customer, index) => (
+														<div className={`column ${customer.isFull ? 'active' : ''}`} key={index}>
+															<td className={checkCount(customer.ordered, customer.fulfilled)}>
+																{customer.ordered}
+															</td>
+															{customer.isFull && (
+																<Fragment>
+																	<td>{customer.fulfilled}</td>
+																	<td>{customer.reserved}</td>
+																	<td>{customer.allocated}</td>
+																</Fragment>
+															)}
+														</div>))}
+												</tr>
+											))}
+										</tbody>
+									</table>
+							</div>
+						</Fragment>
+					)}
 					<div className="excel-container">
 						<ReactHTMLTableToExcel
 							id="summary_products-xls-button"
@@ -176,7 +184,7 @@ const Summary = styled.div`
 				height: 5rem;
 				td {
 					font-weight: 500;
-					padding: 1rem 2rem;
+					padding: 1rem;
 					vertical-align: middle;
 				}
 				&:nth-child(odd) {
@@ -199,7 +207,7 @@ const Summary = styled.div`
 				border-bottom: 1px solid #dfdfdf;
 				th {
 					font-weight: 500;
-					padding: 1.5rem 2rem;
+					padding: 1rem;
 
 					button:hover {
 						background-color: #130f2680;
@@ -213,14 +221,16 @@ const Summary = styled.div`
 				font-weight: 400;
 			}
 		}
-		th,
-		td {
-			width: 4rem;
+		th, td {
+			min-width: 4rem;
+			max-width: 4rem;
 			&:first-child {
-				width: 12rem;
+				min-width: 12rem;
+				max-width: 12rem;
 			}
 			&:nth-child(2) {
-				width: 20rem;
+				min-width: 20rem;
+				max-width: 20rem;
 			}
 			&:last-child {
 				width: 2rem;
@@ -231,57 +241,69 @@ const Summary = styled.div`
 	table.table_2 {
 		text-align: center;
 		thead {
-			tr {
-				border-right: 1px solid #fff;
-				th {
-					padding: 0.4rem 1rem;
-				}
-				&:first-child {
-					th {
-						width: fit-content;
-						display: flex;
-						text-align: left;
-						align-items: center;
-
-						span {
-							font-weight: 500;
-							line-height: 1.2;
+			display: flex;
+			.column {
+				tr {
+					border-right: 1px solid #fff;
+					&:first-child {
+						th {
+							width: fit-content;
+							display: flex;
+							text-align: left;
+							align-items: center;
+							padding: 0.4rem 1rem;
+	
+							span {
+								font-weight: 500;
+								line-height: 1.2;
+							}
+						}
+					}
+					&:nth-child(2) {
+						background-color: #f2f2f2;
+						border-right: 1px solid #f2f2f2;
+						border-bottom: 1px solid #dfdfdf;
+						th {
+							font-size: 14px;
+							color: #898989;
+							font-weight: 400;
+							padding: 0.2rem 0;
 						}
 					}
 				}
-				&:nth-child(2) {
-					background-color: #f2f2f2;
-					border-bottom: 1px solid #dfdfdf;
-					border-right: 1px solid #f2f2f2;
-					th {
-						font-size: 14px;
-						color: #898989;
-						font-weight: 400;
-						padding: 0.2rem 2rem;
+				&.active {
+					tr {
+						&:first-child th {
+							width: 100%;
+							display: table-cell;
+						}
+						&:nth-child(2) {
+							background-color: #016584;
+							th {
+								color: #fff;
+							}
+						}
 					}
 				}
 			}
 		}
 		tbody {
-			border-right: 1px solid #eaeaea;
-		}
-	}
-	table.table_2.active {
-		thead tr {
-			&:first-child th {
-				width: 100%;
-				display: table-cell;
-			}
-			&:nth-child(2) {
-				background-color: #016584;
-				th {
-					color: #fff;
+			tr {
+				display: flex; 
+				.column {
+					display: flex;
+					align-items: center;
+					justify-content: space-around;
+					border-right: 1px solid #eaeaea;
+					&.active {
+						background-color: #f0f8f9;
+						border-bottom: 1px solid #dfdfdf;
+					}
 				}
 			}
 		}
-		tbody tr {
-			background-color: #f0f8f9;
-			border-bottom: 1px solid #dfdfdf;
+		.column {
+			width: 25rem
 		}
 	}
 `;

@@ -1,21 +1,41 @@
+import { NotificationManager } from "react-notifications";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { instance } from "services/config";
-import { NotificationManager } from "react-notifications";
 
 export const fetchProdsByDealer = createAsyncThunk(
 	"product/fetchProdsByDealer",
-	async ({ date_from, date_to }, { rejectWithValue }) => {
+	async ({ date_from, date_to, page }, { rejectWithValue }) => {
 		try {
 			const response = await instance.get("/customer/main_page_list/", 
-                { params: { date_from, date_to }}
+                { params: { date_from, date_to, page }}
             );
 			if (response.status !== 200) {
 				throw new Error("Bad Request");
 			}
 			const data = await response.data;
-			return data.map((el) => ({ ...el, isFull: false }));
+			return data.map((prod) => ({
+				...prod, 
+				customers: prod.customers.map(customer => ({
+					...customer, 
+					isFull: false
+					}))
+				}));
 		} catch (err) {
 			return rejectWithValue("Couldn't get products");
+		}
+	}
+);
+
+
+export const fetchDealersByFact = createAsyncThunk(
+	'product/fetchDealersByFact',
+	async({ date_from, date_to }, { rejectWithValue }) => {
+		try {
+			const response = await instance.get('/customer/stat_by_factory/', { params: { date_from, date_to }});
+			if(response.status !== 200) throw new Error("Bad Request");
+			return response.data;
+		} catch(err) {
+			return rejectWithValue("Couldn't get data");
 		}
 	}
 );
@@ -58,34 +78,6 @@ export const fetchVendors = createAsyncThunk(
 			if (response.status !== 200) throw new Error("Bad Request");
 			return response.data;
 		} catch (err) {
-			return rejectWithValue("Couldn't get data");
-		}
-	}
-);
-
-
-export const fetchAllProducts = createAsyncThunk(
-	'product/fetchAllProducts',
-	async({ date_from, date_to }, { rejectWithValue }) => {
-		try {
-			const response = await instance.get('/material/list/', { params: { date_from, date_to }});
-			if(response.status !== 200) throw new Error("Bad Request");
-			return response.data;
-		} catch(err) {
-			return rejectWithValue("Couldn't get products");
-		}
-	}
-);
-
-
-export const fetchDealersByFact = createAsyncThunk(
-	'product/fetchDealersByFact',
-	async({ date_from, date_to }, { rejectWithValue }) => {
-		try {
-			const response = await instance.get('/customer/stat_by_factory/', { params: { date_from, date_to }});
-			if(response.status !== 200) throw new Error("Bad Request");
-			return response.data;
-		} catch(err) {
 			return rejectWithValue("Couldn't get data");
 		}
 	}

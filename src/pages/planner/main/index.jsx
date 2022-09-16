@@ -36,6 +36,16 @@ export default function MainPage() {
 			<header className="header">
 				<Typography variant="h1">{t("headers.summary")}</Typography>
 				<div className="actions">
+					<div className="form__radio-group">
+						<input type="checkbox" className="form__radio-input" id="large" name="size"
+							checked={dataFilter}
+							onChange={(e) => setDataFilter(e.target.checked)}
+						/>
+						<label htmlFor="large" className="form__radio-label">
+							<span className="form__radio-button"></span>
+							Rows with data
+						</label>
+					</div>
 					<Box sx={{ minWidth: 200 }}>
 						<FormControl sx={{ borderRadius: "2px" }} size="small" fullWidth>
 							<InputLabel>Select factory</InputLabel>
@@ -48,21 +58,11 @@ export default function MainPage() {
 							</Select>
 						</FormControl>
 					</Box>
-					<div className="form__radio-group">
-						<input type="checkbox" className="form__radio-input" id="large" name="size"
-							checked={dataFilter}
-							onChange={(e) => setDataFilter(e.target.checked)}
-						/>
-						<label htmlFor="large" className="form__radio-label">
-							<span className="form__radio-button"></span>
-							Rows with data
-						</label>
-					</div>
 					<LocalizationProvider dateAdapter={AdapterDateFns}>
 						<DatePicker label="Date" value={date} onChange={(value) => {
 								dispatch(changeDate(value));
 								setDate(value);
-							}} renderInput={(params) => <TextField {...params} />} />
+							}} renderInput={(params) => <TextField size="small" sx={{ width: '20ch' }} {...params} />} />
 					</LocalizationProvider>
 					<button
 						type="button"
