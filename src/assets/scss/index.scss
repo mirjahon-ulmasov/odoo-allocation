@@ -5,7 +5,9 @@
 
 
 .main-layout {
+	max-height: calc(90vh - 55px);
 	padding: 2rem 0;
+	overflow: auto;
 
 	.nav-links {
 		display: flex;
@@ -51,6 +53,14 @@
 			font-weight: 400;
 			font-size: 16px;
 		}
+		.excel-button {
+			cursor: pointer;
+			font-size: 14px;
+			padding: 7px 10px;
+			border: 1px solid #ccc;
+			text-transform: uppercase;
+			background-color: #efefef;
+		}		
 	}
 
 	& > .actions {

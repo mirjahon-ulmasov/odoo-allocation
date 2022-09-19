@@ -8,7 +8,7 @@ export default function MainLayout() {
 		<Fragment>
 			<NotificationContainer />
 			<NavBar />
-			<main className="main-layout">
+			<main className="main-layout scroll">
 				<Outlet />
 			</main>
 		</Fragment>

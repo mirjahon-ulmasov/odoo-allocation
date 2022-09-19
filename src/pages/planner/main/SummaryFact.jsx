@@ -112,16 +112,6 @@ export default function SummaryByFact() {
 					</div>
 				</Fragment>
 			)}
-			<div className="excel-container">
-				<ReactHTMLTableToExcel
-					id="summary_factory-xls-button"
-					className="excel-button"
-					table="summary_factory"
-					filename="summary_factory"
-					sheet="tablexls"
-					buttonText="Excel"
-				/>
-			</div>
 		</Summary>
 	);
 }

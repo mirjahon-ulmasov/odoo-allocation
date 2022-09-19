@@ -5,24 +5,32 @@ import { ChevronRight, ChevronLeft } from "@mui/icons-material";
 import { fetchProdsByDealer } from "middlewares/product";
 import { editDealerProdisFull } from "store/product";
 import { regenerate_api } from "services/config";
-import { IconButton } from "@mui/material";
+import { createTheme, IconButton, Pagination, ThemeProvider } from "@mui/material";
 import Loader from "components/Loader";
 import styled from "styled-components";
 import { checkCount} from "utils"
 
+const theme = createTheme({
+	palette: {
+	  	primary: {
+			main: "#036f75",
+	  	},
+	},
+});
 
 export default function SummaryByProd() {
 	const dispatch = useDispatch();
 	const table1Ref = useRef(null);
 	const table2Ref = useRef(null);
+	const [page, setPage] = useState(1);
 	const [isFull, setIsFull] = useState(true);
 	const { date_from, date_to } = useSelector(state => state.setting);
 	const { loading, dealer_prods } = useSelector((state) => state.product);
 
 	useEffect(() => {
 		regenerate_api();
-		dispatch(fetchProdsByDealer({ date_from, date_to, page: 0 }));
-	}, [dispatch, date_from, date_to]);
+		dispatch(fetchProdsByDealer({ date_from, date_to, page: page - 1 }));
+	}, [dispatch, date_from, date_to, page]);
 
 	const scrollHandler = (event) => {
 		Array.from(table2Ref.current.children).forEach((child) => {
@@ -42,11 +50,10 @@ export default function SummaryByProd() {
 	};
 
 	return (
-		<Summary className="scroll">
-			{loading ? <Loader /> : (
-				<Fragment>
-					{dealer_prods && dealer_prods.length !== 0 && (
-						<Fragment>
+		<Container className="scroll">
+			{loading ? <Loader /> : 
+					dealer_prods.length > 0 && (
+						<Summary className="scroll">
 							<table id="summary_products" className="table_1">
 								<thead>
 									<tr>
@@ -70,24 +77,24 @@ export default function SummaryByProd() {
 									</tr>
 								</thead>
 								<tbody ref={table1Ref} onScroll={scrollHandler}>
-									{dealer_prods.map((prod, index) => (
-										<tr key={index}>
-											<td>{prod.material}</td>
-											<td>{prod.name}</td>
-											{isFull && (
-												<Fragment>
-													<td className={checkCount(prod.total.total_ordered, prod.total.total_fulfilled)}>
-														{prod.total.total_ordered}
-													</td>
-													<td>{prod.total.total_fulfilled}</td>
-													<td>{prod.total.total_reserved}</td>
-													<td>{prod.total.total_stock}</td>
-													<td>{prod.total.total_available}</td>
-												</Fragment>
-											)}
-											<td></td>
-										</tr>
-									))}
+										{dealer_prods.map((prod, index) => (
+											<tr key={index}>
+												<td>{prod.material}</td>
+												<td>{prod.name}</td>
+												{isFull && (
+													<Fragment>
+														<td className={checkCount(prod.total.total_ordered, prod.total.total_fulfilled)}>
+															{prod.total.total_ordered}
+														</td>
+														<td>{prod.total.total_fulfilled}</td>
+														<td>{prod.total.total_reserved}</td>
+														<td>{prod.total.total_stock}</td>
+														<td>{prod.total.total_available}</td>
+													</Fragment>
+												)}
+												<td></td>
+											</tr>
+										))}
 								</tbody>
 							</table>
 							<div ref={table2Ref} className="scroll"
@@ -96,10 +103,10 @@ export default function SummaryByProd() {
 										<thead>
 											{dealer_prods[0].customers.map((customer, index) => (
 												<div className={`column ${customer.isFull ? 'active' : ''}`} key={index}>
-													<tr>
-														<th colSpan={4} onClick={() => dispatch(editDealerProdisFull(customer.customer_id))}>
+													<tr onClick={() => dispatch(editDealerProdisFull(customer.customer_id))}>
+														<th colSpan={4}>
 															<span>{customer.customer_name}</span>
-															<IconButton type="button">
+															<IconButton sx={{ padding: '0'}} type="button">
 																{customer.isFull ? <ChevronRight /> : <ChevronLeft />}
 															</IconButton>
 														</th>
@@ -138,23 +145,25 @@ export default function SummaryByProd() {
 										</tbody>
 									</table>
 							</div>
-						</Fragment>
-					)}
-					<div className="excel-container">
-						<ReactHTMLTableToExcel
-							id="summary_products-xls-button"
-							className="excel-button"
-							table="summary_products"
-							filename="summary_products"
-							sheet="tablexls"
-							buttonText="Excel"
-						/>
-					</div>
-				</Fragment>
-			)}
-		</Summary>
+						</Summary>
+					)
+			}
+			 <ThemeProvider theme={theme}>
+				<Pagination page={page} onChange={(e, value) => setPage(value)} 
+					className="pagination" count={100} color="primary"  />
+			 </ThemeProvider>
+		</Container>
 	);
 }
+
+const Container = styled.div`
+	display: flex;
+	flex-direction: column;
+	.pagination {
+		margin-top: 1rem;
+		align-self: flex-end;
+	}
+`
 
 const Summary = styled.div`
 	display: flex;
@@ -175,16 +184,16 @@ const Summary = styled.div`
 			width: 100%;
 			display: block;
 			overflow: auto;
-			max-height: 65vh;
+			max-height: 35rem;
 
 			&::-webkit-scrollbar {
 				display: none;
 			}
 			tr {
-				height: 5rem;
+				height: 4rem;
 				td {
 					font-weight: 500;
-					padding: 1rem;
+					padding: 0 1rem;
 					vertical-align: middle;
 				}
 				&:nth-child(odd) {
@@ -249,6 +258,7 @@ const Summary = styled.div`
 						th {
 							width: fit-content;
 							display: flex;
+							height: 2.5rem;
 							text-align: left;
 							align-items: center;
 							padding: 0.4rem 1rem;
@@ -273,10 +283,6 @@ const Summary = styled.div`
 				}
 				&.active {
 					tr {
-						&:first-child th {
-							width: 100%;
-							display: table-cell;
-						}
 						&:nth-child(2) {
 							background-color: #016584;
 							th {
@@ -303,7 +309,8 @@ const Summary = styled.div`
 			}
 		}
 		.column {
-			width: 25rem
+			width: 22rem;
+			box-sizing: border-box;
 		}
 	}
 `;

@@ -13,7 +13,7 @@ const initialState = {
 	loading: false,
 	vendors: null,
 	allocations: null,
-	dealer_prods: null,
+	dealer_prods: [],
 	dealer_factory: null,
 };
 
@@ -69,7 +69,7 @@ export const productSlice = createSlice({
 	extraReducers: {
 		[fetchProdsByDealer.pending]: (state) => {
 			state.loading = true;
-			state.dealer_prods = null;
+			state.dealer_prods = [];
 		},
 		[fetchProdsByDealer.fulfilled]: (state, { payload }) => {
 			state.loading = false;

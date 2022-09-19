@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { fetchAllocations, postAllocations } from "middlewares/product";
+import { createTheme, ThemeProvider, Pagination } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Container } from "components/Tables";
 import Loader from "components/Loader";
@@ -21,12 +22,21 @@ const headers = [
 	"Available",
 ];
 
+const theme = createTheme({
+	palette: {
+	  	primary: {
+			main: "#036f75",
+	  	},
+	},
+});
+
 export default function PlanningDetail() {
 	const { vendorID } = useParams();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
+	const [page, setPage] = useState(1);
 	const [productFilter, setProductFilter] = useState(false);
 	const [dealerFilter, setDealerFilter] = useState(false);
 	const { loading, allocations } = useSelector((state) => state.product);
@@ -35,9 +45,10 @@ export default function PlanningDetail() {
 		dispatch(
 			fetchAllocations({
 				vendor: vendorID,
+				page
 			})
 		);
-	}, [dispatch, vendorID]);
+	}, [dispatch, vendorID, page]);
 
 	const filteredAllocations = React.useMemo(() => {
 		if (!allocations || allocations.length === 0) return;
@@ -135,6 +146,10 @@ export default function PlanningDetail() {
 				</Container>
 			)}
 			<div style={{ marginTop: "2rem" }} className="actions">
+				<ThemeProvider theme={theme}>
+					<Pagination page={page} onChange={(e, value) => setPage(value)}
+						className="pagination" count={100} color="primary"  />
+				</ThemeProvider>
 				{filteredAllocations && filteredAllocations.length > 0 && (
 					<button type="button" className="btn success" onClick={submitHandler}>
 						<img src={check} alt="check" />

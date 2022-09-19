@@ -10,6 +10,7 @@ import SummaryByFact from "./SummaryFact.jsx";
 import SummaryByProd from "./SummaryProd.jsx";
 
 import styles from "./style.module.scss";
+import ReactHtmlTableToExcel from "react-html-table-to-excel";
 
 const factoryList = [
 	{ id: 1, name: 'EPAM'},
@@ -36,6 +37,14 @@ export default function MainPage() {
 			<header className="header">
 				<Typography variant="h1">{t("headers.summary")}</Typography>
 				<div className="actions">
+					<ReactHtmlTableToExcel
+						id="summary_products-xls-button"
+						className="excel-button"
+						table="summary_products"
+						filename="summary_products"
+						sheet="tablexls"
+						buttonText="Excel"
+					/>
 					<div className="form__radio-group">
 						<input type="checkbox" className="form__radio-input" id="large" name="size"
 							checked={dataFilter}
