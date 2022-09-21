@@ -65,8 +65,16 @@
 
 	& > .actions {
 		display: flex;
+		gap: 1rem;
 		margin: 1rem 2rem;
+		align-items: center;
 		justify-content: flex-end;
+
+		.pagination {
+			padding: 7px;
+			border-radius: 5px;
+			background-color: #f7f7f7;
+		}
 	}
 }
 

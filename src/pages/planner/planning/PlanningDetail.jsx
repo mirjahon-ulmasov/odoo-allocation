@@ -39,7 +39,7 @@ export default function PlanningDetail() {
 	const [page, setPage] = useState(1);
 	const [productFilter, setProductFilter] = useState(false);
 	const [dealerFilter, setDealerFilter] = useState(false);
-	const { loading, allocations } = useSelector((state) => state.product);
+	const { loading, allocations, page_count } = useSelector((state) => state.product);
 
 	useEffect(() => {
 		dispatch(
@@ -126,41 +126,43 @@ export default function PlanningDetail() {
 				</div>
 			</header>	
 			{filteredAllocations && filteredAllocations.length > 0 && (
-				<Container className="scroll">
-					<table className={`${style.table} ${style.t2}`}>
-						<thead>
-							<tr>
-								{headers.map((header, index) => (
-									<th key={index}>{header}</th>
+				<Fragment>
+					<Container className="scroll">
+						<table className={`${style.table} ${style.t2}`}>
+							<thead>
+								<tr>
+									{headers.map((header, index) => (
+										<th key={index}>{header}</th>
+									))}
+									<th></th>
+								</tr>
+							</thead>
+						
+							<tbody className="scroll">
+								{filteredAllocations.map((product, index) => (
+									<Row key={index} product={product} />
 								))}
-								<th></th>
-							</tr>
-						</thead>
-					
-						<tbody className="scroll">
-							{filteredAllocations.map((product, index) => (
-								<Row key={index} product={product} />
-							))}
-						</tbody>
-					</table>
-				</Container>
+							</tbody>
+						</table>
+					</Container>
+					<div style={{ marginTop: "2rem" }} className="actions">
+						<ThemeProvider theme={theme}>
+							<Pagination page={page} onChange={(e, value) => setPage(value)}
+								className="pagination" count={page_count} color="primary"  />
+						</ThemeProvider>
+						{filteredAllocations && filteredAllocations.length > 0 && (
+							<button type="button" className="btn success" onClick={submitHandler}>
+								<img src={check} alt="check" />
+								{t("buttons.confirm")}
+							</button>
+						)}
+						<button style={{ padding: "10px 16px" }} type="button" className="btn gray"
+							onClick={cancelReservation}>
+							{t("buttons.cancel")}
+						</button>
+					</div>
+				</Fragment>
 			)}
-			<div style={{ marginTop: "2rem" }} className="actions">
-				<ThemeProvider theme={theme}>
-					<Pagination page={page} onChange={(e, value) => setPage(value)}
-						className="pagination" count={100} color="primary"  />
-				</ThemeProvider>
-				{filteredAllocations && filteredAllocations.length > 0 && (
-					<button type="button" className="btn success" onClick={submitHandler}>
-						<img src={check} alt="check" />
-						{t("buttons.confirm")}
-					</button>
-				)}
-				<button style={{ marginLeft: "2rem" }} type="button" className="btn gray"
-					onClick={cancelReservation}>
-					{t("buttons.cancel")}
-				</button>
-			</div>
 		</Fragment>
 	);
 }
