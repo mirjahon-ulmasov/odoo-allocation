@@ -196,7 +196,7 @@
 }
 
 .scroll {
-	overflow: scroll;
+	overflow: auto;
 
 	&::-webkit-scrollbar {
 		width: 8px;

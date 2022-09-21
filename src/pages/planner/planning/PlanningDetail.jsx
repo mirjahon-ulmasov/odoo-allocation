@@ -45,7 +45,7 @@ export default function PlanningDetail() {
 		dispatch(
 			fetchAllocations({
 				vendor: vendorID,
-				page
+				page: page - 1
 			})
 		);
 	}, [dispatch, vendorID, page]);

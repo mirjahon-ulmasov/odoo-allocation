@@ -5,13 +5,13 @@ import { instance } from "services/config";
 export const fetchProdsByDealer = createAsyncThunk(
 	"product/fetchProdsByDealer",
 	async ({ date_from, date_to, page }, { rejectWithValue, getState, dispatch }) => {
+		const { product } = getState();
 		try {
 			const response = await instance.get("/customer/main_page_list/", 
                 { params: { date_from, date_to, page }}
             );
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
+			if (response.status !== 200) throw new Error("Bad Request");
+			if (product.page_count === 0) await dispatch(fetchPageCount());
 			const data = await response.data;
 			return data.map((prod) => ({
 				...prod, 
@@ -29,17 +29,29 @@ export const fetchProdsByDealer = createAsyncThunk(
 
 export const fetchDealersByFact = createAsyncThunk(
 	'product/fetchDealersByFact',
-	async({ date_from, date_to, page = 0 }, { rejectWithValue }) => {
+	async({ date_from, date_to }, { rejectWithValue }) => {
 		try {
-			const response = await instance.get('/customer/stat_by_factory/', { params: { date_from, date_to, page }});
-			if(response.status !== 200) throw new Error("Bad Request");
+			const response = await instance.get('/customer/stat_by_factory/', { params: { date_from, date_to }});
+			if (response.status !== 200) throw new Error("Bad Request");
 			return response.data;
-		} catch(err) {
+		} catch (err) {
 			return rejectWithValue("Couldn't get data");
 		}
 	}
 );
 
+
+export const fetchPageCount = createAsyncThunk("product/fetchPageCount", 
+	async function( _, { rejectWithValue }) {
+		try {
+			const response = await instance.get("/material/get_page_count/");
+			if (response.status !== 200) throw new Error("Bad Request");
+			const data = await response.data;
+			return data.page_count + 1
+		} catch (err) {
+			rejectWithValue("Couldn't get page count")
+		}
+})
 
 export const fetchAllocations = createAsyncThunk(
 	"product/fetchAllocations",

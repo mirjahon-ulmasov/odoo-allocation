@@ -3,6 +3,7 @@ import { NotificationManager } from "react-notifications";
 import { 
 	updateStock,
 	fetchVendors,
+	fetchPageCount,
 	fetchAllocations,
 	fetchProdsByDealer,
 	fetchDealersByFact,
@@ -15,6 +16,7 @@ const initialState = {
 	allocations: null,
 	dealer_prods: [],
 	dealer_factory: null,
+	page_count: 0,
 };
 
 export const productSlice = createSlice({
@@ -116,6 +118,20 @@ export const productSlice = createSlice({
 			state.dealer_factory = payload;
 		},
 		[fetchDealersByFact.rejected]: (state, { payload }) => {
+			state.loading = false;
+			NotificationManager.error(payload, "", 2000);
+		},
+
+
+		[fetchPageCount.pending]: (state) => {
+			state.loading = true;
+			state.page_count = null;
+		},
+		[fetchPageCount.fulfilled]: (state, { payload }) => {
+			state.loading = false;
+			state.page_count = payload;
+		},
+		[fetchPageCount.rejected]: (state, { payload }) => {
 			state.loading = false;
 			NotificationManager.error(payload, "", 2000);
 		},
