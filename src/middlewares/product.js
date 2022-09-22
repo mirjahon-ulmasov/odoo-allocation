@@ -11,7 +11,7 @@ export const fetchProdsByDealer = createAsyncThunk(
             );
 			if (response.status !== 200) throw new Error("Bad Request");
 			const data = await response.data;
-			dispatch(fetchPageCount());
+			await dispatch(fetchPageCount());
 			return data.map((prod) => ({
 				...prod, 
 				customers: prod.customers.map(customer => ({
@@ -67,7 +67,7 @@ export const fetchAllocations = createAsyncThunk(
 				throw new Error("Bad Request");
 			}
 			const data = await response.data;
-			dispatch(fetchPageCount(vendor));
+			await dispatch(fetchPageCount(vendor));
 			return data.map((item) => ({
 				...item,
 				total: {

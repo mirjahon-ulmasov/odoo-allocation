@@ -34,7 +34,7 @@ table.t1 {
 	text-align: left;
 	border-bottom: 1px solid #ccc;
 	tbody {
-		max-height: 65vh;
+		max-height: 60vh;
 		tr {
 			&:nth-child(odd) {
 				background-color: #f3f3f3;
@@ -50,8 +50,9 @@ table.t1 {
 }
 
 table.t2 {
+	border-bottom: 1px solid #ccc;
 	tbody {
-		max-height: 65vh;
+		max-height: 50vh;
 		tr.row:nth-child(4n-3) {
 			background-color: #f3f3f3;
 		}

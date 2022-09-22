@@ -17,10 +17,10 @@ export const fetchDealers = createAsyncThunk("sm/fetchDealers", async () => {
 
 export const fetchSmProds = createAsyncThunk(
 	"sm/fetchSmProds",
-	async ({ dealer }) => {
+	async ({ dealer, exclude }) => {
 		try {
 			const response = await instance.get("/material/sm_list/", {
-				params: { dealer },
+				params: { dealer, exclude },
 			});
 			if (response.status !== 200) {
 				throw new Error("Bad Request");

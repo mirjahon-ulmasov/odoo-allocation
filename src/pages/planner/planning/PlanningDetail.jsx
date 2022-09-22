@@ -11,6 +11,7 @@ import Row from "./Row";
 import style from "./style.module.scss";
 import back from "assets/icons/back.svg";
 import check from "assets/icons/check.svg";
+import { useMemo } from "react";
 
 const headers = [
 	"ID",
@@ -74,17 +75,29 @@ export default function PlanningDetail() {
 		navigate("/planner/planning");
 	};
 
+	const isAllocated = useMemo(() => {
+		return !!allocations && allocations.some(function(prod) {
+			return prod.customers.some(function(customer) {
+				return customer.allocate !== '' && customer.allocate > 0
+			})
+		})
+	}, 
+	[allocations]);
+
 	const submitHandler = () => {
-		const data = allocations.map((prod) => {
-			return {
-				material: prod.id,
-				items: prod.customers
-					.filter((customer) => customer.allocate !== '')
-					.map((customer) => ({
-						customer: customer.customer_id,
-						quantity: parseInt(customer.allocate),
-					})),
-			};
+		const data = allocations
+			.filter(prod => prod.customers
+				.some(customer => customer.allocate !== ''))
+			.map((prod) => {
+				return {
+					material: prod.id,
+					items: prod.customers
+						.filter((customer) => customer.allocate !== '')
+						.map((customer) => ({
+							customer: customer.customer_id,
+							quantity: parseInt(customer.allocate),
+						})),
+				};
 		});
 
 		dispatch(postAllocations({ data, cb: () => navigate("/planner") }));
@@ -104,9 +117,7 @@ export default function PlanningDetail() {
 				<div className="form__group">
 					<div className="form__radio-group">
 						<input id="small" name="size" type="checkbox" className="form__radio-input"
-							checked={productFilter}
-							onChange={(e) => setProductFilter(e.target.checked)}
-						/>
+							checked={productFilter} onChange={(e) => setProductFilter(e.target.checked)}/>
 						<label htmlFor="small" className="form__radio-label">
 							<span className="form__radio-button"></span>
 							{t("others.checkbox1")}
@@ -115,9 +126,7 @@ export default function PlanningDetail() {
 
 					<div className="form__radio-group">
 						<input type="checkbox" className="form__radio-input" id="large" name="size"
-							checked={dealerFilter}
-							onChange={(e) => setDealerFilter(e.target.checked)}
-						/>
+							checked={dealerFilter} onChange={(e) => setDealerFilter(e.target.checked)}/>
 						<label htmlFor="large" className="form__radio-label">
 							<span className="form__radio-button"></span>
 							{t("others.checkbox2")}
@@ -151,9 +160,10 @@ export default function PlanningDetail() {
 								className="pagination" count={page_count} color="primary"  />
 						</ThemeProvider>
 						{filteredAllocations && filteredAllocations.length > 0 && (
-							<button type="button" className="btn success" onClick={submitHandler}>
-								<img src={check} alt="check" />
-								{t("buttons.confirm")}
+							<button type="button" onClick={submitHandler} 
+								className={`btn ${isAllocated ? 'success' : 'disabled'}`}>
+									<img src={check} alt="check" />
+									{t("buttons.confirm")}
 							</button>
 						)}
 						<button style={{ padding: "10px 16px" }} type="button" className="btn gray"
