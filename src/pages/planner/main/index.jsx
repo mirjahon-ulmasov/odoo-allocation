@@ -1,11 +1,10 @@
-import React, { Fragment, useEffect, useId, useState } from "react";
+import React, { Fragment, useId, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button, Typography, TextField, FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { fetchVendors } from "middlewares/product.js";
 import { changeDate } from "store/setting.js";
 import SummaryByFact from "./SummaryFact.jsx";
 import SummaryByProd from "./SummaryProd.jsx";
