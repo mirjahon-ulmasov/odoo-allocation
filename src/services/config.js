@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // API
-export const API = process.env.REACT_APP_API || "http://odoo-api.artelelectronics.com/api/v1";
+export const API = process.env.REACT_APP_API;
 
 // Axios
 export const defaultOptions = () => {
