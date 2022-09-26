@@ -1,9 +1,10 @@
 import React, { Fragment, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateStock, fetchVendors } from "store/product";
+import { updateStock, fetchVendors } from "middlewares/product";
 import { ArrowForward, Cached } from "@mui/icons-material";
 import { Container } from "components/Tables";
+import { useTranslation } from "react-i18next";
 import Loader from "components/Loader";
 
 import style from "./style.module.scss";
@@ -14,6 +15,7 @@ const headers = ["ID", "Organization", "Status", "Action"];
 export default function PlanningList() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const { t } = useTranslation();
 
 	const { loading, vendors } = useSelector(state => state.product)
 
@@ -34,14 +36,14 @@ export default function PlanningList() {
 			{loading && <Loader />}
 			<nav className="nav-links">
 				<img onClick={() => navigate(-1)} src={back} alt="back icon" />
-				<p onClick={() => navigate("/planner")} className="click">Main Page -</p>
-				<p className="unclick">Planning</p>
+				<p onClick={() => navigate("/planner")} className="click">{t("main.mainPage")} -</p>
+				<p className="unclick">{t("main.allocation")}</p>
 			</nav>
 			<header className="header">
-				<h1>Planning</h1>
+				<h1>{t("main.allocation")}</h1>
 				<button type="button" onClick={updateDB} className="btn info">
 					<Cached />
-					Update
+					{t("buttons.update")}
 				</button>
 			</header>
 			{vendors && vendors.length !== 0 && (
@@ -64,7 +66,7 @@ export default function PlanningList() {
 										<td>
 											<button type="button" className="btn success"
 												onClick={() => planningHandler(vendor.id.toString(),vendor.vendor_name)}>
-												Start planning
+												{t("buttons.main")}
 												<ArrowForward />
 											</button>
 										</td>

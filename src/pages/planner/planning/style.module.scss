@@ -1,7 +1,7 @@
 table.table {
 	width: 100%;
 	color: #333;
-	min-width: 80rem;
+	min-width: 90rem;
 	text-align: center;
 	margin-top: 1.5rem;
 	border-collapse: collapse;
@@ -34,7 +34,7 @@ table.t1 {
 	text-align: left;
 	border-bottom: 1px solid #ccc;
 	tbody {
-		max-height: 65vh;
+		max-height: 60vh;
 		tr {
 			&:nth-child(odd) {
 				background-color: #f3f3f3;
@@ -50,8 +50,9 @@ table.t1 {
 }
 
 table.t2 {
+	border-bottom: 1px solid #ccc;
 	tbody {
-		max-height: 65vh;
+		max-height: 50vh;
 		tr.row:nth-child(4n-3) {
 			background-color: #f3f3f3;
 		}
@@ -106,7 +107,10 @@ table.nested_table {
 	}
 	tr.nested {
 		th, td {
-			width: 20%;
+			width: 16%;
+			&:first-child {
+				width: 20%;
+			}
 		}
 	}
 }

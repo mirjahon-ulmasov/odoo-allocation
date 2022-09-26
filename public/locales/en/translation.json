@@ -1,7 +1,29 @@
 {
-  "title": "welcome",
-  "description": {
-    "part1": "To get started, edit <1>src/App.js</1> and save to reload.",
-    "part2": "Switch language between english and german using buttons above."
+  "main": {
+    "allocation": "Allocation",
+    "mainPage": "Main Page",
+    "order": "Order",
+    "edit": "Edit"
+  },
+  "buttons": {
+    "main": "Allocate",
+    "update": "Update",
+    "confirm": "Confirm",
+    "request": "Request",
+    "cancel": "Cancel",
+    "logIn": "Log In",
+    "logOut": "Log Out",
+    "back": "Back"
+  },
+  "headers": {
+    "notifications": "Notifications",
+    "summary": "Summary reports",
+    "report": "Report",
+    "orders": "Orders",
+    "orderDetails": "Order Details"
+  },
+  "others": {
+    "checkbox1": "Show only products with an order",
+    "checkbox2": "Show only dealers with an order"
   }
 }

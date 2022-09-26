@@ -1,7 +1,8 @@
 import React, { Fragment, useId } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postNotification } from "store/notification";
+import { postNotification } from "middlewares/notification";
 import { T2, Container } from "components/Tables";
+import { useTranslation } from "react-i18next";
 import { Collapse } from "@mui/material";
 import { getStatus } from "utils";
 import Row from "./Row";
@@ -11,22 +12,30 @@ import check from "assets/icons/check.svg";
 
 export default function Notification({ data, active, clickHandler }) {
 	const id = useId();
+	const { t } = useTranslation();
 	const dispatch = useDispatch();
 	const is_active = id === active;
 	const { notification_details, loading } = useSelector((state) => state.notification);
 
 	const confirmHandler = () => {
-		const data =  notification_details.map((notif) => ({
+		
+		const data =  notification_details.map((notif) => {
+			const validDealers = notif.dealers
+				.filter(dealer => dealer.given !== '')
+				.map(dealer => ({...dealer, given: parseInt(dealer.given)}));
+			
+			return {
 				order_item_id: notif.order_item_id,
 				material_id: notif.material_id,
-				is_confirmed: notif.dealers.reduce((acc, dealer) => acc + dealer.given, 0) > 0 ? true : false, 
-				dealers: notif.dealers.map((dealer) => ({
+				is_confirmed: validDealers.reduce((acc, dealer) => acc + dealer.given, 0) > 0 ? true : false, 
+				dealers: validDealers.map((dealer) => ({
 					dealer_id: dealer.dealer_id,
 					given_quantity: dealer.given,
 				})),
-			}));
+			}
+		});
 		
-		dispatch(postNotification(data));
+	dispatch(postNotification(data));
 	};
 
 	return (
@@ -46,7 +55,7 @@ export default function Notification({ data, active, clickHandler }) {
 						className="btn success"
 						onClick={confirmHandler}>
 						<img src={check} alt="check" />
-						Confirm reservation
+						{t("buttons.confirm")}
 					</button>
 				)}
 			</li>
@@ -66,7 +75,7 @@ export default function Notification({ data, active, clickHandler }) {
 												<th>Fulfilled (%)</th>
 												<th>Reserved</th>
 												<th>Allocated</th>
-												<th>Reserve</th>
+												<th>Requested</th>
 												{!data.processed && (
 													<Fragment>
 														<th>Action</th>

@@ -14,7 +14,7 @@ const headers = [
 	"Fulfilled (%)",
 	"Reserved",
 	"Allocated",
-	"Reserve",
+	"Requested",
 ];
 
 export default function Notification({ data, active, clickHandler }) {

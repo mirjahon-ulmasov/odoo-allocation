@@ -3,6 +3,7 @@ import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar, Typography } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
+import { useTranslation } from "react-i18next";
 import { logout } from "store/auth";
 import { getPath } from "utils";
 
@@ -11,6 +12,7 @@ import document from "assets/icons/document.svg";
 import notification from "assets/icons/notification.svg";
 
 export default function NavBar() {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const menuRef = useRef(null);
@@ -33,22 +35,25 @@ export default function NavBar() {
 			<div className="navbar">
 				<div className="left" onClick={() => navigate("/")}>
 					<img src={icon} alt="dashboard" />
-					<Typography variant="h2">Planning</Typography>
+					<Typography variant="h2">
+						{!user || user.role === 'planner' ? t("main.allocation") : t("main.order")}
+					</Typography>
 				</div>
 				{user && (
 					<div className="right">
 						<ul className="nav-links">
-							<li>
-								<img src={document} alt="document icon" />
-								<span>History</span>
-							</li>
+							{user.role === 'sales_manager' && (
+								<li onClick={() => navigate(`${getPath(user)}/orders`)}>
+									<img src={document} alt="document icon" />
+									<span>Orders</span>
+								</li>
+							)}
 							<li onClick={() => navigate(`${getPath(user)}/notifications`)}>
 								<img src={notification} alt="notification icon" />
 								<span>Notifications</span>
 							</li>
 							<li>
-								<Avatar
-									sx={{ bgcolor: deepOrange[500], cursor: "pointer", height: 35, width: 35 }}>
+								<Avatar sx={{ bgcolor: deepOrange[500], cursor: "pointer", height: 35, width: 35 }}>
 									{user.first_name.charAt()}
 								</Avatar>
 								<span ref={menuRef} onClick={() => setIsOpen((prev) => !prev)}>
@@ -60,7 +65,7 @@ export default function NavBar() {
 							<div className="menu">
 								<button
 									onClick={() => { setIsOpen(false); dispatch(logout(navigate))}}>
-									Log out
+									{t("buttons.logOut")}
 								</button>
 							</div>
 						)}

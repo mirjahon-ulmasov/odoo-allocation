@@ -9,7 +9,7 @@ export const Table = styled.table`
 	color: #333;
 	width: 100%;
 	min-width: 85rem;
-	text-align: center;
+	text-align: left;
 	border-collapse: collapse;
 	animation: 0.5s linear fadeIn;
 
@@ -35,12 +35,14 @@ export const Table = styled.table`
 		border: 0;
 		font-size: 16px;
 		vertical-align: middle;
-		padding: 1rem 0;
+		padding: 1rem 0 1rem 1.5rem;
 	}
 `;
 
 export const T1 = styled(Table)`
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid #ccc;
+	text-align: center;
 
 	tbody {
 		max-height: 65vh;
@@ -85,9 +87,9 @@ export const T1 = styled(Table)`
 	}
 
 	th, td {
-		width: 11%;
+		width: 9%;
 		&:first-child {
-			width: 14%;
+			width: 17%;
 		}
 		&:nth-child(2) {
 			width: 20%;
@@ -95,7 +97,38 @@ export const T1 = styled(Table)`
 	}
 `;
 
+export const T1v1 = styled(T1)`
+	text-align: left;
+	th, td {
+		width: 15%;
+		cursor: pointer;
+		&:first-child, &:nth-child(2) {
+			width: 15%;
+		}
+	}
+`
+
+export const T1v2 = styled(T1)`
+	min-width: 50rem;
+	th, td {
+		cursor: pointer;
+		&, &:first-child {
+			width: 25%;
+		}
+		&:nth-child(2) {
+			width: 50%;
+		}
+	}
+	th {
+		color: #fff;
+		background: #017E84;
+		border-bottom: 1px solid #DFDFDF;
+	}
+`
+
 export const T2 = styled(T1)`
+	min-width: 90rem;
+
 	th, td {
 		width: 8%;
 
@@ -116,8 +149,10 @@ export const T2 = styled(T1)`
 			right: 17rem;
 			padding: 1rem;
 			position: absolute;
-			background: #ffffff;
 			border-radius: 2px;
+			max-height: 12rem;
+			overflow: hidden scroll;
+			background: #ffffff;
 			box-shadow: 0px 0px 10px #ccc;
 			animation: linear 0.2s fadeInUp;
 
@@ -141,3 +176,4 @@ export const T2 = styled(T1)`
 		}
 	}
 `;
+

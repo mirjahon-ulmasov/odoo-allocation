@@ -36,11 +36,6 @@
 		background-color: #eee;
 	}
 }
-.disabled {
-	color: #dbdbdb;
-	cursor: not-allowed;
-	background-color: #dfdfdf;
-}
 .danger {
 	background-color: #f76060;
 	&:hover {
@@ -53,12 +48,21 @@
 		background-color: #39935d;
 	}
 }
+.disabled, .btn:disabled {
+	color: #fff;
+	cursor: not-allowed;
+	background-color: #dbdbdb;
+}
 
 // Checkbox
 .form {
+	&__group {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
 	&__radio-group {
 		display: inline-block;
-		margin-right: 50px;
 	}
 
 	&__radio-input {
@@ -115,17 +119,14 @@
 	padding: 1rem;
 }
 
-.excel-container {
-	position: absolute;
-	right: 2rem;
-	top: 9.5rem;
+.danger-font {
+	color: #FF1B1B
+}
 
-	.excel-button {
-		cursor: pointer;
-		font-size: 14px;
-		padding: 7px 10px;
-		border: 1px solid #ccc;
-		text-transform: uppercase;
-		background-color: #efefef;
-	}
+.warning-font {
+	color: #FED598
+}
+
+.success-font {
+	color: #57BC7F
 }

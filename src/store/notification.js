@@ -1,57 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { NotificationManager } from "react-notifications";
-import { API, instance } from "services/setting";
-
-export const fetchNotificationList = createAsyncThunk(
-	"notification/fetchNotificationList",
-	async () => {
-		try {
-			const response = await instance.get(API + "/notification/list/");
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			const notifications = await response.data;
-			return notifications;
-		} catch (err) {
-			NotificationManager.error("Couldn't get notifications", "", 2000);
-		}
-	}
-);
-
-export const fetchNotifDetails = createAsyncThunk(
-	"notification/fetchNotifDetails",
-	async (notifId) => {
-		try {
-			const response = await instance.get(API + `/notification/${notifId}/detail/`);
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			const notifDetails = await response.data;
-			return notifDetails.map((notif) => ({
-				...notif,
-				dealers: notif.dealers.map((dealer) => ({
-					...dealer,
-					given: 0,
-					remain: dealer.dealer_allocation,
-				})),
-			}));
-		} catch (err) {
-			NotificationManager.error("Couldn't get notification details", "", 2000);
-		}
-	}
-);
-
-export const postNotification = createAsyncThunk(
-	"notification/postNotification",
-	async (data) => {
-		try {
-			const response = await instance.post(API + "/order/confirm_reserve/ ", data);
-			if (response.status !== 200) throw new Error("Bad Request")
-		} catch (err) {
-			NotificationManager.error("Couldn't confirm", "", 2000);
-		}
-	}
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchNotificationList, fetchNotifDetails } from "middlewares/notification"
 
 const initialState = {
 	notifications: [],
@@ -79,6 +27,7 @@ export const notificationSlice = createSlice({
 		},
 		editDealerCount(state, { payload }) {
 			const { materialId, dealerId, quantity } = payload;
+			const number = quantity !== "" ? parseInt(quantity) : 0;
 			state.notification_details = state.notification_details.map((item) => {
 				if (item.material_id === materialId) {
 					return {
@@ -88,12 +37,14 @@ export const notificationSlice = createSlice({
 								return {
 									...dealer,
 									given:
-										dealer.dealer_allocation > quantity
+										dealer.dealer_allocation > number
 											? quantity
-											: dealer.dealer_allocation,
+											: dealer.dealer_allocation > 0 
+												? dealer.dealer_allocation 
+												: "" ,
 									remain:
-										dealer.dealer_allocation > quantity
-											? dealer.dealer_allocation - quantity
+										dealer.dealer_allocation > number
+											? dealer.dealer_allocation - number
 											: 0,
 								};
 							}

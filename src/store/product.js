@@ -1,119 +1,40 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { API, instance, regenerate_api } from "services/setting";
+import { createSlice } from "@reduxjs/toolkit";
 import { NotificationManager } from "react-notifications";
-
-export const fetchProdsByDealer = createAsyncThunk(
-	"product/fetchProdsByDealer",
-	async (_, { rejectWithValue }) => {
-		try {
-			regenerate_api();
-			const response = await instance.get(API + "/customer/main_page_list/");
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			const data = await response.data;
-			return data.map((el) => ({ ...el, isFull: false }));
-		} catch (err) {
-			return rejectWithValue("Couldn't get products");
-		}
-	}
-);
-
-export const fetchAllocations = createAsyncThunk(
-	"product/fetchAllocations",
-	async ({ vendor }, { rejectWithValue }) => {
-		try {
-			const response = await instance.get(API + "/material/list_for_allocation/",
-				{ params: { vendor } }
-			);
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			const data = await response.data;
-			return data.map((item) => ({
-				...item,
-				total: {
-					...item.total,
-					available_remains: item.total.total_available,
-				},
-				customers: item.customers.map((customer) => ({
-					...customer,
-					allocated: 0,
-				})),
-			}));
-		} catch (err) {
-			return rejectWithValue("Couldn't get data");
-		}
-	}
-);
-
-export const fetchVendors = createAsyncThunk(
-	"product/fetchVendors",
-	async (_, { rejectWithValue }) => {
-		try {
-			const response = await instance.get(API + "/vendor/list/");
-			if (response.status !== 200) throw new Error("Bad Request");
-			return response.data
-		} catch (err) {
-			return rejectWithValue("Couldn't get data");
-		}
-	}
-);
-
-export const postAllocations = createAsyncThunk(
-	"product/postAllocations",
-	async ({ data, cb }) => {
-		try {
-			const response = await instance.post(API + "/allocation/create/", data);
-			if (response.status !== 200) {
-				throw new Error("Bad Request");
-			}
-			cb();
-		} catch (err) {
-			NotificationManager.error("Couldn't allocate", "", 2000);
-		}
-	}
-);
-
-export const updateStock = createAsyncThunk(
-	"product/updateStock",
-	async (_, thunkAPI) => {
-		try {
-			const response = await instance.get(API + "/stock/update_all_stock/");
-			if (response.status !== 200) throw new Error("Bad Request");
-			thunkAPI.dispatch(fetchVendors()); 
-		} catch (err) {
-			return thunkAPI.rejectWithValue("Unable to Update");
-		}
-	}
-);
+import { 
+	updateStock,
+	fetchVendors,
+	fetchPageCount,
+	fetchAllocations,
+	fetchProdsByDealer,
+	fetchDealersByFact,
+} from "middlewares/product"
 
 
 const initialState = {
-	dealer_prods: null,
-	allocations: null,
-	vendors: null,
 	loading: false,
+	vendors: null,
+	allocations: null,
+	dealer_prods: [],
+	dealer_factory: null,
+	page_count: 0,
 };
 
 export const productSlice = createSlice({
 	name: "product",
 	initialState,
 	reducers: {
-		clearDealerProds(state) {
-			state.dealer_prods = null;
-		},
 		editDealerProdisFull(state, { payload }) {
-			state.dealer_prods = state.dealer_prods.map((dealer) => {
-				if (dealer.id === payload) return { ...dealer, isFull: !dealer.isFull };
-				return dealer;
-			});
-		},
-		clearAllocation(state) {
-			state.allocations = null;
+			state.dealer_prods = state.dealer_prods.map((prod) => ({
+				...prod,
+				customers: prod.customers.map(customer => {
+					if(customer.customer_id === payload) return {...customer, isFull: !customer.isFull}
+					return customer
+				})
+			}))
 		},
 		editAllocation(state, { payload }) {
 			const { prodId, customerId, quantity } = payload;
+			const number = quantity !== '' ? parseInt(quantity) : 0;
 
 			const prod_index = state.allocations.findIndex(
 				(prod) => prod.id === prodId
@@ -127,7 +48,14 @@ export const productSlice = createSlice({
 
 			state.allocations[prod_index].customers[customer_index] = {
 				...customer,
-				allocated: quantity,
+				allocate:
+					product.total.total_available -
+						product.customers.reduce((acc, customer) => {
+							if (customer.customer_id === customerId) return acc + number;
+							return acc + parseInt(customer.allocate !== '' ? customer.allocate : 0);
+						}, 0) >= 0
+						? quantity
+						: parseInt(customer.allocate !== '' ? customer.allocate : 0) + state.allocations[prod_index].total.available_remains,
 			};
 
 			state.allocations[prod_index].total = {
@@ -135,7 +63,7 @@ export const productSlice = createSlice({
 				available_remains:
 					product.total.total_available -
 					product.customers.reduce((acc, customer) => {
-						return acc + customer.allocated;
+						return acc + parseInt(customer.allocate !== '' ? customer.allocate : 0);
 					}, 0),
 			};
 		},
@@ -143,7 +71,7 @@ export const productSlice = createSlice({
 	extraReducers: {
 		[fetchProdsByDealer.pending]: (state) => {
 			state.loading = true;
-			state.dealer_prods = null;
+			state.dealer_prods = [];
 		},
 		[fetchProdsByDealer.fulfilled]: (state, { payload }) => {
 			state.loading = false;
@@ -153,7 +81,6 @@ export const productSlice = createSlice({
 			state.loading = false;
 			NotificationManager.error(payload, "", 2000);
 		},
-
 
 		[fetchAllocations.pending]: (state) => {
 			state.loading = true;
@@ -167,7 +94,6 @@ export const productSlice = createSlice({
 			state.loading = false;
 			NotificationManager.error(payload, "", 2000);
 		},
-
 
 		[fetchVendors.pending]: (state) => {
 			state.loading = true;
@@ -183,6 +109,34 @@ export const productSlice = createSlice({
 		},
 
 		
+		[fetchDealersByFact.pending]: (state) => {
+			state.loading = true;
+			state.dealer_factory = null;
+		},
+		[fetchDealersByFact.fulfilled]: (state, { payload }) => {
+			state.loading = false;
+			state.dealer_factory = payload;
+		},
+		[fetchDealersByFact.rejected]: (state, { payload }) => {
+			state.loading = false;
+			NotificationManager.error(payload, "", 2000);
+		},
+
+
+		[fetchPageCount.pending]: (state) => {
+			state.loading = true;
+			state.page_count = null;
+		},
+		[fetchPageCount.fulfilled]: (state, { payload }) => {
+			state.loading = false;
+			state.page_count = payload;
+		},
+		[fetchPageCount.rejected]: (state, { payload }) => {
+			state.loading = false;
+			NotificationManager.error(payload, "", 2000);
+		},
+
+
 		[updateStock.pending]: (state) => {
 			state.loading = true;
 		},
@@ -197,11 +151,6 @@ export const productSlice = createSlice({
 	},
 });
 
-export const {
-	editAllocation,
-	clearAllocation,
-	clearDealerProds,
-	editDealerProdisFull,
-} = productSlice.actions;
+export const { editAllocation, editDealerProdisFull } = productSlice.actions;
 const { reducer } = productSlice;
 export default reducer;

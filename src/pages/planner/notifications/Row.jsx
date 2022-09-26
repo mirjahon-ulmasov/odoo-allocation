@@ -1,16 +1,28 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { editDealerCount } from "store/notification";
 import { Done, Close, KeyboardArrowDown } from "@mui/icons-material";
 
 export default function Row({ item, isConfirmed }) {
-	const dispatch = useDispatch()
-	const [isReject, setIsReject] = useState(true);
+	const btnRef = useRef();
+	const selectRef = useRef();
+	const inputRef = useRef();
+	const dispatch = useDispatch();
 	const [isOpen, setIsOpen] = useState(false);
+	const [isReject, setIsReject] = useState(true);
 
-	const applyHandler = () => {
-		setIsOpen(false);
-	};
+	useEffect(() => {
+		document.addEventListener("click", clickHandler);
+		return () => document.removeEventListener("click", clickHandler)
+	}, [])
+
+	const clickHandler = (event) => {
+		if(selectRef.current && !selectRef.current.contains(event.target) 
+			&& event.target !== btnRef.current) {
+			setIsOpen(false);
+		}
+	}
+
 	return (
 		<tr>
 			<td>{item.material}</td>
@@ -37,39 +49,32 @@ export default function Row({ item, isConfirmed }) {
 						</div>
 					</td>
 					<td>
-						<button disabled={isReject} className={`btn ${isReject ? "disabled" : "gray"}`}
+						<button ref={btnRef} disabled={isReject} className={`btn ${isReject ? "disabled" : "gray"}`}
 							onClick={() => setIsOpen((prev) => !prev)}>
 							Select Dealer
 							<KeyboardArrowDown />
 						</button>
 						{isOpen && (
-							<div className="dropdown">
+							<div ref={selectRef} className="dropdown scroll">
 								{item.dealers.map((dealer, index) => {
 									return (
 										<label key={index}>
 											{dealer.dealer_name} ({dealer.remain})
-											<input
-												type="number"
-												value={dealer.given}
-												onChange={(e) => {
-													const num = parseInt(e.target.value);
-													if (num >= 0) {
+											<input ref={inputRef} onFocus={(e) => e.currentTarget.select()} 
+												type="text" value={dealer.given} onChange={(event) => {
+													if(isNaN(event.target.value) || event.target.value.includes('-')) return;
 														dispatch(
 															editDealerCount({
 																materialId: item.material_id,
 																dealerId: dealer.dealer_id,
-																quantity: num,
+																quantity: event.target.value,
 															})
 														);
-													}
 												}}
 											/>
 										</label>
 									);
 								})}
-								<button onClick={applyHandler} className="btn success">
-									Apply
-								</button>
 							</div>
 						)}
 					</td>

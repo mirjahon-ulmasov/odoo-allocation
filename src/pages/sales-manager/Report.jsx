@@ -1,8 +1,9 @@
-import React, { Fragment, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { clearSmProds, fetchSmProds } from "store/sales_manager";
+import { fetchSmProds } from "middlewares/sales_manager";
 import { T1, Container } from "components/Tables";
 import Loader from "components/Loader";
 
@@ -14,25 +15,37 @@ const headers = [
 	"Fulfilled (%)",
 	"Reserved",
 	"Allocated",
+	"Requested",
 ];
 
 export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer }) {
 	const navigate = useNavigate();
-	const dispatch = useDispatch()
+	const dispatch = useDispatch();
+	const { t } = useTranslation();
+	const [dataFilter, setDataFilter] = useState(true);
 
 	useEffect(() => {
 		if (!dealers || dealers.length === 0) return;
 		let dealerId = dealer ? dealer : dealers[0].id;
-		dispatch(fetchSmProds({ dealer: dealerId }));
-		return () => dispatch(clearSmProds())
-	}, [dispatch, dealers, dealer]);
+		dispatch(fetchSmProds({ dealer: dealerId, exclude: dataFilter }));
+	}, [dispatch, dealers, dealer, dataFilter]);
 
 	return (
 		<Fragment>
 			{loading && <Loader />}
 			<header className="header">
-				<h1>Report</h1>
+				<h1>{t("headers.report")}</h1>
 				<div className="actions">
+					<div className="form__radio-group">
+						<input type="checkbox" className="form__radio-input" id="large" name="size"
+							checked={dataFilter}
+							onChange={(e) => setDataFilter(e.target.checked)}
+						/>
+						<label htmlFor="large" className="form__radio-label">
+							<span className="form__radio-button"></span>
+							Products with allocation
+						</label>
+					</div>
 					{dealers && (
 						<Box sx={{ minWidth: 200 }}>
 							<FormControl sx={{ backgroundColor: "#f1f1f1", borderRadius: "2px" }} size="small" fullWidth>
@@ -48,7 +61,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 						</Box>
 					)}
 					<button type="button" className="btn dark" onClick={() => navigate("edit")}>
-						Start reservation
+						{t("buttons.request")}
 					</button>
 				</div>
 			</header>
@@ -73,6 +86,7 @@ export default function Report({ dealers, sm_prods, loading, dealer, onSetDealer
 									<td>{item.fulfilled_percentage}%</td>
 									<td>{item.reserved}</td>
 									<td>{item.allocated}</td>
+									<td>{item.requested}</td>
 								</tr>
 							)})}
 					</tbody>

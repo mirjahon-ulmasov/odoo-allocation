@@ -1,21 +1,28 @@
-import React, { Fragment, useRef } from "react";
-import styled from "styled-components";
-import Loader from "components/Loader";
-import { NotificationManager } from "react-notifications";
-import { useFetchDealersByFactQuery } from "services/product";
+import React, { Fragment, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDealersByFact } from "middlewares/product";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import Loader from "components/Loader";
+import styled from "styled-components";
+import { checkCount } from "utils";
 
 export default function SummaryByFact() {
-	const { data, isLoading: loading, error } = useFetchDealersByFactQuery();
 	const stickyRef = useRef(null);
 	const scrollRef = useRef(null);
+	const dispatch = useDispatch();
+	const { loading, dealer_factory } = useSelector(state => state.product);
+	const { date_from, date_to } = useSelector(state => state.setting);
+
+	useEffect(() => {
+		dispatch(fetchDealersByFact({ date_from, date_to }));
+	}, [dispatch, date_from, date_to])
 
 	const th = (index = "johon") => (
 		<Fragment key={index}>
 			<th>Ordered</th>
 			<th>Fulfilled</th>
 			<th>Reserved</th>
-			<th>Allocation</th>
+			<th>Allocated</th>
 		</Fragment>
 	);
 
@@ -44,19 +51,17 @@ export default function SummaryByFact() {
 		return s.replace(/{(\w+)}/g, (m, p) => c[p]);
 	};
 
-	if (error) NotificationManager.error(error.error);
-
 	return (
 		<Summary>
 			{loading && <Loader />}
-			{data && data.length !== 0 && (
+			{dealer_factory && dealer_factory.length !== 0 && (
 				<Fragment>
 					<table className="sticky">
 						<thead>
 							<tr><th>Dealers</th></tr>
 						</thead>
 						<tbody ref={stickyRef} onScroll={scrollHandler}>
-							{data.map((dealer, index) => (
+							{dealer_factory.map((dealer, index) => (
 								<tr key={index}>
 									<td>{dealer.name}</td>
 								</tr>
@@ -68,7 +73,7 @@ export default function SummaryByFact() {
 							<thead>
 								<tr>
 									<th colSpan={4}>Total</th>
-									{data[0].vendors.map((prod, index) => (
+									{dealer_factory[0].vendors.map((prod, index) => (
 										<th key={index} colSpan={4}>
 											{prod.vendor}
 										</th>
@@ -76,22 +81,26 @@ export default function SummaryByFact() {
 								</tr>
 								<tr>
 									{th()}
-									{data[0].vendors.map((_, index) => th(index))}
+									{dealer_factory[0].vendors.map((_, index) => th(index))}
 								</tr>
 							</thead>
 							<tbody ref={scrollRef} onScroll={scrollHandler}>
-								{data.map((row, index) => {
+								{dealer_factory.map((row, index) => {
 									return (
 										<tr key={index}>
-											<td>{row.total.total_ordered}</td>
-											<td>{row.total.total_reserved}</td>
+											<td className={checkCount(row.total.total_ordered, row.total.total_fulfilled)}>
+												{row.total.total_ordered}
+											</td>
 											<td>{row.total.total_fulfilled}</td>
+											<td>{row.total.total_reserved}</td>
 											<td>{row.total.total_allocation}</td>
 											{row.vendors.map((vendor, index) => (
 												<Fragment key={index}>
-													<td>{vendor.ordered}</td>
-													<td>{vendor.reserved}</td>
+													<td className={checkCount(vendor.ordered, vendor.fulfilled)}>
+														{vendor.ordered}
+													</td>
 													<td>{vendor.fulfilled}</td>
+													<td>{vendor.reserved}</td>
 													<td>{vendor.allocation}</td>
 												</Fragment>
 											))}
@@ -103,16 +112,6 @@ export default function SummaryByFact() {
 					</div>
 				</Fragment>
 			)}
-			<div className="excel-container">
-				<ReactHTMLTableToExcel
-					id="summary_factory-xls-button"
-					className="excel-button"
-					table="summary_factory"
-					filename="summary_factory"
-					sheet="tablexls"
-					buttonText="Excel"
-				/>
-			</div>
 		</Summary>
 	);
 }

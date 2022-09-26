@@ -5,7 +5,9 @@
 
 
 .main-layout {
+	max-height: calc(90vh - 55px);
 	padding: 2rem 0;
+	overflow: auto;
 
 	.nav-links {
 		display: flex;
@@ -45,17 +47,34 @@
 		.actions {
 			display: flex;
 			gap: 1rem;
+			align-items: center;
 		}
 		button {
 			font-weight: 400;
 			font-size: 16px;
 		}
+		.excel-button {
+			cursor: pointer;
+			font-size: 14px;
+			padding: 7px 10px;
+			border: 1px solid #ccc;
+			text-transform: uppercase;
+			background-color: #efefef;
+		}		
 	}
 
 	& > .actions {
 		display: flex;
+		gap: 1rem;
 		margin: 1rem 2rem;
+		align-items: center;
 		justify-content: flex-end;
+
+		.pagination {
+			padding: 7px;
+			border-radius: 5px;
+			background-color: #f7f7f7;
+		}
 	}
 }
 
@@ -126,8 +145,66 @@
 	background: rgba(255, 255, 255, 0.8);
 }
 
+
+.modal {
+	gap: 2rem;
+	display: flex;
+	flex-direction: column;
+
+	h2 {
+		font-size: 18px;
+		color: #000000;
+		font-weight: 400;
+		letter-spacing: 0.01em;
+	}
+
+	.inputs {
+		gap: 1rem;
+		display: flex;
+		flex-direction: column;
+
+		input {
+			color: #555;
+			font-size: 16px;
+			padding: 0.7rem 1rem;
+			background: #FFFFFF;
+			border: 1px solid #D6D6D6;
+
+			&.error {
+				border: 1px solid #e07171;
+			}
+		}
+	}
+
+	.modal-action {
+		gap: 1rem;
+		display: flex;
+		justify-content: flex-end;
+
+		button {
+			border: none;
+			cursor: pointer;
+			font-size: 14px;
+			color: #414141;
+			font-weight: 500;
+			padding: 0.7rem 1rem;
+			text-transform: uppercase;
+			background-color: transparent;
+
+			&:first-child:hover {
+				background-color: #efefef;
+			}
+
+			&:nth-child(2) {
+				color: #fff;
+				background: #017E84;
+			}
+		}
+	}
+}
+
 .scroll {
-	overflow: scroll;
+	overflow: auto;
 
 	&::-webkit-scrollbar {
 		width: 8px;
