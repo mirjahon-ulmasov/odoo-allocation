@@ -36,11 +36,6 @@
 		background-color: #eee;
 	}
 }
-.disabled {
-	color: #fff;
-	cursor: not-allowed;
-	background-color: #dbdbdb;
-}
 .danger {
 	background-color: #f76060;
 	&:hover {
@@ -52,6 +47,11 @@
 	&:hover {
 		background-color: #39935d;
 	}
+}
+.disabled, .btn:disabled {
+	color: #fff;
+	cursor: not-allowed;
+	background-color: #dbdbdb;
 }
 
 // Checkbox

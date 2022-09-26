@@ -160,8 +160,8 @@ export default function PlanningDetail() {
 								className="pagination" count={page_count} color="primary"  />
 						</ThemeProvider>
 						{filteredAllocations && filteredAllocations.length > 0 && (
-							<button type="button" onClick={submitHandler} 
-								className={`btn ${isAllocated ? 'success' : 'disabled'}`}>
+							<button type="button" disabled={!isAllocated} 
+								onClick={submitHandler} className="btn success">
 									<img src={check} alt="check" />
 									{t("buttons.confirm")}
 							</button>

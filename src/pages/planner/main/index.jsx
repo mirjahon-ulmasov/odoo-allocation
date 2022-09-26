@@ -1,24 +1,17 @@
-import React, { Fragment, useId, useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { Fragment, useEffect, useId, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button, Typography, TextField, FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { fetchVendors } from "middlewares/product.js";
 import { changeDate } from "store/setting.js";
 import SummaryByFact from "./SummaryFact.jsx";
 import SummaryByProd from "./SummaryProd.jsx";
-
-import styles from "./style.module.scss";
 import ReactHtmlTableToExcel from "react-html-table-to-excel";
 
-const factoryList = [
-	{ id: 1, name: 'EPAM'},
-	{ id: 2, name: 'iTechArt'},
-	{ id: 3, name: 'AppliedLabs'},
-	{ id: 4, name: 'Jafton'},
-
-]
+import styles from "./style.module.scss";
 
 export default function MainPage() {
 	const { t } = useTranslation();
@@ -26,11 +19,15 @@ export default function MainPage() {
 	const id2 = useId();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+
 	const [active, setActive] = useState(id);
 	const [date, setDate] = useState(new Date());
+
 	const [byFactory, setByFactory] = useState('')
 	const [dataFilter, setDataFilter] = useState(false);
+
 	const activeClass = (id) => (active === id ? styles.active : "");
+	const { vendors } = useSelector(state => state.product)
 
 	return (
 		<Fragment>
@@ -55,18 +52,20 @@ export default function MainPage() {
 							Rows with data
 						</label>
 					</div>
-					<Box sx={{ minWidth: 200 }}>
-						<FormControl sx={{ borderRadius: "2px" }} size="small" fullWidth>
-							<InputLabel>Select factory</InputLabel>
-							<Select value={byFactory} label="Select factory" onChange={(e) => setByFactory(e.target.value)}>
-								{factoryList.map((factory, index) => (
-									<MenuItem key={index} value={factory.id}>
-										{factory.name}
-									</MenuItem>
-								))}
-							</Select>
-						</FormControl>
-					</Box>
+					{vendors && (
+						<Box sx={{ minWidth: 200 }}>
+							<FormControl sx={{ borderRadius: "2px" }} size="small" fullWidth>
+								<InputLabel>Select factory</InputLabel>
+								<Select value={byFactory} label="Select factory" onChange={(e) => setByFactory(e.target.value)}>
+									{vendors.map((vendor, index) => (
+										<MenuItem key={index} value={vendor.id}>
+											{vendor.vendor_name}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						</Box>
+					)}
 					<LocalizationProvider dateAdapter={AdapterDateFns}>
 						<DatePicker label="Date" value={date} onChange={(value) => {
 								dispatch(changeDate(value));

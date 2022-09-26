@@ -101,44 +101,44 @@ export default function SummaryByProd() {
 							<table className="table_2">
 								<thead>
 									{dealer_prods[0].customers.map((customer, index) => (
-										<div className={`column ${customer.isFull ? 'active' : ''}`} key={index}>
-											<tr onClick={() => dispatch(editDealerProdisFull(customer.customer_id))}>
-												<th colSpan={4}>
+										<tr className={customer.isFull ? 'active' : ''} key={index}>
+											<th onClick={() => dispatch(editDealerProdisFull(customer.customer_id))}>
+												<li colSpan={4}>
 													<span>{customer.customer_name}</span>
 													<IconButton sx={{ padding: '0'}} type="button">
 														{customer.isFull ? <ChevronRight /> : <ChevronLeft />}
 													</IconButton>
-												</th>
-											</tr>
-											<tr>
-												<th>Ordered</th>
+												</li>
+											</th>
+											<th>
+												<li>Ordered</li>
 												{customer.isFull && (
 													<Fragment>
-														<th>Fulfilled</th>
-														<th>Reserved</th>
-														<th>Allocated</th>
+														<li>Fulfilled</li>
+														<li>Reserved</li>
+														<li>Allocated</li>
 													</Fragment>
 												)}
-											</tr>
-										</div>
+											</th>
+										</tr>
 									))}
 								</thead>
 								<tbody onScroll={scrollHandler}>
 									{dealer_prods.map((prod, index) => (
 										<tr key={index}>
 											{prod.customers.map((customer, index) => (
-												<div className={`column ${customer.isFull ? 'active' : ''}`} key={index}>
-													<td className={checkCount(customer.ordered, customer.fulfilled)}>
+												<td className={customer.isFull ? 'active' : ''} key={index}>
+													<li className={checkCount(customer.ordered, customer.fulfilled)}>
 														{customer.ordered}
-													</td>
+													</li>
 													{customer.isFull && (
 														<Fragment>
-															<td>{customer.fulfilled}</td>
-															<td>{customer.reserved}</td>
-															<td>{customer.allocated}</td>
+															<li>{customer.fulfilled}</li>
+															<li>{customer.reserved}</li>
+															<li>{customer.allocated}</li>
 														</Fragment>
 													)}
-												</div>))}
+												</td>))}
 										</tr>
 									))}
 								</tbody>
@@ -189,7 +189,7 @@ const Summary = styled.div`
 			&::-webkit-scrollbar {
 				display: none;
 			}
-			tr {
+			tr:not(.column) {
 				height: 4rem;
 				td {
 					font-weight: 500;
@@ -251,11 +251,13 @@ const Summary = styled.div`
 		text-align: center;
 		thead {
 			display: flex;
-			.column {
-				tr {
+			tr {
+				display: flex;
+				flex-direction: column;
+				th {
 					border-right: 1px solid #fff;
 					&:first-child {
-						th {
+						li {
 							width: fit-content;
 							display: flex;
 							height: 2.5rem;
@@ -270,10 +272,13 @@ const Summary = styled.div`
 						}
 					}
 					&:nth-child(2) {
+						display: flex;
 						background-color: #f2f2f2;
+						justify-content: space-around;
 						border-right: 1px solid #f2f2f2;
 						border-bottom: 1px solid #dfdfdf;
-						th {
+						li {
+							list-style: none;
 							font-size: 14px;
 							color: #898989;
 							font-weight: 400;
@@ -282,10 +287,11 @@ const Summary = styled.div`
 					}
 				}
 				&.active {
-					tr {
+					th {
 						&:nth-child(2) {
 							background-color: #016584;
-							th {
+							li {
+								list-style: none;
 								color: #fff;
 							}
 						}
@@ -296,21 +302,22 @@ const Summary = styled.div`
 		tbody {
 			tr {
 				display: flex; 
-				.column {
+				td {
+					width: 22rem;
 					display: flex;
 					align-items: center;
+					box-sizing: border-box;
 					justify-content: space-around;
 					border-right: 1px solid #eaeaea;
+					li {
+						list-style: none;
+					}
 					&.active {
 						background-color: #f0f8f9;
 						border-bottom: 1px solid #dfdfdf;
 					}
 				}
 			}
-		}
-		.column {
-			width: 22rem;
-			box-sizing: border-box;
 		}
 	}
 `;
