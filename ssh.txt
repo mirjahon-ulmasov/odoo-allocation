@@ -1,3 +1,0 @@
-1.ssh -i odoo_export.pem ubuntu@43.205.130.11
-2.PWD: /home/ubuntu/odoo_extension_front/build
-3.SUBDOMAIN: exportodooo.artelelectronics.com
